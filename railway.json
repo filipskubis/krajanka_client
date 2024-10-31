@@ -1,8 +1,8 @@
 {
   "services": {
     "frontend": {
-      "build": "cd frontend && npm install && npm run build",
-      "start": "cd frontend && npx serve -s dist"
+      "build": "npm install && npm run build",
+      "start": "npx serve -s dist"
     }
   }
 }
