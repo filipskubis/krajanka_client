@@ -3,7 +3,6 @@ export default async function fetcher(ENDPOINT, method = "GET", body = null) {
     `https://api-krajanka.up.railway.app${ENDPOINT}`,
     {
       method,
-      mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
       },
