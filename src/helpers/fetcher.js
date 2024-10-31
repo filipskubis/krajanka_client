@@ -1,13 +1,14 @@
-const apiUrl = import.meta.env.VITE_BACKEND_URL;
-
-export default async function fetcher(ENDPOINT, method = 'GET', body = null) {
-  const response = await fetch(`${apiUrl}${ENDPOINT}`, {
-    method,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: body ? JSON.stringify(body) : null,
-  });
+export default async function fetcher(ENDPOINT, method = "GET", body = null) {
+  const response = await fetch(
+    `https://api-krajanka.up.railway.app${ENDPOINT}`,
+    {
+      method,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: body ? JSON.stringify(body) : null,
+    }
+  );
   const data = await response.json();
 
   if (!data.ok) throw data.message;
