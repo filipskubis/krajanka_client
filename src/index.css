@@ -1,0 +1,687 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'League Spartan';
+  src: url('/LeagueSpartan-VariableFont_wght.ttf');
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('../public/Inter-VariableFont_opsz,wght.ttf');
+}
+
+body {
+  background-color: #fbe8a6;
+  overflow-x: hidden;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+* {
+  font-family: 'Inter';
+  font-weight: 600;
+  color: #303c6c;
+}
+
+/*
+  1. Use a more-intuitive box-sizing model.
+*/
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+/*
+    2. Remove default margin
+  */
+* {
+  margin: 0;
+}
+/*
+    Typographic tweaks!
+    3. Add accessible line-height
+    4. Improve text rendering
+  */
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+/*
+    5. Improve media defaults
+  */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+/*
+    6. Remove built-in form typography styles
+  */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+/*
+    7. Avoid text overflows
+  */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
+}
+/*
+    8. Create a root stacking context
+  */
+#root,
+#__next {
+  isolation: isolate;
+}
+
+button {
+  border: none;
+  margin: 0;
+  padding: 0;
+  width: auto;
+  overflow: visible;
+
+  background: transparent;
+
+  /* inherit font & color from ancestor */
+  color: inherit;
+  font: inherit;
+
+  /* Normalize `line-height`. Cannot be changed from `normal` in Firefox 4+. */
+  line-height: normal;
+
+  /* Corrects font smoothing for webkit */
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+
+  /* Corrects inability to style clickable `input` types in iOS */
+  -webkit-appearance: none;
+}
+
+/* Remove excess padding and border in Firefox 4+ */
+button::-moz-focus-inner {
+  border: 0;
+  padding: 0;
+}
+
+/* DROPDOWN COMPONENT  */
+
+/* From Uiverse.io by 3bdel3ziz-T */
+.select {
+  width: fit-content;
+  cursor: pointer;
+  position: relative;
+  transition: 300ms;
+  color: white;
+  overflow: hidden;
+}
+
+.fadeIn {
+  animation: fadeIn linear 300ms;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.selected {
+  background-color: white;
+  border: 2px solid #6b7a8f;
+  padding: 5px;
+  margin-bottom: 3px;
+  border-radius: 5px;
+  position: relative;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.arrow {
+  position: relative;
+  right: 0px;
+  height: 10px;
+  transform: rotate(-90deg);
+  width: 25px;
+  fill: #6b7a8f;
+  transition: 300ms;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  border-radius: 5px;
+  padding: 5px;
+  background-color: white;
+  border: 2px solid #6b7a8f;
+  position: relative;
+  top: -100px;
+  opacity: 0;
+  transition: 300ms;
+}
+
+.select:hover > .options {
+  opacity: 1;
+  top: 0;
+}
+
+.select:hover > .selected .arrow {
+  transform: rotate(0deg);
+}
+
+.option {
+  border-radius: 5px;
+  padding: 5px;
+  color: black;
+  transition: 300ms;
+  background-color: white;
+  width: 150px;
+  font-size: 15px;
+}
+.option:hover {
+  filter: brightness(90%);
+}
+
+.options input[type='radio'] {
+  display: none;
+}
+
+.options label {
+  display: inline-block;
+}
+.options label::before {
+  content: attr(data-txt);
+}
+
+.options input[type='radio']:checked + label {
+  display: none;
+}
+
+.options input[type='radio']#all:checked + label {
+  display: none;
+}
+
+.select:has(.options input[type='radio']#all:checked) .selected::before {
+  content: attr(data-default);
+}
+.select:has(.options input[type='radio']#option-1:checked) .selected::before {
+  content: attr(data-one);
+}
+.select:has(.options input[type='radio']#option-2:checked) .selected::before {
+  content: attr(data-two);
+}
+.select:has(.options input[type='radio']#option-3:checked) .selected::before {
+  content: attr(data-three);
+}
+
+/* From Uiverse.io by Na3ar-17 */
+.radio-input {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.radio-input * {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+}
+
+.radio-input label {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+  padding: 0px 30px;
+  width: 100%;
+  cursor: pointer;
+  height: auto;
+  height: 50px;
+  position: relative;
+}
+
+.radio-input label::before {
+  position: absolute;
+  content: '';
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  height: 45px;
+  z-index: -1;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  border-radius: 10px;
+  padding: 1.5rem;
+  background-color: #00000020;
+  border: 2px solid transparent;
+}
+.radio-input label:hover::before {
+  transition: all 0.2s ease;
+  background-color: #f28a7280;
+}
+
+.radio-input .label:has(input:checked)::before {
+  background-color: #f28a7280;
+  height: 50px;
+}
+.radio-input .label .text {
+  color: black;
+}
+
+.radio-input .label input[type='radio'] {
+  background-color: white;
+  appearance: none;
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.radio-input .label input[type='radio']:checked {
+  background-color: #f28a72;
+  -webkit-animation: puls 0.7s forwards;
+  animation: pulse 0.7s forwards;
+}
+
+.radio-input .label input[type='radio']:before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  transition: all 0.1s cubic-bezier(0.165, 0.84, 0.44, 1);
+  background-color: #fff;
+  transform: scale(0);
+}
+
+.radio-input .label input[type='radio']:checked::before {
+  transform: scale(1);
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(242, 138, 114, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(242, 138, 114, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(242, 138, 114, 0);
+  }
+}
+
+/* From Uiverse.io by vishnupprajapat */
+.checkbox-wrapper-46 input[type='checkbox'] {
+  display: none;
+  visibility: hidden;
+}
+
+.checkbox-wrapper-46 .cbx {
+  -webkit-user-select: none;
+  user-select: none;
+  cursor: pointer;
+}
+.checkbox-wrapper-46 .cbx span {
+  display: inline-block;
+  vertical-align: middle;
+  transform: translate3d(0, 0, 0);
+}
+.checkbox-wrapper-46 .cbx span:first-child {
+  position: relative;
+  width: 25px; /* Updated size */
+  height: 25px; /* Updated size */
+  border-radius: 4px; /* Adjusted for larger size */
+  transform: scale(1);
+  vertical-align: middle;
+  border: 2px solid #6b7a8f;
+  transition: all 0.2s ease;
+}
+.checkbox-wrapper-46 .cbx span:first-child svg {
+  position: absolute;
+  top: 4px; /* Adjusted for larger size */
+  left: 3px; /* Adjusted for larger size */
+  fill: none;
+  stroke: #ffffff;
+  stroke-width: 2.5; /* Slightly thicker for larger size */
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-dasharray: 20px; /* Adjusted for larger size */
+  stroke-dashoffset: 20px; /* Adjusted for larger size */
+  transition: all 0.3s ease;
+  transition-delay: 0.1s;
+  transform: translate3d(0, 0, 0);
+}
+.checkbox-wrapper-46 .cbx span:first-child:before {
+  content: '';
+  width: 100%;
+  height: 100%;
+  background: #f28a72;
+  display: block;
+  transform: scale(0);
+  opacity: 1;
+  border-radius: 50%;
+}
+.checkbox-wrapper-46 .cbx:hover span:first-child {
+  border-color: #6b7a8f;
+}
+
+.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child {
+  background: #f28a72;
+  border-color: #f28a72;
+  animation: wave-46 0.4s ease;
+}
+.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child svg {
+  stroke-dashoffset: 0;
+}
+.checkbox-wrapper-46 .inp-cbx:checked + .cbx span:first-child:before {
+  transform: scale(3.5);
+  opacity: 0;
+  transition: all 0.6s ease;
+}
+
+@keyframes wave-46 {
+  50% {
+    transform: scale(0.9);
+  }
+}
+
+/* From Uiverse.io by Yaya12085 */
+.card {
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+  text-align: left;
+  border-radius: 0.5rem;
+  max-width: 290px;
+  box-shadow:
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 10px 10px -5px rgba(0, 0, 0, 0.04);
+  animation: slideInY 500ms linear;
+}
+
+.header {
+  padding: 1.25rem 1rem 1rem 1rem;
+  background-color: #ffffff;
+}
+
+.image {
+  display: flex;
+  margin-left: auto;
+  margin-right: auto;
+  background-color: #fee2e2;
+  flex-shrink: 0;
+  justify-content: center;
+  align-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 9999px;
+}
+
+.image svg {
+  color: #e74d4d;
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.content {
+  margin-top: 0.75rem;
+  text-align: center;
+}
+
+.title {
+  color: #111827;
+  font-size: 1.2rem;
+  font-weight: 600;
+  line-height: 1.5rem;
+}
+
+.message {
+  margin-top: 0.5rem;
+  color: #6b7280;
+  font-size: 1rem;
+  line-height: 1.25rem;
+}
+
+.actions {
+  margin: 0.75rem 1rem;
+  background-color: #f9fafb;
+}
+
+.desactivate {
+  display: inline-flex;
+  padding: 0.5rem 1rem;
+  background-color: #e74d4d;
+  color: #ffffff;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  justify-content: center;
+  width: 100%;
+  border-radius: 0.375rem;
+  border-width: 1px;
+  border-color: transparent;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+.cancel {
+  display: inline-flex;
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #ffffff;
+  color: #374151;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
+  font-weight: 500;
+  justify-content: center;
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+}
+
+@keyframes slideInX {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(2%);
+  }
+  75% {
+    transform: translateX(-2%);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInY {
+  0% {
+    transform: translateY(-200%);
+  }
+  50% {
+    transform: translateY(5%);
+  }
+  75% {
+    transform: translateY(-5%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* .slideInX {
+  animation: slideInX 300ms linear;
+}
+
+.fadeIn {
+  animation: fadeIn 250ms linear;
+} */
+
+.alertAnimation {
+  animation-name: slideInX, fadeIn;
+  animation-duration: 400ms, 550ms;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
+@media print {
+  .dontPrint {
+    display: none;
+  }
+
+  body {
+    font-size: 14px;
+    margin: 0;
+  }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type='number'] {
+  -moz-appearance: textfield;
+}
+
+/* From Uiverse.io by abrahamcalsin */
+.dot-spinner {
+  --uib-size: 2.8rem;
+  --uib-speed: 0.9s;
+  --uib-color: #183153;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: var(--uib-size);
+  width: var(--uib-size);
+}
+
+.dot-spinner__dot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: 100%;
+  width: 100%;
+}
+
+.dot-spinner__dot::before {
+  content: '';
+  height: 20%;
+  width: 20%;
+  border-radius: 50%;
+  background-color: var(--uib-color);
+  transform: scale(0);
+  opacity: 0.5;
+  animation: pulse0112 calc(var(--uib-speed) * 1.111) ease-in-out infinite;
+  box-shadow: 0 0 20px rgba(18, 31, 53, 0.3);
+}
+
+.dot-spinner__dot:nth-child(2) {
+  transform: rotate(45deg);
+}
+
+.dot-spinner__dot:nth-child(2)::before {
+  animation-delay: calc(var(--uib-speed) * -0.875);
+}
+
+.dot-spinner__dot:nth-child(3) {
+  transform: rotate(90deg);
+}
+
+.dot-spinner__dot:nth-child(3)::before {
+  animation-delay: calc(var(--uib-speed) * -0.75);
+}
+
+.dot-spinner__dot:nth-child(4) {
+  transform: rotate(135deg);
+}
+
+.dot-spinner__dot:nth-child(4)::before {
+  animation-delay: calc(var(--uib-speed) * -0.625);
+}
+
+.dot-spinner__dot:nth-child(5) {
+  transform: rotate(180deg);
+}
+
+.dot-spinner__dot:nth-child(5)::before {
+  animation-delay: calc(var(--uib-speed) * -0.5);
+}
+
+.dot-spinner__dot:nth-child(6) {
+  transform: rotate(225deg);
+}
+
+.dot-spinner__dot:nth-child(6)::before {
+  animation-delay: calc(var(--uib-speed) * -0.375);
+}
+
+.dot-spinner__dot:nth-child(7) {
+  transform: rotate(270deg);
+}
+
+.dot-spinner__dot:nth-child(7)::before {
+  animation-delay: calc(var(--uib-speed) * -0.25);
+}
+
+.dot-spinner__dot:nth-child(8) {
+  transform: rotate(315deg);
+}
+
+.dot-spinner__dot:nth-child(8)::before {
+  animation-delay: calc(var(--uib-speed) * -0.125);
+}
+
+@keyframes pulse0112 {
+  0%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+
+  50% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
