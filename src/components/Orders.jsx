@@ -1,14 +1,15 @@
-import useSWR from 'swr';
-import fetcher from '../helpers/fetcher';
-import { useEffect, useState } from 'react';
-import { MapPin, Phone, Trash2, CalendarDays, Clock } from 'lucide-react';
-import { Link } from 'react-router-dom';
-import Confirm from './Confirm';
+import useSWR from "swr";
+import fetcher from "../helpers/fetcher";
+import { useEffect, useState } from "react";
+import { MapPin, Phone, Trash2, CalendarDays, Clock } from "lucide-react";
+import { Link } from "react-router-dom";
+import Confirm from "./Confirm";
+import Spinner from "./Spinner.jsx";
 // coral: '#f28a72',
 // slate: '#6b7a8f',
 
 export default function Orders() {
-  const { data, isLoading } = useSWR('/orders/get', fetcher);
+  const { data, isLoading } = useSWR("/orders/get", fetcher);
   const [orders, setOrders] = useState([]);
   const [removingOrder, setRemovingOrder] = useState(null);
   useEffect(() => {
@@ -20,7 +21,7 @@ export default function Orders() {
 
   async function removeOrder(id) {
     try {
-      await fetcher(`/orders/remove/${id}`, 'POST');
+      await fetcher(`/orders/remove/${id}`, "POST");
 
       window.location.reload();
     } catch (err) {
@@ -28,14 +29,16 @@ export default function Orders() {
     }
   }
 
-  if (isLoading) return <div> Loading... </div>;
+  if (isLoading) {
+    return <Spinner />;
+  }
   return (
-    <div className="relative flex flex-col gap-4 p-8 tablet:grid  pb-[4rem] tablet:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] tablet:justify-items-center">
+    <div className="relative flex flex-col gap-4 p-8 tablet:grid bg-[#fbe8a6] pb-[4rem] tablet:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] tablet:justify-items-center">
       {removingOrder ? (
         <Confirm
-          action={'Usuń zamówienie'}
+          action={"Usuń zamówienie"}
           description={
-            'Czy na pewno chcesz usunąć zamówienie? Ta czynność jest nieodwracalna.'
+            "Czy na pewno chcesz usunąć zamówienie? Ta czynność jest nieodwracalna."
           }
           cancel={() => {
             setRemovingOrder(null);
@@ -52,8 +55,8 @@ export default function Orders() {
           className="relative w-full h-fit bg-white rounded-lg shadow-xl flex flex-col gap-4 items-start p-4 tablet:max-w-[400px] tablet:h-full"
         >
           <p className="self-center text-xl">
-            {' '}
-            Zamówienie numer {orderNumber}{' '}
+            {" "}
+            Zamówienie numer {orderNumber}{" "}
           </p>
           <div className="flex flex-col gap-3">
             <div className="flex gap-2 items-center">
@@ -81,7 +84,7 @@ export default function Orders() {
               setRemovingOrder(_id);
             }}
           >
-            <Trash2 color="white" width={'20px'} height={'auto'} />
+            <Trash2 color="white" width={"20px"} height={"auto"} />
           </div>
         </Link>
       ))}

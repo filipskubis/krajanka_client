@@ -1,18 +1,19 @@
-import { useEffect, useState } from 'react';
-import { CircleUserRound, CirclePlus, X, Trash2 } from 'lucide-react';
-import PhoneNumberInput from './PhoneNumberInput';
-import useSWR from 'swr';
-import fetcher from '../helpers/fetcher';
-import Confirm from './Confirm';
+import { useEffect, useState } from "react";
+import { CircleUserRound, CirclePlus, X, Trash2 } from "lucide-react";
+import PhoneNumberInput from "./PhoneNumberInput";
+import useSWR from "swr";
+import fetcher from "../helpers/fetcher";
+import Confirm from "./Confirm";
+import Spinner from "./Spinner.jsx";
 export default function Clients() {
-  const { data } = useSWR('/clients/get', fetcher);
+  const { data, isLoading } = useSWR("/clients/get", fetcher);
   const [clients, setClients] = useState([]);
   const [formActive, setFormActive] = useState(false);
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState("");
   const [isBeingDeleted, setIsBeingDeleted] = useState(null);
   async function removeClient(client) {
     try {
-      await fetcher(`/clients/delete/${client._id}`, 'POST');
+      await fetcher(`/clients/delete/${client._id}`, "POST");
     } catch (err) {
       return;
     }
@@ -29,11 +30,11 @@ export default function Clients() {
   }, [data]);
   async function handleSubmit(e) {
     e.preventDefault();
-    const address = document.querySelector('#address').value;
-    const phone = document.querySelector('#phone').value;
+    const address = document.querySelector("#address").value;
+    const phone = document.querySelector("#phone").value;
     let id;
     try {
-      const result = await fetcher('/clients/add', 'POST', {
+      const result = await fetcher("/clients/add", "POST", {
         address,
         phone,
       });
@@ -46,15 +47,18 @@ export default function Clients() {
 
     setClients(newClients);
     setFormActive(false);
-    setPhone('');
+    setPhone("");
+  }
+  if (isLoading) {
+    return <Spinner />;
   }
   return (
-    <div className="flex flex-col gap-4 p-6 tablet:!text-lg">
+    <div className="flex flex-col gap-4 p-6 tablet:!text-lg bg-[#fbe8a6]">
       {isBeingDeleted ? (
         <Confirm
-          action={'Usuń stałego klienta'}
+          action={"Usuń stałego klienta"}
           description={
-            'Czy na pewno chcesz usunąć tego klienta? Ta czynność jest nieodwracalna.'
+            "Czy na pewno chcesz usunąć tego klienta? Ta czynność jest nieodwracalna."
           }
           cancel={() => {
             setIsBeingDeleted(null);
@@ -78,7 +82,7 @@ export default function Clients() {
                   setFormActive(false);
                 }}
               >
-                <X color="#00000070" width={'1.5rem'} height={'100%'} />
+                <X color="#00000070" width={"1.5rem"} height={"100%"} />
               </button>
               <div className="flex flex-col gap-1">
                 <label htmlFor="address"> Adres: </label>
@@ -91,8 +95,8 @@ export default function Clients() {
               </div>
               <PhoneNumberInput value={phone} change={setPhone} />
               <button className="border-[1px] rounded-full bg-[#00000020] p-2 active:scale-[101%]">
-                {' '}
-                Dodaj{' '}
+                {" "}
+                Dodaj{" "}
               </button>
             </div>
           </div>
@@ -103,7 +107,7 @@ export default function Clients() {
               setFormActive(true);
             }}
           >
-            <CirclePlus color="#303c6c" width={'2rem'} height={'100%'} />
+            <CirclePlus color="#303c6c" width={"2rem"} height={"100%"} />
             <p className="text-xl tablet:text-2xl">Dodaj stałego klienta</p>
           </button>
         )}
@@ -114,11 +118,11 @@ export default function Clients() {
             key={client._id}
             className="relative rounded-lg bg-white justify-start p-4 flex items-center gap-4 tablet:w-full tablet:max-w-[350px]"
           >
-            <CircleUserRound color="#f4976c" width={'2rem'} height={'100%'} />
-            <p className="relative w-[70%]">
+            <CircleUserRound color="#f4976c" width={"2rem"} height={"100%"} />
+            <div className="relative w-[70%]">
               <p>{client.address}</p>
               <p>tel: {client.phone}</p>
-            </p>
+            </div>
             <div className="flex items-center h-full right-[0.7rem] absolute">
               <div
                 className="bg-[#E74D4D] rounded-full p-2"
@@ -126,7 +130,7 @@ export default function Clients() {
                   setIsBeingDeleted(client);
                 }}
               >
-                <Trash2 color="white" width={'18px'} height={'auto'} />
+                <Trash2 color="white" width={"18px"} height={"auto"} />
               </div>
             </div>
           </div>

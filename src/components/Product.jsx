@@ -1,9 +1,9 @@
 /* eslint-disable react/prop-types */
-import { Pencil, Trash2 } from 'lucide-react';
-import { useState, useRef, useEffect, useContext } from 'react';
-import fetcher from '../helpers/fetcher';
-import { AlertContext } from '../misc/AlertContext.jsx';
-import Confirm from './Confirm.jsx';
+import { Pencil, Trash2 } from "lucide-react";
+import { useState, useRef, useEffect, useContext } from "react";
+import fetcher from "../helpers/fetcher";
+import { AlertContext } from "../misc/AlertContext.jsx";
+import Confirm from "./Confirm.jsx";
 
 export default function Product({ uniqueId, name, src, initPrice, packaging }) {
   const { addAlert } = useContext(AlertContext);
@@ -20,10 +20,10 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
 
   async function removeProduct() {
     try {
-      const response = await fetcher(`/products/delete/${uniqueId}`, 'POST');
-      addAlert('success', response);
+      const response = await fetcher(`/products/delete/${uniqueId}`, "POST");
+      addAlert("success", response);
     } catch (err) {
-      addAlert('error', err.message);
+      addAlert("error", err.message);
     }
     window.location.reload();
   }
@@ -33,10 +33,10 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
     if (price === initPrice) return;
     const body = { price: price };
     try {
-      const response = await fetcher(`/products/edit/${uniqueId}`, 'PUT', body);
-      addAlert('success', response);
+      const response = await fetcher(`/products/edit/${uniqueId}`, "PUT", body);
+      addAlert("success", response);
     } catch (err) {
-      addAlert('error', err.message);
+      addAlert("error", err.message);
     }
     setIsEditMode(false);
   }
@@ -64,7 +64,7 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
             setIsBeingDeleted(true);
           }}
         >
-          <Trash2 color="white" width={'20px'} height={'auto'} />
+          <Trash2 color="white" width={"20px"} height={"auto"} />
         </div>
       ) : null}
       <div
@@ -77,7 +77,7 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
           setIsEditMode(!isEditMode);
         }}
       >
-        <Pencil width={'20px'} height={'auto'} />
+        <Pencil width={"20px"} height={"auto"} />
       </div>
       {src != null && (
         <img
@@ -103,8 +103,8 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
               onChange={(e) => {
                 let value = e.target.value;
 
-                if (value.includes('.')) {
-                  const [integerPart, decimalPart] = value.split('.');
+                if (value.includes(".")) {
+                  const [integerPart, decimalPart] = value.split(".");
                   if (decimalPart.length > 2) {
                     value = `${integerPart}.${decimalPart.slice(0, 2)}`;
                   }
@@ -124,7 +124,7 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
           <p> {packaging} </p>
         </form>
       ) : (
-        <p className="text-lg">
+        <div className="text-lg">
           {price < 1 ? (
             <p>
               {price * 100} groszy / {packaging}
@@ -134,7 +134,7 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
               {price} PLN / {packaging}
             </p>
           )}
-        </p>
+        </div>
       )}
     </div>
   );

@@ -1,41 +1,52 @@
 /* eslint-disable no-unused-vars */
-import React from 'react';
-import Layout from './Layout';
-import Products from './Products';
-import Clients from './Clients';
-import OrderForm from './OrderForm';
-import Orders from './Orders';
-import OrderDetails from './OrderDetails';
-import HomePage from './HomePage';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-
+import React from "react";
+import Layout from "./Layout";
+import Products from "./Products";
+import Clients from "./Clients";
+import OrderForm from "./OrderForm";
+import Orders from "./Orders";
+import OrderDetails from "./OrderDetails";
+import HomePage from "./HomePage";
+import LoginPage from "./LoginPage";
+import ProtectedRoute from "./ProtectedRoute";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "../misc/AuthContext";
+import Alerts from "./Alerts";
 const router = createBrowserRouter([
   {
-    path: '/',
-    element: <Layout />,
+    path: "/login",
+    element: <LoginPage />,
+  },
+  {
+    path: "/",
+    element: (
+      <ProtectedRoute>
+        <Layout />
+      </ProtectedRoute>
+    ),
     children: [
       {
-        path: '/',
+        path: "/",
         element: <HomePage />,
       },
       {
-        path: '/produkty',
+        path: "/produkty",
         element: <Products />,
       },
       {
-        path: '/klienci',
+        path: "/klienci",
         element: <Clients />,
       },
       {
-        path: '/formularz',
+        path: "/formularz",
         element: <OrderForm />,
       },
       {
-        path: '/zamówienia',
+        path: "/zamówienia",
         element: <Orders />,
       },
       {
-        path: '/zamówienie/:id',
+        path: "/zamówienie/:id",
         element: <OrderDetails />,
       },
     ],
@@ -43,5 +54,10 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AuthProvider>
+      <Alerts />
+      <RouterProvider router={router} />
+    </AuthProvider>
+  );
 }

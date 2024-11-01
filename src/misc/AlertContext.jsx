@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import { createContext, useRef, useState } from 'react';
+import { createContext, useRef, useState } from "react";
 export const AlertContext = createContext();
 
 export const AlertProvider = ({ children }) => {

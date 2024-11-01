@@ -1,23 +1,23 @@
 // import { useState } from "react"
-import { AlignJustify, CirclePlus } from 'lucide-react';
-import { useEffect, useState } from 'react';
-import { Carrot } from 'lucide-react';
-import { UsersRound } from 'lucide-react';
-import { BookOpen } from 'lucide-react';
-import { ArrowLeft } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { AlignJustify, CirclePlus } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Carrot } from "lucide-react";
+import { UsersRound } from "lucide-react";
+import { BookOpen } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { Link } from "react-router-dom";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
     if (open) {
-      document.body.style.overflowY = 'hidden';
+      document.body.style.overflowY = "hidden";
     } else {
-      document.body.style.overflowY = '';
+      document.body.style.overflowY = "";
     }
 
     return () => {
-      document.body.style.overflowY = '';
+      document.body.style.overflowY = "";
     };
   }, [open]);
 
@@ -33,7 +33,9 @@ export default function Navbar() {
         <AlignJustify color="#303c6c" width="2rem" height="2rem" />
       </button>
       <div
-        className={`flex h-full flex-col items-start pl-4 pt-16 gap-[2.5rem] ${open ? 'translate-x-[0]' : 'translate-x-[-100%]'} absolute left-0 top-0 w-[20rem] tablet:w-[24rem] pr-4 bg-[#f9f9f9] transition-transform duration-200 z-[9999]`}
+        className={`flex h-full flex-col items-start pl-4 pt-16 gap-[2.5rem] ${
+          open ? "translate-x-[0]" : "translate-x-[-100%]"
+        } absolute left-0 top-0 w-[20rem] tablet:w-[24rem] pr-4 bg-[#f9f9f9] transition-transform duration-200 z-[9999]`}
       >
         <button
           className="absolute top-[1rem] left-[1rem] "

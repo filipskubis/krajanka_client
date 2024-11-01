@@ -1,10 +1,10 @@
-import { Carrot, UsersRound, BookOpen, CirclePlus } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Carrot, UsersRound, BookOpen, CirclePlus } from "lucide-react";
+import { Link } from "react-router-dom";
 
 export default function HomePage() {
   return (
     <div
-      className={`flex h-full flex-col pt-[10%] items-center gap-[2.5rem] w-full  pr-4`}
+      className={`flex h-full flex-col pt-[10%] items-center gap-[2.5rem] w-full`}
     >
       <Link
         to="/produkty"

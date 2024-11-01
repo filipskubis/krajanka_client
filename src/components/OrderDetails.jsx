@@ -1,12 +1,13 @@
-import { useParams } from 'react-router-dom';
-import useSWR from 'swr';
-import fetcher from '../helpers/fetcher';
-import { MapPin, Phone, CalendarDays, Clock } from 'lucide-react';
-import { useState } from 'react';
-import Confirm from './Confirm';
-import { useNavigate } from 'react-router-dom';
-import Big from 'big.js';
-import EditForm from './EditForm';
+import { useParams } from "react-router-dom";
+import useSWR from "swr";
+import fetcher from "../helpers/fetcher";
+import { MapPin, Phone, CalendarDays, Clock } from "lucide-react";
+import { useRef, useState } from "react";
+import Confirm from "./Confirm";
+import { useNavigate } from "react-router-dom";
+import Big from "big.js";
+import EditForm from "./EditForm";
+import Spinner from "./Spinner.jsx";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -15,16 +16,17 @@ export default function OrderDetails() {
   const { data, isLoading } = useSWR(`/orders/get/${id}`, fetcher);
   const [editing, setEditing] = useState(false);
   const [confirmWindow, setConfirmWindow] = useState(false);
+  const orderRef = useRef(null);
   const navigate = useNavigate();
   if (isLoading) {
-    return <div> Loading... </div>;
+    return <Spinner />;
   }
 
   async function removeOrder() {
     try {
-      const response = await fetcher(`/orders/remove/${id}`, 'POST');
+      const response = await fetcher(`/orders/remove/${id}`, "POST");
       if (response.ok) {
-        navigate('/zamówienia');
+        navigate("/zamówienia");
       } else {
         throw new Error(response.message);
       }
@@ -34,7 +36,7 @@ export default function OrderDetails() {
   }
 
   function handlePrint() {
-    window.print();
+    orderRef.current.print();
   }
 
   if (editing && data) {
@@ -48,12 +50,12 @@ export default function OrderDetails() {
     );
   }
   return (
-    <div className="relative w-full h-fit p-4 ">
+    <div className="relative w-full h-fit p-4 bg-[#fbe8a6]">
       {confirmWindow ? (
         <Confirm
-          action={'Usuń zamówienie'}
+          action={"Usuń zamówienie"}
           description={
-            'Czy na pewno chcesz usunąć zamówienie? Ta czynność nie może być cofnięta.'
+            "Czy na pewno chcesz usunąć zamówienie? Ta czynność nie może być cofnięta."
           }
           cancel={() => {
             setConfirmWindow(false);
@@ -63,17 +65,20 @@ export default function OrderDetails() {
           }}
         />
       ) : null}
-      <div className="bg-white h-full w-full rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8">
+      <div
+        className="bg-white h-full w-full rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8"
+        ref={orderRef}
+      >
         <p className="text-2xl text-slate self-center tablet:text-3xl">
-          {' '}
+          {" "}
           Zamówienie numer: {data.orderNumber}
         </p>
         <div className="flex flex-col gap-3 w-full text-lg tablet:text-xl">
           <div className="flex gap-2 items-center">
             <MapPin
               color="#f28a72"
-              width={'30px'}
-              height={'auto'}
+              width={"30px"}
+              height={"auto"}
               className="tablet:w-[2rem]"
             />
             <p>{data.address} </p>
@@ -81,8 +86,8 @@ export default function OrderDetails() {
           <div className="flex gap-2 items-center">
             <Phone
               color="#f28a72"
-              width={'30px'}
-              height={'auto'}
+              width={"30px"}
+              height={"auto"}
               className="tablet:w-[2rem]"
             />
             <p>{data.phone} </p>
@@ -90,8 +95,8 @@ export default function OrderDetails() {
           <div className="flex gap-2 items-center">
             <CalendarDays
               color="#f28a72"
-              width={'30px'}
-              height={'auto'}
+              width={"30px"}
+              height={"auto"}
               className="tablet:w-[2rem]"
             />
             <p> {data.date} </p>
@@ -99,8 +104,8 @@ export default function OrderDetails() {
           <div className="flex gap-2 items-center">
             <Clock
               color="#f28a72"
-              width={'30px'}
-              height={'auto'}
+              width={"30px"}
+              height={"auto"}
               className="tablet:w-[2rem]"
             />
             <p> {data.time} </p>
@@ -117,12 +122,12 @@ export default function OrderDetails() {
             ({ name, price, quantity, packagingMethod }, index) => (
               <div
                 key={index}
-                className="border-[2px] border-slate rounded-md p-1 gap-4 grid grid-cols-5 content-center"
+                className="border-[2px] border-slate rounded-md p-1 gap-4 grid grid-cols-5 content-center flex-shrink"
               >
                 <p className="col-start-1 col-end-3"> {name} </p>
                 <p className="col-start-3 col-end-4"> {price} zł</p>
                 <p className="col-start-4 col-end-6">
-                  {' '}
+                  {" "}
                   {quantity} ({packagingMethod})
                 </p>
               </div>
@@ -137,7 +142,7 @@ export default function OrderDetails() {
                     (acc, product) =>
                       acc + Number(Big(product.quantity).times(product.price)),
                     0
-                  )}{' '}
+                  )}{" "}
                   zł
                 </p>
               </p>

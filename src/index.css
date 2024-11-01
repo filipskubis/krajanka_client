@@ -3,17 +3,21 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: 'League Spartan';
-  src: url('/LeagueSpartan-VariableFont_wght.ttf');
+  font-family: "League Spartan";
+  src: url("/LeagueSpartan-VariableFont_wght.ttf");
 }
 
 @font-face {
-  font-family: 'Inter';
-  src: url('../public/Inter-VariableFont_opsz,wght.ttf');
+  font-family: "Inter";
+  src: url("../public/Inter-VariableFont_opsz,wght.ttf");
 }
 
+html,
 body {
-  background-color: #fbe8a6;
+  min-height: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: white;
   overflow-x: hidden;
 }
 
@@ -27,7 +31,7 @@ body {
 }
 
 * {
-  font-family: 'Inter';
+  font-family: "Inter";
   font-weight: 600;
   color: #303c6c;
 }
@@ -208,7 +212,7 @@ button::-moz-focus-inner {
   filter: brightness(90%);
 }
 
-.options input[type='radio'] {
+.options input[type="radio"] {
   display: none;
 }
 
@@ -219,24 +223,24 @@ button::-moz-focus-inner {
   content: attr(data-txt);
 }
 
-.options input[type='radio']:checked + label {
+.options input[type="radio"]:checked + label {
   display: none;
 }
 
-.options input[type='radio']#all:checked + label {
+.options input[type="radio"]#all:checked + label {
   display: none;
 }
 
-.select:has(.options input[type='radio']#all:checked) .selected::before {
+.select:has(.options input[type="radio"]#all:checked) .selected::before {
   content: attr(data-default);
 }
-.select:has(.options input[type='radio']#option-1:checked) .selected::before {
+.select:has(.options input[type="radio"]#option-1:checked) .selected::before {
   content: attr(data-one);
 }
-.select:has(.options input[type='radio']#option-2:checked) .selected::before {
+.select:has(.options input[type="radio"]#option-2:checked) .selected::before {
   content: attr(data-two);
 }
-.select:has(.options input[type='radio']#option-3:checked) .selected::before {
+.select:has(.options input[type="radio"]#option-3:checked) .selected::before {
   content: attr(data-three);
 }
 
@@ -267,7 +271,7 @@ button::-moz-focus-inner {
 
 .radio-input label::before {
   position: absolute;
-  content: '';
+  content: "";
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -293,7 +297,7 @@ button::-moz-focus-inner {
   color: black;
 }
 
-.radio-input .label input[type='radio'] {
+.radio-input .label input[type="radio"] {
   background-color: white;
   appearance: none;
   width: 17px;
@@ -304,14 +308,14 @@ button::-moz-focus-inner {
   justify-content: center;
   align-items: center;
 }
-.radio-input .label input[type='radio']:checked {
+.radio-input .label input[type="radio"]:checked {
   background-color: #f28a72;
   -webkit-animation: puls 0.7s forwards;
   animation: pulse 0.7s forwards;
 }
 
-.radio-input .label input[type='radio']:before {
-  content: '';
+.radio-input .label input[type="radio"]:before {
+  content: "";
   width: 6px;
   height: 6px;
   border-radius: 50%;
@@ -320,7 +324,7 @@ button::-moz-focus-inner {
   transform: scale(0);
 }
 
-.radio-input .label input[type='radio']:checked::before {
+.radio-input .label input[type="radio"]:checked::before {
   transform: scale(1);
 }
 
@@ -337,7 +341,7 @@ button::-moz-focus-inner {
 }
 
 /* From Uiverse.io by vishnupprajapat */
-.checkbox-wrapper-46 input[type='checkbox'] {
+.checkbox-wrapper-46 input[type="checkbox"] {
   display: none;
   visibility: hidden;
 }
@@ -378,7 +382,7 @@ button::-moz-focus-inner {
   transform: translate3d(0, 0, 0);
 }
 .checkbox-wrapper-46 .cbx span:first-child:before {
-  content: '';
+  content: "";
   width: 100%;
   height: 100%;
   background: #f28a72;
@@ -419,8 +423,7 @@ button::-moz-focus-inner {
   text-align: left;
   border-radius: 0.5rem;
   max-width: 290px;
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   animation: slideInY 500ms linear;
 }
@@ -577,7 +580,7 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -585,8 +588,12 @@ input[type='number'] {
 .dot-spinner {
   --uib-size: 2.8rem;
   --uib-speed: 0.9s;
-  --uib-color: #183153;
-  position: relative;
+  --uib-color: #f28a72;
+  position: fixed;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  margin: auto;
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -606,7 +613,7 @@ input[type='number'] {
 }
 
 .dot-spinner__dot::before {
-  content: '';
+  content: "";
   height: 20%;
   width: 20%;
   border-radius: 50%;
@@ -684,4 +691,28 @@ input[type='number'] {
     transform: scale(1);
     opacity: 1;
   }
+}
+
+/* From Uiverse.io by elijahgummer */
+.loginBtn {
+  font: inherit;
+  background-color: #f0f0f0;
+  border: 0;
+  color: #242424;
+  border-radius: 0.5em;
+  font-size: 1.35rem;
+  padding: 0.375em 1em;
+  font-weight: 600;
+  text-shadow: 0 0.0625em 0 #fff;
+  box-shadow: inset 0 0.0625em 0 0 #f4f4f4, 0 0.0625em 0 0 #efefef,
+    0 0.125em 0 0 #ececec, 0 0.25em 0 0 #e0e0e0, 0 0.3125em 0 0 #dedede,
+    0 0.375em 0 0 #dcdcdc, 0 0.425em 0 0 #cacaca, 0 0.425em 0.5em 0 #cecece;
+  transition: 0.15s ease;
+  cursor: pointer;
+}
+.loginBtn:active {
+  translate: 0 0.225em;
+  box-shadow: inset 0 0.03em 0 0 #f4f4f4, 0 0.03em 0 0 #efefef,
+    0 0.0625em 0 0 #ececec, 0 0.125em 0 0 #e0e0e0, 0 0.125em 0 0 #dedede,
+    0 0.2em 0 0 #dcdcdc, 0 0.225em 0 0 #cacaca, 0 0.225em 0.375em 0 #cecece;
 }

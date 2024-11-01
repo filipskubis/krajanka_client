@@ -1,32 +1,32 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useContext, useEffect, useState } from 'react';
-import { CirclePlus, ClipboardList, CircleMinus } from 'lucide-react';
-import PhoneNumberInput from './PhoneNumberInput';
-import fetcher from '../helpers/fetcher';
-import useSWR from 'swr';
-import ClientsModal from './ClientsModal';
-import ProductModal from './ProductModal';
-import { MobileTimePicker } from '@mui/x-date-pickers/MobileTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { MobileDatePicker } from '@mui/x-date-pickers/MobileDatePicker';
-import 'dayjs/locale/pl';
-import dayjs from 'dayjs';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { useNavigate } from 'react-router-dom';
-import Big from 'big.js';
-import { AlertContext } from '../misc/AlertContext';
+import { useContext, useEffect, useState } from "react";
+import { CirclePlus, ClipboardList, CircleMinus } from "lucide-react";
+import PhoneNumberInput from "./PhoneNumberInput";
+import fetcher from "../helpers/fetcher";
+import useSWR from "swr";
+import ClientsModal from "./ClientsModal";
+import ProductModal from "./ProductModal";
+import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
+import "dayjs/locale/pl";
+import dayjs from "dayjs";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useNavigate } from "react-router-dom";
+import Big from "big.js";
+import { AlertContext } from "../misc/AlertContext";
 
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
 function convertToDateAndTimeObjects(dateStr, timeStr) {
   // Parse the date part
-  const dateObject = dayjs(dateStr, 'DD-MM-YYYY');
+  const dateObject = dayjs(dateStr, "DD-MM-YYYY");
 
   // Parse the time part
-  const [hours, minutes] = timeStr.split(':');
+  const [hours, minutes] = timeStr.split(":");
   const timeObject = dayjs()
     .hour(parseInt(hours, 10))
     .minute(parseInt(minutes, 10))
@@ -39,7 +39,7 @@ function convertToDateAndTimeObjects(dateStr, timeStr) {
 const theme = createTheme({
   palette: {
     primary: {
-      main: '#f28a72',
+      main: "#f28a72",
     },
   },
   shape: {
@@ -49,21 +49,21 @@ const theme = createTheme({
     MuiDatePickerToolbar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f28a72',
+          backgroundColor: "#f28a72",
         },
       },
     },
     MuiTimePickerToolbar: {
       styleOverrides: {
         root: {
-          backgroundColor: '#f28a72',
+          backgroundColor: "#f28a72",
         },
       },
     },
     MuiButtonBase: {
       styleOverrides: {
         root: {
-          color: '#f28a72',
+          color: "#f28a72",
         },
       },
     },
@@ -71,7 +71,7 @@ const theme = createTheme({
 });
 
 export default function EditForm({ order, close }) {
-  const { data } = useSWR('/products/get', fetcher);
+  const { data } = useSWR("/products/get", fetcher);
   const [products, setProducts] = useState(order.products);
   const [productModal, setProductModal] = useState(false);
   const [clientModal, setClientModal] = useState(false);
@@ -108,10 +108,10 @@ export default function EditForm({ order, close }) {
     e.preventDefault();
     const productsNoTotal = products.map(({ total, ...rest }) => rest);
     if (!(date && time)) {
-      return console.log('Please select both date and time.');
+      return console.log("Please select both date and time.");
     }
-    const formattedDate = date.format('DD-MM-YYYY');
-    const formattedTime = time.format('HH:mm');
+    const formattedDate = date.format("DD-MM-YYYY");
+    const formattedTime = time.format("HH:mm");
     const body = {
       address,
       phone,
@@ -122,12 +122,12 @@ export default function EditForm({ order, close }) {
       originalOrderNumber: order.orderNumber,
     };
     try {
-      const response = await fetcher(`/orders/edit/${order._id}`, 'PUT', body);
+      const response = await fetcher(`/orders/edit/${order._id}`, "PUT", body);
       resetForm();
       close();
-      addAlert('success', response);
+      addAlert("success", response);
     } catch (err) {
-      addAlert('error', err);
+      addAlert("error", err);
     }
   }
 
@@ -164,9 +164,9 @@ export default function EditForm({ order, close }) {
 
   function resetForm() {
     setProducts([]);
-    setAddress('');
-    setPhone('');
-    setOrderNumber('');
+    setAddress("");
+    setPhone("");
+    setOrderNumber("");
     setDate(null);
     setTime(null);
   }
@@ -179,8 +179,8 @@ export default function EditForm({ order, close }) {
     e.preventDefault();
     e.stopPropagation();
 
-    const name = e.target.querySelector('#productSelect').value;
-    const quantity = e.target.querySelector('#quantity').value;
+    const name = e.target.querySelector("#productSelect").value;
+    const quantity = e.target.querySelector("#quantity").value;
     const product = data.find((product) => product.name === name);
     const uniqueId = crypto.randomUUID();
     const productObject = {
@@ -210,7 +210,7 @@ export default function EditForm({ order, close }) {
         />
       ) : null}
       <form
-        className="w-full h-fit bg-white p-4 rounded-lg flex flex-col gap-8 pb-12"
+        className="w-full h-full bg-white p-4 rounded-lg flex flex-col gap-8 pb-12"
         onSubmit={handleFormSubmit}
       >
         <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
@@ -255,7 +255,7 @@ export default function EditForm({ order, close }) {
               <p className="col-start-1 col-end-3"> {name} </p>
               <p className="col-start-3 col-end-4"> {price} zł</p>
               <p className="col-start-4 col-end-5">
-                {' '}
+                {" "}
                 {quantity} ({packagingMethod})
               </p>
               <div className="absolute flex gap-2 right-2 h-full items-center">
@@ -287,7 +287,7 @@ export default function EditForm({ order, close }) {
                     (acc, product) =>
                       acc + Number(Big(product.quantity).times(product.price)),
                     0
-                  )}{' '}
+                  )}{" "}
                   zł
                 </p>
               </p>
@@ -333,12 +333,12 @@ export default function EditForm({ order, close }) {
                 value={date}
                 onChange={handleDateChange}
                 localeText={{
-                  cancelButtonLabel: 'Anuluj',
-                  okButtonLabel: 'OK',
-                  clearButtonLabel: 'Wyczyść',
-                  toolbarTitle: 'Wybierz datę',
-                  previousMonth: 'Poprzedni miesiąc',
-                  nextMonth: 'Następny miesiąc',
+                  cancelButtonLabel: "Anuluj",
+                  okButtonLabel: "OK",
+                  clearButtonLabel: "Wyczyść",
+                  toolbarTitle: "Wybierz datę",
+                  previousMonth: "Poprzedni miesiąc",
+                  nextMonth: "Następny miesiąc",
                 }}
               />
             </LocalizationProvider>
@@ -353,9 +353,9 @@ export default function EditForm({ order, close }) {
                 onChange={handleTimeChange}
                 ampm={false}
                 localeText={{
-                  toolbarTitle: 'Wybierz godzinę',
-                  cancelButtonLabel: 'Anuluj',
-                  okButtonLabel: 'OK',
+                  toolbarTitle: "Wybierz godzinę",
+                  cancelButtonLabel: "Anuluj",
+                  okButtonLabel: "OK",
                 }}
               />
             </LocalizationProvider>
