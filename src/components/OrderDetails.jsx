@@ -2,12 +2,13 @@ import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import { MapPin, Phone, CalendarDays, Clock } from "lucide-react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Confirm from "./Confirm";
 import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import EditForm from "./EditForm";
 import Spinner from "./Spinner.jsx";
+import { useReactToPrint } from "react-to-print";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -16,8 +17,13 @@ export default function OrderDetails() {
   const { data, isLoading } = useSWR(`/orders/get/${id}`, fetcher);
   const [editing, setEditing] = useState(false);
   const [confirmWindow, setConfirmWindow] = useState(false);
-  const orderRef = useRef(null);
+  const orderRef = useRef();
   const navigate = useNavigate();
+
+  function handlePrint() {
+    window.print();
+  }
+
   if (isLoading) {
     return <Spinner />;
   }
@@ -33,10 +39,6 @@ export default function OrderDetails() {
     } catch (err) {
       console.log(err);
     }
-  }
-
-  function handlePrint() {
-    orderRef.current.print();
   }
 
   if (editing && data) {
@@ -66,7 +68,7 @@ export default function OrderDetails() {
         />
       ) : null}
       <div
-        className="bg-white h-full w-full rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8"
+        className="bg-white h-full w-full print:shadow-none rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8"
         ref={orderRef}
       >
         <p className="text-2xl text-slate self-center tablet:text-3xl">
