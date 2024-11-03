@@ -4,7 +4,7 @@ function useSwipe(onSwipeLeft, onSwipeRight) {
   useEffect(() => {
     let touchStartX = 0;
     let touchEndX = 0;
-    const swipeThreshold = 200;
+    const swipeThreshold = 100;
 
     function handleTouchStart(event) {
       touchStartX = event.changedTouches[0].screenX;
