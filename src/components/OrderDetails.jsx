@@ -16,7 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import EditForm from "./EditForm";
 import Spinner from "./Spinner.jsx";
-import printNodeAsImage from "../helpers/printNode.js";
+
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -33,7 +33,7 @@ export default function OrderDetails() {
   );
 
   function handlePrint() {
-    printNodeAsImage(orderRef.current);
+    window.print();
   }
 
   async function goToNextOrder() {
