@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import EditForm from "./EditForm";
 import Spinner from "./Spinner.jsx";
+import printNodeAsImage from "../helpers/printNode.js";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -24,16 +25,15 @@ export default function OrderDetails() {
   const { data, isLoading } = useSWR(`/orders/get/${id}`, fetcher);
   const [editing, setEditing] = useState(false);
   const [confirmWindow, setConfirmWindow] = useState(false);
+  const orderRef = useRef(null);
   const navigate = useNavigate();
   useSwipe(
     () => goToNextOrder(),
     () => goToPrevioustOrder()
   );
 
-  const componentRef = useRef();
-
   function handlePrint() {
-    window.print();
+    printNodeAsImage(orderRef.current);
   }
 
   async function goToNextOrder() {
@@ -76,7 +76,7 @@ export default function OrderDetails() {
         )}
         <div
           className="bg-white w-full max-w-[130mm] print:shadow-none rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8 print:!text-xs print:gap-2 print:pb-4"
-          ref={componentRef}
+          ref={orderRef}
         >
           {isLoading ? (
             <Spinner />
@@ -238,7 +238,7 @@ export default function OrderDetails() {
       )}
       <div
         className="bg-white h-full w-full print:shadow-none rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8 print:!text-sm"
-        ref={componentRef}
+        ref={orderRef}
       >
         {isLoading ? (
           <Spinner />
