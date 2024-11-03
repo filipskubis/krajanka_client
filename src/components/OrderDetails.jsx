@@ -1,14 +1,21 @@
 import { useParams } from "react-router-dom";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
-import { MapPin, Phone, CalendarDays, Clock } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import useSwipe from "../helpers/useSwipe.jsx";
+import {
+  MapPin,
+  Phone,
+  CalendarDays,
+  Clock,
+  CreditCard,
+  NotebookPen,
+} from "lucide-react";
+import { useRef, useState } from "react";
 import Confirm from "./Confirm";
 import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import EditForm from "./EditForm";
 import Spinner from "./Spinner.jsx";
-import { useReactToPrint } from "react-to-print";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -19,7 +26,27 @@ export default function OrderDetails() {
   const [confirmWindow, setConfirmWindow] = useState(false);
   const orderRef = useRef();
   const navigate = useNavigate();
+  useSwipe(
+    () => goToNextOrder(),
+    () => goToPrevioustOrder()
+  );
 
+  async function goToNextOrder() {
+    try {
+      const nextID = await fetcher(`/orders/getNextOrderID/${id}`);
+      navigate(`/zamówienie/${nextID}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  async function goToPrevioustOrder() {
+    try {
+      const nextID = await fetcher(`/orders/getPreviousOrderID/${id}`);
+      navigate(`/zamówienie/${nextID}`);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   function handlePrint() {
     window.print();
   }
@@ -30,12 +57,8 @@ export default function OrderDetails() {
 
   async function removeOrder() {
     try {
-      const response = await fetcher(`/orders/remove/${id}`, "POST");
-      if (response.ok) {
-        navigate("/zamówienia");
-      } else {
-        throw new Error(response.message);
-      }
+      await fetcher(`/orders/remove/${id}`, "POST");
+      navigate("/zamówienia");
     } catch (err) {
       console.log(err);
     }
@@ -95,13 +118,31 @@ export default function OrderDetails() {
             <p>{data.phone} </p>
           </div>
           <div className="flex gap-2 items-center">
+            <CreditCard
+              color="#f28a72"
+              width={"30px"}
+              height={"auto"}
+              className="tablet:w-[2rem]"
+            />
+            <p> {data.paymentMethod || "- ~ -"} </p>
+          </div>
+          <div className="flex gap-2 items-center dontPrint">
+            <NotebookPen
+              color="#f28a72"
+              width={"30px"}
+              height={"auto"}
+              className="tablet:w-[2rem]"
+            />
+            <p> {data.note || "- ~ -"} </p>
+          </div>
+          <div className="flex gap-2 items-center">
             <CalendarDays
               color="#f28a72"
               width={"30px"}
               height={"auto"}
               className="tablet:w-[2rem]"
             />
-            <p> {data.date} </p>
+            <p> {data.date || "- ~ -"} </p>
           </div>
           <div className="flex gap-2 items-center">
             <Clock
@@ -110,31 +151,33 @@ export default function OrderDetails() {
               height={"auto"}
               className="tablet:w-[2rem]"
             />
-            <p> {data.time} </p>
+            <p> {data.time || "- ~ -"} </p>
           </div>
           {data.products.length > 0 ? (
-            <p className="gap-4 p-1 grid grid-cols-5 w-full">
-              <p className="col-start-1 col-end-3"> Nazwa: </p>
-              <p className="col-start-3 col-end-4"> Cena: </p>
-              <p className="col-start-4 col-end-5"> Ilość: </p>
-            </p>
+            <div className="gap-4 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] text-left w-full">
+              <p>Nazwa:</p>
+              <p>Cena:</p>
+              <p>Ilość:</p>
+              <p>Razem:</p>
+            </div>
           ) : null}
 
           {data.products.map(
-            ({ name, price, quantity, packagingMethod }, index) => (
+            ({ id, name, price, quantity, packagingMethod }) => (
               <div
-                key={index}
-                className="border-[2px] border-slate rounded-md p-1 gap-4 grid grid-cols-5 content-center flex-shrink"
+                key={id}
+                className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] items-center text-left w-full"
               >
-                <p className="col-start-1 col-end-3"> {name} </p>
-                <p className="col-start-3 col-end-4"> {price} zł</p>
-                <p className="col-start-4 col-end-6">
-                  {" "}
+                <p className="truncate break-words">{name}</p>
+                <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
+                <p>
                   {quantity} ({packagingMethod})
                 </p>
+                <p>{`${String(Big(quantity).times(price))} zł`}</p>
               </div>
             )
           )}
+
           {data.products.length > 0 ? (
             <div className="gap-4 p-1 flex w-full justify-end">
               <p className="border-[2px] border-slate p-1 rounded-md flex gap-2 ">

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CircleMinus, CirclePlus, ClipboardList } from "lucide-react";
 import PhoneNumberInput from "./PhoneNumberInput";
 import fetcher from "../helpers/fetcher";
@@ -61,7 +61,7 @@ export default function OrderForm() {
   const [products, setProducts] = useState([]);
   const [productModal, setProductModal] = useState(false);
   const [clientModal, setClientModal] = useState(false);
-
+  const [payment, setPayment] = useState("Przelew/BLIK");
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState("");
 
@@ -70,6 +70,21 @@ export default function OrderForm() {
 
   const { addAlert } = useContext(AlertContext);
 
+  const textarea = useRef(null);
+  const [note, setNote] = useState("");
+
+  useEffect(() => {
+    if (textarea.current) {
+      textarea.current.addEventListener("input", function () {
+        this.style.height = "auto";
+        this.style.height = this.scrollHeight + "px";
+      });
+    }
+  }, [textarea]);
+
+  const handleTextareaChange = (e) => {
+    setNote(e.target.value);
+  };
   const handleDateChange = (newDate) => {
     console.log(newDate);
     setDate(newDate);
@@ -83,16 +98,20 @@ export default function OrderForm() {
   async function handleFormSubmit(e) {
     e.preventDefault();
     const productsNoTotal = products.map(({ total, ...rest }) => rest);
-    if (!(date && time)) {
-      return console.log("Please select both date and time.");
+    let formattedDate = null;
+    let formattedTime = null;
+    if (date && time) {
+      formattedDate = date.format("DD-MM-YYYY");
+      formattedTime = time.format("HH:mm");
     }
-    const formattedDate = date.format("DD-MM-YYYY");
-    const formattedTime = time.format("HH:mm");
+
     const body = {
       address,
       phone,
+      paymentMethod: payment,
       products: productsNoTotal,
       orderNumber,
+      note: note || null,
       date: formattedDate,
       time: formattedTime,
     };
@@ -212,26 +231,24 @@ export default function OrderForm() {
             <p className="text-coral"> Dodaj Produkt</p>
           </button>
           {products.length > 0 ? (
-            <p className="gap-4 p-1 grid grid-cols-5">
-              <p className="col-start-1 col-end-3"> Nazwa: </p>
-              <p className="col-start-3 col-end-4"> Cena: </p>
-              <p className="col-start-4 col-end-5"> Ilość: </p>
-            </p>
+            <div className="gap-4 p-1 grid grid-cols-[1.5fr_1fr_1fr_1fr] text-left">
+              <p className="col-span-1">Nazwa:</p>
+              <p>Cena:</p>
+              <p>Ilość:</p>
+              <p>Razem:</p>
+            </div>
           ) : null}
 
           {products.map(({ id, name, price, quantity, packagingMethod }) => (
             <div
               key={id}
-              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-5 content-center"
+              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[1.5fr_1fr_1.5fr_1fr] items-start text-start"
             >
-              <p className="col-start-1 col-end-3"> {name} </p>
-              <p className="col-start-3 col-end-4">
-                {" "}
-                {price >= 1 ? `${price} zł` : `${price * 100} gr`}{" "}
-              </p>
-              <div className="col-start-4 w-fit text-nowrap flex flex-col gap-2">
+              <p className="col-span-1">{name}</p>
+              <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
+              <div className="flex flex-col gap-2 items-center">
                 {quantity} ({packagingMethod})
-                <div className="flex gap-2 h-full justify-center self-start">
+                <div className="flex gap-2">
                   <button
                     onClick={(e) => {
                       e.preventDefault();
@@ -252,12 +269,14 @@ export default function OrderForm() {
                   </HoldButton>
                 </div>
               </div>
+              <p>{`${String(Big(quantity).times(price))} zł`}</p>
             </div>
           ))}
+
           {products.length > 0 ? (
             <div className="gap-4 p-1 flex w-full justify-end">
               <p className="border-[1px] p-1 rounded-md flex gap-2">
-                <p> Suma: </p>
+                <p>Suma:</p>
                 <p>
                   {`${String(
                     products.reduce(
@@ -302,6 +321,62 @@ export default function OrderForm() {
             }}
           />
         </div>
+        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <p> Płatność: </p>
+          <div className="radio-input ">
+            <label className="label bg-[#f28a7270] rounded-xl ">
+              <input
+                type="radio"
+                id="value-1"
+                checked={payment === "Przelew/BLIK"}
+                onChange={(e) => {
+                  setPayment(e.target.value);
+                }}
+                name="value-radio"
+                value="Przelew/BLIK"
+              />
+              <p className="text">Przelew/BLIK</p>
+            </label>
+            <label className="label checked:border-[1px] checked:border-[#f28a72] bg-[#f28a7270] rounded-xl">
+              <input
+                type="radio"
+                id="value-2"
+                checked={payment === "Za pobraniem"}
+                onChange={(e) => {
+                  setPayment(e.target.value);
+                }}
+                name="value-radio"
+                value="Za pobraniem"
+              />
+              <p className="text ">Za pobraniem</p>
+            </label>
+            <label className="label bg-[#f28a7270] rounded-xl">
+              <input
+                type="radio"
+                id="value-3"
+                checked={payment === "Gotówka/Przelew"}
+                onChange={(e) => {
+                  setPayment(e.target.value);
+                }}
+                name="value-radio"
+                value="Gotówka/Przelew"
+              />
+              <p className="text">Gotówka/Przelew</p>
+            </label>
+          </div>
+        </div>
+        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <p>Dodatkowe notatki: </p>
+          <textarea
+            maxLength="100"
+            rows="1"
+            value={note}
+            onChange={handleTextareaChange}
+            ref={textarea}
+            className="text-black text-lg focus:outline-none bg-transparent w-full p-2 rounded-lg text-wrap h-fit resize-none no-scrollbar border-[1px] border-[#f28a72]"
+          />
+        </div>
+
         <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
           <label htmlFor="date"> Data: </label>
           <ThemeProvider theme={theme}>

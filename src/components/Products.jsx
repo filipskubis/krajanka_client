@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
-import { useEffect, useState } from 'react';
-import { CirclePlus } from 'lucide-react';
-import Product from './Product';
-import useSWR from 'swr';
-import fetcher from '../helpers/fetcher';
-import NewProductForm from './NewProductForm';
+import { useEffect, useState } from "react";
+import { CirclePlus } from "lucide-react";
+import Product from "./Product";
+import useSWR from "swr";
+import fetcher from "../helpers/fetcher";
+import NewProductForm from "./NewProductForm";
+import Spinner from "./Spinner.jsx";
 export default function Products() {
-  const { data, error, isLoading } = useSWR('/products/get', fetcher);
+  const { data, error, isLoading } = useSWR("/products/get", fetcher);
 
   const [products, setProducts] = useState([]);
   const [formActive, setFormActive] = useState(false);
@@ -16,7 +17,7 @@ export default function Products() {
     const body = { name, price, image, packaging, seasonal };
 
     try {
-      fetcher('/products/add', 'POST', body);
+      fetcher("/products/add", "POST", body);
     } catch (err) {
       console.log(err);
     }
@@ -26,7 +27,7 @@ export default function Products() {
       setProducts(data);
     }
   }, [data]);
-  if (isLoading) return;
+  if (isLoading) return <Spinner />;
   return (
     <div className="w-full box-border flex flex-col gap-4 p-4 no-scrollbar overflow-y-auto">
       {formActive ? (
@@ -43,7 +44,7 @@ export default function Products() {
             setFormActive(true);
           }}
         >
-          <CirclePlus color="#303c6c" width={'2rem'} height={'auto'} />
+          <CirclePlus color="#303c6c" width={"2rem"} height={"auto"} />
           <p className="text-xl tablet:text-2xl">Dodaj produkt</p>
         </button>
       )}

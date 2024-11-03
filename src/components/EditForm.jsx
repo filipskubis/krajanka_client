@@ -14,10 +14,9 @@ import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import "dayjs/locale/pl";
 import dayjs from "dayjs";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
-
+import HoldButton from "./HoldButton";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -76,6 +75,9 @@ export default function EditForm({ order, close }) {
   const [productModal, setProductModal] = useState(false);
   const [clientModal, setClientModal] = useState(false);
 
+  const [payment, setPayment] = useState(order.paymentMethod || "Przelew/BLIK");
+  const [note, setNote] = useState(order.note || "");
+  const handleNoteChange = (e) => setNote(e.target.value);
   const [address, setAddress] = useState(order.address);
   const [phone, setPhone] = useState(order.phone);
   const [orderNumber, setOrderNumber] = useState(order.orderNumber);
@@ -84,7 +86,7 @@ export default function EditForm({ order, close }) {
   const [time, setTime] = useState(null);
 
   useEffect(() => {
-    if (order) {
+    if (order && order.date && order.time) {
       const { dateObject, timeObject } = convertToDateAndTimeObjects(
         order.date,
         order.time
@@ -107,15 +109,19 @@ export default function EditForm({ order, close }) {
   async function handleFormSubmit(e) {
     e.preventDefault();
     const productsNoTotal = products.map(({ total, ...rest }) => rest);
-    if (!(date && time)) {
-      return console.log("Please select both date and time.");
+    let formattedDate = null;
+    let formattedTime = null;
+    if (date && time) {
+      formattedDate = date.format("DD-MM-YYYY");
+      formattedTime = time.format("HH:mm");
     }
-    const formattedDate = date.format("DD-MM-YYYY");
-    const formattedTime = time.format("HH:mm");
+
     const body = {
       address,
       phone,
       products: productsNoTotal,
+      paymentMethod: payment,
+      note: note || null,
       orderNumber,
       date: formattedDate,
       time: formattedTime,
@@ -240,42 +246,45 @@ export default function EditForm({ order, close }) {
             <p className="text-coral"> Dodaj Produkt</p>
           </button>
           {products.length > 0 ? (
-            <p className="gap-4 p-1 grid grid-cols-5">
-              <p className="col-start-1 col-end-3"> Nazwa: </p>
-              <p className="col-start-3 col-end-4"> Cena: </p>
-              <p className="col-start-4 col-end-5"> Ilość: </p>
-            </p>
+            <div className="gap-4 p-1 grid grid-cols-[1.5fr_1fr_1fr_1fr] text-left">
+              <p className="col-span-1">Nazwa:</p>
+              <p>Cena:</p>
+              <p>Ilość:</p>
+              <p>Razem:</p>
+            </div>
           ) : null}
 
           {products.map(({ id, name, price, quantity, packagingMethod }) => (
             <div
               key={id}
-              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-5 content-center"
+              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[1.5fr_1fr_1.5fr_1fr] items-start text-start"
             >
-              <p className="col-start-1 col-end-3"> {name} </p>
-              <p className="col-start-3 col-end-4"> {price} zł</p>
-              <p className="col-start-4 col-end-5">
-                {" "}
+              <p className="col-span-1">{name}</p>
+              <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
+              <div className="flex flex-col gap-2 items-center">
                 {quantity} ({packagingMethod})
-              </p>
-              <div className="absolute flex gap-2 right-2 h-full items-center">
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleAdd(id);
-                  }}
-                >
-                  <CirclePlus />
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleSubtract(id);
-                  }}
-                >
-                  <CircleMinus />
-                </button>
+                <div className="flex gap-2">
+                  <button
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleAdd(id);
+                    }}
+                  >
+                    <CirclePlus />
+                  </button>
+                  <HoldButton
+                    click={() => {
+                      handleSubtract(id);
+                    }}
+                    hold={() => {
+                      removeProduct(id);
+                    }}
+                  >
+                    <CircleMinus />
+                  </HoldButton>
+                </div>
               </div>
+              <p>{`${String(Big(quantity).times(price))} zł`}</p>
             </div>
           ))}
           {products.length > 0 ? (
@@ -323,6 +332,37 @@ export default function EditForm({ order, close }) {
             change={(value) => {
               setPhone(value);
             }}
+          />
+        </div>
+        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <p>Płatność:</p>
+          <div className="radio-input">
+            {["Przelew/BLIK", "Za pobraniem", "Gotówka/Przelew"].map(
+              (method) => (
+                <label key={method} className="label bg-[#f28a7270] rounded-xl">
+                  <input
+                    type="radio"
+                    checked={payment === method}
+                    onChange={() => setPayment(method)}
+                    name="payment-radio"
+                    value={method}
+                  />
+                  <p className="text">{method}</p>
+                </label>
+              )
+            )}
+          </div>
+        </div>
+
+        {/* Additional Notes */}
+        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <p>Dodatkowe notatki:</p>
+          <textarea
+            maxLength="100"
+            rows="1"
+            value={note}
+            onChange={handleNoteChange}
+            className="text-black text-lg focus:outline-none bg-transparent w-full p-2 rounded-lg text-wrap h-fit resize-none no-scrollbar border-[1px] border-[#f28a72]"
           />
         </div>
         <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
