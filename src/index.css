@@ -712,3 +712,15 @@ input[type="number"] {
     0 0.0625em 0 0 #ececec, 0 0.125em 0 0 #e0e0e0, 0 0.125em 0 0 #dedede,
     0 0.2em 0 0 #dcdcdc, 0 0.225em 0 0 #cacaca, 0 0.225em 0.375em 0 #cecece;
 }
+
+@media print {
+  /* Remove all margins */
+  @page {
+    margin: 0;
+  }
+  /* Adjust body to occupy full page without padding */
+  body {
+    margin: 0;
+    padding: 0;
+  }
+}
