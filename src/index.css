@@ -284,10 +284,6 @@ button::-moz-focus-inner {
   background-color: #00000020;
   border: 2px solid transparent;
 }
-.radio-input label:hover::before {
-  transition: all 0.2s ease;
-  background-color: #f28a7280;
-}
 
 .radio-input .label:has(input:checked)::before {
   background-color: #f28a7280;

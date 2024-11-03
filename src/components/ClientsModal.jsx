@@ -1,23 +1,25 @@
 /* eslint-disable react/prop-types */
-import fetcher from '../helpers/fetcher';
-import useSWR from 'swr';
-import { X } from 'lucide-react';
-import { useEffect, useRef, useState } from 'react';
+import fetcher from "../helpers/fetcher";
+import useSWR from "swr";
+import { X } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 
 export default function ClientsModal({ setClientModal, handleClientChoice }) {
   const { data } = useSWR(`/clients/get`, fetcher);
   const [value, setValue] = useState(null);
+  const [searchQuery, setSearchQuery] = useState(""); // State for search input
   const modalRef = useRef(null);
+
   useEffect(() => {
     function closeFunction(e) {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
         setClientModal(false);
       }
     }
-    window.addEventListener('click', closeFunction);
+    window.addEventListener("click", closeFunction);
 
     return () => {
-      window.removeEventListener('click', closeFunction);
+      window.removeEventListener("click", closeFunction);
     };
   }, [setClientModal]);
 
@@ -30,6 +32,14 @@ export default function ClientsModal({ setClientModal, handleClientChoice }) {
     handleClientChoice(myClient.address, myClient.phone);
     setClientModal(false);
   }
+
+  // Filter clients based on the search query
+  const filteredClients = data
+    ? data.filter((client) =>
+        client.address.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : [];
+
   return (
     <div className="absolute flex inset-0 justify-center pt-[30%] w-screen h-screen">
       <div className="fixed w-[9999px] h-[9999px] top-0 left-0 backdrop-blur-sm z-[9998]"></div>
@@ -46,27 +56,43 @@ export default function ClientsModal({ setClientModal, handleClientChoice }) {
         >
           <X />
         </button>
+
+        <div className="p-4">
+          <input
+            type="text"
+            placeholder="Szukaj"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full p-2 border-[1px] border-gray-300 rounded-lg"
+          />
+        </div>
+
         <div className="p-4 flex flex-col gap-4 w-full">
           <div className="radio-input">
-            {data
-              ? data.map((client) => (
-                  <label className="label" key={client._id}>
-                    <input
-                      type="radio"
-                      onChange={() => {
-                        setValue(client._id);
-                      }}
-                      id={client._id}
-                      checked={client._id === value}
-                      name={client.address}
-                      value={client}
-                    />
-                    <p className="text">{client.address}</p>
-                  </label>
-                ))
-              : null}
+            {filteredClients.length > 0 ? (
+              filteredClients.map((client) => (
+                <label className="label" key={client._id}>
+                  <input
+                    type="radio"
+                    onChange={() => {
+                      setValue(client._id);
+                    }}
+                    id={client._id}
+                    checked={client._id === value}
+                    name="client"
+                    value={client._id}
+                  />
+                  <p className="text">{client.address}</p>
+                </label>
+              ))
+            ) : (
+              <p className="text-center text-gray-500">
+                Nie znaleziono klientów
+              </p>
+            )}
           </div>
         </div>
+
         <div className="sticky bottom-0 w-full">
           <button className="w-full flex text-[#000000] justify-center items-center h-[50px] bg-[#f28a72]">
             Zatwierdź
