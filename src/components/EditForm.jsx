@@ -289,13 +289,17 @@ export default function EditForm({ order, close }) {
           ))}
           {products.length > 0 ? (
             <div className="gap-4 p-1 flex w-full justify-end">
-              <p className="border-[1px] p-1 rounded-md flex gap-2">
+              <p className="border-[2px] border-slate p-1 rounded-md flex gap-2 ">
                 <p> Suma: </p>
                 <p>
-                  {products.reduce(
-                    (acc, product) =>
-                      acc + Number(Big(product.quantity).times(product.price)),
-                    0
+                  {String(
+                    products
+                      .reduce(
+                        (acc, product) =>
+                          acc.plus(Big(product.quantity).times(product.price)),
+                        Big(0)
+                      )
+                      .toFixed(2) // Round the final result to 2 decimal places
                   )}{" "}
                   zł
                 </p>

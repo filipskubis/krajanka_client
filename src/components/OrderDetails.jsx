@@ -168,7 +168,7 @@ export default function OrderDetails() {
                 key={id}
                 className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] items-center text-left w-full"
               >
-                <p className="truncate break-words">{name}</p>
+                <p className="break-words">{name}</p>
                 <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
                 <p>
                   {quantity} ({packagingMethod})
@@ -183,10 +183,14 @@ export default function OrderDetails() {
               <p className="border-[2px] border-slate p-1 rounded-md flex gap-2 ">
                 <p> Suma: </p>
                 <p>
-                  {data.products.reduce(
-                    (acc, product) =>
-                      acc + Number(Big(product.quantity).times(product.price)),
-                    0
+                  {String(
+                    data.products
+                      .reduce(
+                        (acc, product) =>
+                          acc.plus(Big(product.quantity).times(product.price)),
+                        Big(0)
+                      )
+                      .toFixed(2) // Round the final result to 2 decimal places
                   )}{" "}
                   zł
                 </p>
