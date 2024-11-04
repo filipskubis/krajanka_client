@@ -1,6 +1,6 @@
 export default async function fetcher(ENDPOINT, method = "GET", body = null) {
   const response = await fetch(
-    `https://api-krajanka.up.railway.app${ENDPOINT}}`,
+    `https://api-krajanka.up.railway.app${ENDPOINT}`,
     {
       method,
       headers: {
