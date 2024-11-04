@@ -1,11 +1,15 @@
+import { useState } from "react";
+
 /* eslint-disable react/prop-types */
 function HoldButton({ click, hold, children }) {
-  let timer;
+  const [timer, setTimer] = useState(null);
 
   const handleTouchStart = () => {
-    timer = setTimeout(() => {
-      hold();
-    }, 1000);
+    setTimer(
+      setTimeout(() => {
+        hold();
+      }, 1000)
+    );
   };
 
   const handleTouchEnd = () => {
@@ -14,10 +18,22 @@ function HoldButton({ click, hold, children }) {
 
   return (
     <button
-      onTouchStart={handleTouchStart}
-      onTouchEnd={handleTouchEnd}
-      onMouseDown={handleTouchStart}
-      onMouseUp={handleTouchEnd}
+      onTouchStart={(e) => {
+        console.log("Touch start:", e);
+        handleTouchStart();
+      }}
+      onTouchEnd={(e) => {
+        console.log("Touch end:", e);
+        handleTouchEnd();
+      }}
+      onMouseDown={(e) => {
+        console.log("Mouse down:", e);
+        handleTouchStart();
+      }}
+      onMouseUp={(e) => {
+        console.log("Mouse up:", e);
+        handleTouchEnd();
+      }}
       onClick={(e) => {
         e.preventDefault();
         click();

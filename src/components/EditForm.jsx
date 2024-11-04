@@ -216,7 +216,7 @@ export default function EditForm({ order, close }) {
         />
       ) : null}
       <form
-        className="w-full h-full bg-white p-4 rounded-lg flex flex-col gap-8 pb-12"
+        className="w-full h-full bg-white rounded-lg flex flex-col gap-8 pb-12"
         onSubmit={handleFormSubmit}
       >
         <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
@@ -257,7 +257,7 @@ export default function EditForm({ order, close }) {
           {products.map(({ id, name, price, quantity, packagingMethod }) => (
             <div
               key={id}
-              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[1.5fr_1fr_1.5fr_1fr] items-start text-start"
+              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[1.5fr_1fr_1.5fr_1fr] items-start  text-start"
             >
               <p className="col-span-1">{name}</p>
               <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>

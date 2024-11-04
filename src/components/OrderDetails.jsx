@@ -46,6 +46,7 @@ export default function OrderDetails() {
   }
 
   async function goToNextOrder() {
+    if (editing) return;
     try {
       if (orderIDs.indexOf(id) + 1 + 1 > orderIDs.length) {
         navigate(`/zamówienie/${orderIDs[0]}`);
@@ -58,6 +59,7 @@ export default function OrderDetails() {
     }
   }
   async function goToPreviousOrder() {
+    if (editing) return;
     try {
       if (orderIDs.indexOf(id) - 1 < 0) {
         const lastID = orderIDs[orderIDs.length - 1];

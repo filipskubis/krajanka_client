@@ -1,10 +1,14 @@
 // import { useState } from "react"
-import { AlignJustify, CirclePlus } from "lucide-react";
+import {
+  AlignJustify,
+  CirclePlus,
+  Carrot,
+  UsersRound,
+  BookOpen,
+  ArrowLeft,
+  Route,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-import { Carrot } from "lucide-react";
-import { UsersRound } from "lucide-react";
-import { BookOpen } from "lucide-react";
-import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 export default function Navbar() {
   const [open, setOpen] = useState(false);
@@ -61,6 +65,7 @@ export default function Navbar() {
           />
           <p> Produkty </p>
         </Link>
+
         <Link
           to="/klienci"
           onClick={() => {
@@ -79,26 +84,54 @@ export default function Navbar() {
           onClick={() => {
             setOpen(false);
           }}
-          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:left-[-0.125rem] before:bottom-0 before:bg-slate'
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex  justify-between hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
-          <BookOpen
-            color="#303c6c"
-            className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
-          />
-          <p> Zamówienia </p>
+          <div className="flex gap-[1.5rem] items-center">
+            <BookOpen
+              color="#303c6c"
+              className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+            />
+            <p> Zamówienia </p>
+          </div>
+          <Link
+            to="/formularzZamówienie"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(false);
+            }}
+          >
+            <CirclePlus
+              color="#303c6c"
+              className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+            />
+          </Link>
         </Link>
         <Link
-          to="/formularz"
+          to="/trasy"
           onClick={() => {
             setOpen(false);
           }}
-          className='relative w-[fit] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:left-[-0.125rem] before:bottom-0 before:bg-slate'
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex  justify-between hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
-          <CirclePlus
-            color="#303c6c"
-            className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
-          />
-          <p> Dodaj zamówienie </p>
+          <div className="flex gap-[1.5rem] items-center">
+            <Route
+              color="#303c6c"
+              className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+            />
+            <p> Trasy </p>
+          </div>
+          <Link
+            to="/formularzTrasa"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(false);
+            }}
+          >
+            <CirclePlus
+              color="#303c6c"
+              className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+            />
+          </Link>
         </Link>
       </div>
     </div>

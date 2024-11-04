@@ -68,7 +68,7 @@ export default function Orders() {
             </p>
             <div className="flex flex-col gap-3">
               <div className="flex gap-2 items-center">
-                <MapPin color="#f28a72" />
+                <MapPin color="#f28a72" className="min-w-[1.5rem] h-auto" />
                 <p>{address} </p>
               </div>
               <div className="flex gap-2 items-center">

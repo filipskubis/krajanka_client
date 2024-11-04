@@ -12,6 +12,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "../misc/AuthContext";
 import Alerts from "./Alerts";
+import UndefinedPage from "./UndefinedPage";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -38,7 +39,7 @@ const router = createBrowserRouter([
         element: <Clients />,
       },
       {
-        path: "/formularz",
+        path: "/formularzZamówienie",
         element: <OrderForm />,
       },
       {
@@ -51,6 +52,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+  { path: "*", element: <UndefinedPage /> },
 ]);
 
 export default function App() {
