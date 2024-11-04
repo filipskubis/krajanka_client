@@ -10,7 +10,7 @@ import {
   CreditCard,
   NotebookPen,
 } from "lucide-react";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Confirm from "./Confirm";
 import { useNavigate } from "react-router-dom";
 import Big from "big.js";
@@ -23,14 +23,23 @@ Big.RM = Big.roundHalfUp;
 export default function OrderDetails() {
   const { id } = useParams();
   const { data, isLoading } = useSWR(`/orders/get/${id}`, fetcher);
+  const { data: orderIDsRaw } = useSWR("/orders/getAllIDs", fetcher);
   const [editing, setEditing] = useState(false);
   const [confirmWindow, setConfirmWindow] = useState(false);
   const orderRef = useRef(null);
   const navigate = useNavigate();
+  const [orderIDs, setOrderIDs] = useState([]);
   useSwipe(
     () => goToNextOrder(),
-    () => goToPrevioustOrder()
+    () => goToPreviousOrder()
   );
+  useEffect(() => {
+    if (orderIDsRaw) {
+      for (const order of orderIDsRaw) {
+        setOrderIDs((prev) => [...prev, order._id]);
+      }
+    }
+  }, [orderIDsRaw]);
 
   function handlePrint() {
     window.print();
@@ -38,15 +47,24 @@ export default function OrderDetails() {
 
   async function goToNextOrder() {
     try {
-      const nextID = await fetcher(`/orders/getNextOrderID/${id}`);
+      if (orderIDs.indexOf(id) + 1 + 1 > orderIDs.length) {
+        navigate(`/zamówienie/${orderIDs[0]}`);
+        return;
+      }
+      const nextID = orderIDs[orderIDs.indexOf(id) + 1];
       navigate(`/zamówienie/${nextID}`);
     } catch (err) {
       console.log(err);
     }
   }
-  async function goToPrevioustOrder() {
+  async function goToPreviousOrder() {
     try {
-      const nextID = await fetcher(`/orders/getPreviousOrderID/${id}`);
+      if (orderIDs.indexOf(id) - 1 < 0) {
+        const lastID = orderIDs[orderIDs.length - 1];
+        navigate(`/zamówienie/${lastID}`);
+        return;
+      }
+      const nextID = orderIDs[orderIDs.indexOf(id) - 1];
       navigate(`/zamówienie/${nextID}`);
     } catch (err) {
       console.log(err);
@@ -115,12 +133,12 @@ export default function OrderDetails() {
                   />
                   <p>{data.paymentMethod || "- ~ -"}</p>
                 </div>
-                <div className="flex gap-2 items-center dontPrint">
+                <div className="flex gap-2 items-center">
                   <NotebookPen
                     color="#f28a72"
                     width={"30px"}
                     height={"auto"}
-                    className="tablet:w-[2rem]"
+                    className="tablet:w-[2rem] print:w-[1.5rem]"
                   />
                   <p>{data.note || "- ~ -"}</p>
                 </div>
@@ -283,12 +301,12 @@ export default function OrderDetails() {
                 />
                 <p> {data.paymentMethod || "- ~ -"} </p>
               </div>
-              <div className="flex gap-2 items-center dontPrint">
+              <div className="flex gap-2 items-center">
                 <NotebookPen
                   color="#f28a72"
                   width={"30px"}
                   height={"auto"}
-                  className="tablet:w-[2rem]"
+                  className="tablet:w-[2rem] print:w-[1.5rem]"
                 />
                 <p> {data.note || "- ~ -"} </p>
               </div>

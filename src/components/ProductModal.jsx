@@ -96,7 +96,7 @@ export default function ProductModal({
               defaultValue={1}
               step="0.01"
               required
-              className="w-[100px] border-[1px] border-[#CCCCCC] p-1"
+              className="w-[100px] border-[1px] border-[#CCCCCC] p-1 text-lg"
             />
             <div className="flex gap-2 h-full justify-center self-start">
               <button
@@ -105,7 +105,7 @@ export default function ProductModal({
                   setQuantity((current) => current + 1);
                 }}
               >
-                <CirclePlus />
+                <CirclePlus className="w-[2rem] h-auto" />
               </button>
               <button
                 onClick={(e) => {
@@ -115,7 +115,7 @@ export default function ProductModal({
                   }
                 }}
               >
-                <CircleMinus />
+                <CircleMinus className="w-[2rem] h-auto" />
               </button>
             </div>
           </div>
