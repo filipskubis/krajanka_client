@@ -7,16 +7,14 @@ import fetcher from "../helpers/fetcher";
 import useSWR from "swr";
 import ClientsModal from "./ClientsModal";
 import ProductModal from "./ProductModal";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
 import "dayjs/locale/pl";
 import dayjs from "dayjs";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
 import HoldButton from "./HoldButton";
+import TimePicker from "./TimePicker";
+import DatePicker from "./DatePicker";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -34,40 +32,6 @@ function convertToDateAndTimeObjects(dateStr, timeStr) {
 
   return { dateObject, timeObject };
 }
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#f28a72",
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiDatePickerToolbar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#f28a72",
-        },
-      },
-    },
-    MuiTimePickerToolbar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#f28a72",
-        },
-      },
-    },
-    MuiButtonBase: {
-      styleOverrides: {
-        root: {
-          color: "#f28a72",
-        },
-      },
-    },
-  },
-});
 
 export default function EditForm({ order, close }) {
   const { data } = useSWR("/products/get", fetcher);
@@ -199,7 +163,7 @@ export default function EditForm({ order, close }) {
     setProducts([...products, productObject]);
     setProductModal(false);
   }
-  console.log(products);
+
   return (
     <>
       {clientModal ? (
@@ -216,7 +180,7 @@ export default function EditForm({ order, close }) {
         />
       ) : null}
       <form
-        className="w-full h-full bg-white rounded-lg flex flex-col gap-8 pb-12"
+        className="w-full h-full bg-white flex flex-col gap-8 pb-12"
         onSubmit={handleFormSubmit}
       >
         <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
@@ -369,42 +333,8 @@ export default function EditForm({ order, close }) {
             className="text-black text-lg focus:outline-none bg-transparent w-full p-2 rounded-lg text-wrap h-fit resize-none no-scrollbar border-[1px] border-[#f28a72]"
           />
         </div>
-        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
-          <label htmlFor="date"> Data: </label>
-          <ThemeProvider theme={theme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-              <MobileDatePicker
-                value={date}
-                onChange={handleDateChange}
-                localeText={{
-                  cancelButtonLabel: "Anuluj",
-                  okButtonLabel: "OK",
-                  clearButtonLabel: "Wyczyść",
-                  toolbarTitle: "Wybierz datę",
-                  previousMonth: "Poprzedni miesiąc",
-                  nextMonth: "Następny miesiąc",
-                }}
-              />
-            </LocalizationProvider>
-          </ThemeProvider>
-        </div>
-        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
-          <label htmlFor="date"> Godzina: </label>
-          <ThemeProvider theme={theme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <MobileTimePicker
-                value={time}
-                onChange={handleTimeChange}
-                ampm={false}
-                localeText={{
-                  toolbarTitle: "Wybierz godzinę",
-                  cancelButtonLabel: "Anuluj",
-                  okButtonLabel: "OK",
-                }}
-              />
-            </LocalizationProvider>
-          </ThemeProvider>
-        </div>
+        <DatePicker date={date} handleDateChange={handleDateChange} />
+        <TimePicker time={time} handleTimeChange={handleTimeChange} />
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem]"
           onSubmit={handleFormSubmit}

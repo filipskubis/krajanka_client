@@ -13,6 +13,10 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "../misc/AuthContext";
 import Alerts from "./Alerts";
 import UndefinedPage from "./UndefinedPage";
+import Routes from "./Routes";
+import RouteForm from "./RouteForm";
+import RouteDetails from "./RouteDetails";
+
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -39,7 +43,7 @@ const router = createBrowserRouter([
         element: <Clients />,
       },
       {
-        path: "/formularzZamówienie",
+        path: "/formularzZamówienia",
         element: <OrderForm />,
       },
       {
@@ -49,6 +53,18 @@ const router = createBrowserRouter([
       {
         path: "/zamówienie/:id",
         element: <OrderDetails />,
+      },
+      {
+        path: "/trasy",
+        element: <Routes />,
+      },
+      {
+        path: "/trasa/:id",
+        element: <RouteDetails />,
+      },
+      {
+        path: "/formularzTrasy",
+        element: <RouteForm />,
       },
     ],
   },

@@ -1171,3 +1171,68 @@ input[type="number"] {
 .text_4043 {
   transform: scaleY(24.5) scaleX(9);
 }
+
+/* From Uiverse.io by satyamchaudharydev */
+.formverse {
+  --width-of-input: 100%;
+  --border-height: 1px;
+  --border-before-color: rgba(221, 221, 221, 0.39);
+  --border-after-color: #f28a72;
+  --input-hovered-color: #fff;
+  position: relative;
+
+  width: var(--width-of-input);
+}
+/* styling of Input */
+.inputverse {
+  color: black;
+  font-size: 1.1rem;
+  background-color: white;
+  width: 100%;
+  box-sizing: border-box;
+  padding-inline: 0.5em;
+  border-radius: 0.5rem;
+  padding-block: 0.7em;
+  border: none;
+  border-bottom: var(--border-height) solid var(--border-before-color);
+}
+/* styling of animated border */
+.input-border {
+  position: absolute;
+  background: var(--border-after-color);
+  width: 0%;
+  height: 3 px;
+  bottom: 0;
+  left: 0;
+  transition: 0.3s;
+}
+/* Hover on Input */
+.inputverse:hover {
+  background: var(--input-hovered-color);
+}
+
+.inputverse:focus {
+  outline: none;
+}
+/* here is code of animated border */
+.inputverse:focus ~ .input-border {
+  width: 100%;
+}
+/* === if you want to do animated border on typing === */
+/* remove input:focus code and uncomment below code */
+/* input:valid ~ .input-border{
+   width: 100%;
+ } */
+
+.expand {
+  animation: expand 300ms linear;
+}
+
+@keyframes expand {
+  0% {
+    width: 0;
+  }
+  100% {
+    width: 100%;
+  }
+}

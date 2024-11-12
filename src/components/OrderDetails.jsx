@@ -83,7 +83,11 @@ export default function OrderDetails() {
   }
   if (data && data.products.length >= 10) {
     return (
-      <div className="relative w-full h-fit p-4 bg-[#fbe8a6] print:flex print:justify-center print:items-center print:p-0 print:w-[148mm] print:h-[210mm] print:scale-90">
+      <div
+        className={`relative w-full h-fit ${
+          !editing && "p-4"
+        } bg-[#fbe8a6] print:flex print:justify-center print:items-center print:p-0 print:w-[148mm] print:h-[210mm] print:scale-90`}
+      >
         {confirmWindow && (
           <Confirm
             action={"Usuń zamówienie"}
@@ -95,7 +99,7 @@ export default function OrderDetails() {
           />
         )}
         <div
-          className="bg-white w-full max-w-[130mm] print:shadow-none rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8 print:!text-xs print:gap-2 print:pb-4"
+          className={`bg-white w-full max-w-[130mm] print:shadow-none rounded-xl shadow-2xl flex flex-col items-start gap-6 pb-8 print:!text-xs print:gap-2 print:pb-4`}
           ref={orderRef}
         >
           {isLoading ? (
@@ -241,7 +245,7 @@ export default function OrderDetails() {
   }
 
   return (
-    <div className="relative w-full h-fit p-4 bg-[#fbe8a6]">
+    <div className={`relative w-full h-fit ${!editing && "p-4"} bg-[#fbe8a6]`}>
       {confirmWindow && (
         <Confirm
           action={"Usuń zamówienie"}

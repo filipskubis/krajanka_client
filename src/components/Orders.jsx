@@ -6,19 +6,27 @@ import {
   Phone,
   Trash2,
   CalendarDays,
+  CirclePlus,
   Clock,
   CreditCard,
+  Banknote,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Confirm from "./Confirm";
 import Spinner from "./Spinner.jsx";
-// coral: '#f28a72',
-// slate: '#6b7a8f',
+import Big from "big.js";
+
+Big.DP = 2;
+Big.RM = Big.roundHalfUp;
 
 export default function Orders() {
   const { data, isLoading } = useSWR("/orders/get", fetcher);
   const [orders, setOrders] = useState([]);
   const [removingOrder, setRemovingOrder] = useState(null);
+  const [searchText, setSearchText] = useState(""); // New state for search text
+  const filteredOrders = orders.filter((order) =>
+    order.address.toLowerCase().includes(searchText.toLowerCase())
+  );
   useEffect(() => {
     if (data) {
       const sortedOrders = data.sort((a, b) => b.orderNumber - a.orderNumber);
@@ -55,8 +63,37 @@ export default function Orders() {
           }}
         />
       ) : null}
-      {orders.map(
-        ({ _id, address, phone, orderNumber, date, time, paymentMethod }) => (
+      <Link
+        className="flex w-full items-center justify-center gap-4 bg-[#f28a72] p-3 shadow-md rounded-full"
+        to="/formularzZamówienia"
+      >
+        <CirclePlus color="#303c6c" width={"2rem"} height={"auto"} />
+        <p className="text-xl tablet:text-2xl">Dodaj zamówienie</p>
+      </Link>
+      <div className="formverse mt-4 shadow-lg">
+        <input
+          className="inputverse"
+          placeholder="Wyszukaj zamówienie"
+          value={searchText}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+          }}
+          required=""
+          type="text"
+        />
+        <span className="input-border"></span>
+      </div>
+      {filteredOrders.map(
+        ({
+          _id,
+          address,
+          phone,
+          orderNumber,
+          date,
+          time,
+          paymentMethod,
+          products,
+        }) => (
           <Link
             to={`/zamówienie/${_id}`}
             key={_id}
@@ -90,6 +127,16 @@ export default function Orders() {
               <div className="flex gap-2 items-center">
                 <Clock color="#f28a72" />
                 <p> {time || "- ~ -"} </p>
+              </div>
+              <div className="flex gap-2 items-center">
+                <Banknote color="#f28a72" />
+                <p>
+                  {`${products.reduce((value, product) => {
+                    return (
+                      value + Number(Big(product.quantity).times(product.price))
+                    );
+                  }, 0)} PLN`}
+                </p>
               </div>
             </div>
             <div

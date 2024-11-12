@@ -6,53 +6,14 @@ import fetcher from "../helpers/fetcher";
 import useSWR from "swr";
 import ClientsModal from "./ClientsModal";
 import ProductModal from "./ProductModal";
-import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
-import { LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { MobileDatePicker } from "@mui/x-date-pickers/MobileDatePicker";
-import "dayjs/locale/pl";
-import dayjs from "dayjs";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
+import DatePicker from "./DatePicker.jsx";
 import HoldButton from "./HoldButton.jsx";
+import TimePicker from "./TimePicker.jsx";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
-
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: "#f28a72",
-    },
-  },
-  shape: {
-    borderRadius: 8,
-  },
-  components: {
-    MuiDatePickerToolbar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#f28a72",
-        },
-      },
-    },
-    MuiTimePickerToolbar: {
-      styleOverrides: {
-        root: {
-          backgroundColor: "#f28a72",
-        },
-      },
-    },
-    MuiButtonBase: {
-      styleOverrides: {
-        root: {
-          color: "#f28a72",
-        },
-      },
-    },
-  },
-});
 
 export default function OrderForm() {
   const { data } = useSWR("/products/get", fetcher);
@@ -380,45 +341,12 @@ export default function OrderForm() {
           />
         </div>
 
-        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
-          <label htmlFor="date"> Data: </label>
-          <ThemeProvider theme={theme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="pl">
-              <MobileDatePicker
-                value={date}
-                onChange={handleDateChange}
-                localeText={{
-                  cancelButtonLabel: "Anuluj",
-                  okButtonLabel: "OK",
-                  clearButtonLabel: "Wyczyść",
-                  toolbarTitle: "Wybierz datę",
-                  previousMonth: "Poprzedni miesiąc",
-                  nextMonth: "Następny miesiąc",
-                }}
-              />
-            </LocalizationProvider>
-          </ThemeProvider>
-        </div>
-        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
-          <label htmlFor="date"> Godzina: </label>
-          <ThemeProvider theme={theme}>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <MobileTimePicker
-                value={time}
-                onChange={handleTimeChange}
-                ampm={false}
-                localeText={{
-                  toolbarTitle: "Wybierz godzinę",
-                  cancelButtonLabel: "Anuluj",
-                  okButtonLabel: "OK",
-                }}
-              />
-            </LocalizationProvider>
-          </ThemeProvider>
-        </div>
+        <DatePicker date={date} handleDateChange={handleDateChange} />
+        <TimePicker time={time} handleTimeChange={handleTimeChange} />
+
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem] tablet:text-2xl"
-          onSubmit={handleFormSubmit}
+          type="submit"
         >
           Dodaj zamówienie
         </button>

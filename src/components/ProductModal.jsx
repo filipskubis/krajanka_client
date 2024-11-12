@@ -3,6 +3,27 @@ import { X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { CirclePlus, CircleMinus } from "lucide-react";
 // import Spinner from './Spinner';
+
+const prioritizedProducts = [
+  "Jaja z wolnego wybiegu (M/L)",
+  "Jaja z wolnego wybiegu (S/M)",
+  "Jaja z wolnego wybiegu (L/XL)",
+  "Marchew",
+  "Ziemniaki",
+  "Buraki",
+  "Ogórki kiszone",
+  "Kapusta kiszona",
+  "Natka pietruszki",
+  "Jarmuż",
+  "Czerwona kapusta kiszona",
+  "Kapusta kiszona z ogórkiem",
+  "Czosnek",
+  "Zakwas buraczany 1l",
+  "Zakwas buraczany 0.5l",
+  "Por duży",
+  "Seler duży",
+];
+
 export default function ProductModal({
   data,
   setProductModal,
@@ -11,11 +32,13 @@ export default function ProductModal({
   const [quantity, setQuantity] = useState(1);
   const modalRef = useRef(null);
   const [currentProduct, setCurrentProduct] = useState("");
+
   function handleChange(e) {
     const name = e.target.value;
     const product = data.find((product) => product.name === name);
     setCurrentProduct(product);
   }
+
   useEffect(() => {
     function closeFunction(e) {
       if (modalRef.current && !modalRef.current.contains(e.target)) {
@@ -47,8 +70,7 @@ export default function ProductModal({
         </button>
         <div className="flex flex-col gap-2 items-center">
           <label htmlFor="productSelect" className="text-lg">
-            {" "}
-            Produkt:{" "}
+            Produkt:
           </label>
           <select
             name="productSelect"
@@ -58,19 +80,33 @@ export default function ProductModal({
             className="w-full p-2 border-[1px] border-[#CCCCCC]"
           >
             <option value=""> - Wybierz z listy -</option>
+            <optgroup label="Priorytetowe produkty" className="text-coral">
+              {prioritizedProducts.map((name, index) => (
+                <option value={name} key={`priority-${index}`}>
+                  {name}
+                </option>
+              ))}
+            </optgroup>
             <optgroup label="Stała oferta" className="text-coral">
               {data
-                .filter((product) => !product.seasonal)
+                .filter(
+                  (product) =>
+                    !product.seasonal &&
+                    !prioritizedProducts.includes(product.name)
+                )
                 .map(({ name }, index) => (
                   <option value={name} key={`regular-${index}`}>
                     {name}
                   </option>
                 ))}
             </optgroup>
-
             <optgroup label="Sezonowe" className="text-coral">
               {data
-                .filter((product) => product.seasonal)
+                .filter(
+                  (product) =>
+                    product.seasonal &&
+                    !prioritizedProducts.includes(product.name)
+                )
                 .map(({ name }, index) => (
                   <option value={name} key={`seasonal-${index}`}>
                     {name}
@@ -81,7 +117,6 @@ export default function ProductModal({
         </div>
         <div className="flex flex-col gap-2 items-center">
           <label htmlFor="quantity" className="text-lg">
-            {" "}
             Ilość: {currentProduct ? `(${currentProduct.packagingMethod})` : ""}
           </label>
           <div className="flex gap-2">
@@ -121,7 +156,7 @@ export default function ProductModal({
           </div>
         </div>
         <div className="absolute bottom-0 left-0 w-full">
-          <button className="w-full flex justify-center items-center  h-[50px] bg-[#f28a7280]">
+          <button className="w-full flex justify-center items-center h-[50px] bg-[#f28a7280]">
             Dodaj
           </button>
         </div>

@@ -94,7 +94,7 @@ export default function Navbar() {
             <p> Zamówienia </p>
           </div>
           <Link
-            to="/formularzZamówienie"
+            to="/formularzZamówienia"
             onClick={(e) => {
               e.stopPropagation();
               setOpen(false);
@@ -121,7 +121,7 @@ export default function Navbar() {
             <p> Trasy </p>
           </div>
           <Link
-            to="/formularzTrasa"
+            to="/formularzTrasy"
             onClick={(e) => {
               e.stopPropagation();
               setOpen(false);
