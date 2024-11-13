@@ -94,7 +94,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                   <p className="text-md font-semibold text-gray-600 mb-4">
                     Łącznie:{" "}
                     {productQuantities.reduce((current, quantity) => {
-                      return current + quantity.value;
+                      return current + Number(quantity.value); // Convert to number
                     }, 0)}{" "}
                     {packagingMethod === "kg" ? packagingMethod : null}
                   </p>
