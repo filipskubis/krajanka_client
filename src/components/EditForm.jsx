@@ -188,6 +188,7 @@ export default function EditForm({ order, close }) {
           <input
             id="order-number"
             type="number"
+            disabled
             value={orderNumber}
             onChange={(e) => {
               setOrderNumber(e.target.value);

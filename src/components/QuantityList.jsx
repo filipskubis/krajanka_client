@@ -94,7 +94,13 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                       Sposób pakowania: {packagingMethod}
                     </p>
                   )}
-
+                  <p className="text-md font-semibold text-gray-600 mb-4">
+                    Łącznie:{" "}
+                    {productQuantities.reduce((current, quantity) => {
+                      return current + quantity.value;
+                    }, 0)}{" "}
+                    {packagingMethod === "kg" ? packagingMethod : null}
+                  </p>
                   <ul className="grid grid-cols-3 gap-2 mt-2">
                     {productQuantities.map((quantityObj, index) => (
                       <li key={index} className="flex items-center gap-2">

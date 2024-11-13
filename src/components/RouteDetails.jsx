@@ -32,9 +32,18 @@ export default function RouteDetails() {
     return Array.from(productMap.values());
   }, [data]);
 
+  async function updateRoute() {
+    try {
+      fetcher(`/routes/update/${id}`, "POST");
+      location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+  }
+
   async function removeRoute() {
     try {
-      fetcher(`/routes/delete/${id}`);
+      fetcher(`/routes/delete/${id}`, "POST");
     } catch (err) {
       console.log(err);
     }
@@ -97,11 +106,17 @@ export default function RouteDetails() {
               setConfirmWindow(true);
             }}
           >
-            <p className="text-white">Usuń</p>
+            <p className="text-white text-md">Usuń</p>
+          </button>
+          <button
+            className="bg-[#031C4D20] rounded-2xl flex-grow p-3 w-full flex  justify-center items-center"
+            onClick={updateRoute}
+          >
+            <p className="text-md">Zaktualizuj</p>
           </button>
           <button className="bg-[#031C4D20] rounded-2xl w-full flex-grow p-3 flex justify-center items-center">
-            <div className="text-white text-xl flex items-center gap-2">
-              <MapPin color="#1873FF" className="w-[2rem] h-[2rem]" />
+            <div className="text-white text-md flex items-center gap-2">
+              <MapPin color="#1873FF" className="w-[1.5rem] h-[1.5rem]" />
               <p>Połącz z Circuit</p>
             </div>
           </button>

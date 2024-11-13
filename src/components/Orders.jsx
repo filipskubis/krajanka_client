@@ -23,10 +23,15 @@ export default function Orders() {
   const { data, isLoading } = useSWR("/orders/get", fetcher);
   const [orders, setOrders] = useState([]);
   const [removingOrder, setRemovingOrder] = useState(null);
-  const [searchText, setSearchText] = useState(""); // New state for search text
-  const filteredOrders = orders.filter((order) =>
-    order.address.toLowerCase().includes(searchText.toLowerCase())
+  const [searchText, setSearchText] = useState(""); // State for combined search text
+
+  // Filter orders by checking if searchText matches either address or date
+  const filteredOrders = orders.filter(
+    (order) =>
+      order.address.toLowerCase().includes(searchText.toLowerCase()) ||
+      order.date.includes(searchText)
   );
+
   useEffect(() => {
     if (data) {
       const sortedOrders = data.sort((a, b) => b.orderNumber - a.orderNumber);
@@ -37,7 +42,6 @@ export default function Orders() {
   async function removeOrder(id) {
     try {
       await fetcher(`/orders/remove/${id}`, "POST");
-
       window.location.reload();
     } catch (err) {
       console.log(err);
@@ -47,6 +51,7 @@ export default function Orders() {
   if (isLoading) {
     return <Spinner />;
   }
+
   return (
     <div className="relative flex flex-col gap-4 p-8 tablet:grid bg-[#fbe8a6] pb-[4rem] tablet:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] tablet:justify-items-center">
       {removingOrder ? (
@@ -70,6 +75,8 @@ export default function Orders() {
         <CirclePlus color="#303c6c" width={"2rem"} height={"auto"} />
         <p className="text-xl tablet:text-2xl">Dodaj zamówienie</p>
       </Link>
+
+      {/* Single Input for Both Address and Date Search */}
       <div className="formverse mt-4 shadow-lg">
         <input
           className="inputverse"
@@ -83,6 +90,7 @@ export default function Orders() {
         />
         <span className="input-border"></span>
       </div>
+
       {filteredOrders.map(
         ({
           _id,
