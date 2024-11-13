@@ -77,18 +77,15 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
           const packagingMethod = getPackagingMethod(productName);
 
           return (
-            <div
-              key={productName}
-              className="border rounded-lg bg-slate-700 text-black"
-            >
+            <div key={productName} className="border rounded-md text-black">
               <button
-                className="w-full p-4 text-left font-bold"
+                className="w-full p-4 text-left font-bold border-[#f28a92]"
                 onClick={() => toggleProduct(productName)}
               >
                 {productName}
               </button>
               {expandedProduct === productName && (
-                <div className="p-4 bg-gray-100 text-[#000000] transition-all duration-300 expanded">
+                <div className="p-4 bg-gray-100 text-[#000000] expand">
                   {packagingMethod !== "kg" && packagingMethod !== "sztuki" && (
                     <p className="text-md font-semibold text-gray-600 mb-4 -mt-4">
                       Sposób pakowania: {packagingMethod}

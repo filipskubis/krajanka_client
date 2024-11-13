@@ -1226,13 +1226,14 @@ input[type="number"] {
 
 .expand {
   animation: expand 300ms linear;
+  overflow: hidden;
 }
 
 @keyframes expand {
   0% {
-    width: 0;
+    max-height: 0;
   }
   100% {
-    width: 100%;
+    max-height: 500px; /* Set a large enough value to fit the content */
   }
 }
