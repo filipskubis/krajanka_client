@@ -10,7 +10,7 @@ export default function Routes() {
   const [removingRoute, setRemovingRoute] = useState("");
   async function removeRoute(id) {
     try {
-      fetcher(`/routes/delete/${id}`);
+      fetcher(`/routes/delete/${id}`, "POST");
     } catch (err) {
       console.log(err);
     }

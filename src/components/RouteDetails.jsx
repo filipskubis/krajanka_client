@@ -35,7 +35,6 @@ export default function RouteDetails() {
   async function updateRoute() {
     try {
       fetcher(`/routes/update/${id}`, "POST");
-      location.reload();
     } catch (err) {
       console.log(err);
     }
@@ -44,6 +43,7 @@ export default function RouteDetails() {
   async function removeRoute() {
     try {
       fetcher(`/routes/delete/${id}`, "POST");
+      window.location.href = "/trasy";
     } catch (err) {
       console.log(err);
     }
