@@ -1,7 +1,7 @@
 // https://api-krajanka.up.railway.app${ENDPOINT}
 // http://localhost:3000${ENDPOINT}
 export default async function fetcher(ENDPOINT, method = "GET", body = null) {
-  const response = await fetch(`http://localhost:3000${ENDPOINT}`, {
+  const response = await fetch(`https://api-krajanka.up.railway.app${ENDPOINT}`, {
     method,
     headers: {
       "Content-Type": "application/json",
