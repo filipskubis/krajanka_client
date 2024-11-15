@@ -63,6 +63,17 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     setExpandedProduct(expandedProduct === name ? null : name);
   };
 
+  const checkAllForProduct = (productIndex) => {
+    const newQuantities = [...quantities];
+    newQuantities[productIndex].quantities = newQuantities[
+      productIndex
+    ].quantities.map((quantityObj) => ({
+      ...quantityObj,
+      packed: true,
+    }));
+    setQuantities(newQuantities);
+  };
+
   // Get the packaging method for a specific product
   const getPackagingMethod = (name) => {
     const product = data?.find((item) => item.name === name);
@@ -77,7 +88,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
           const packagingMethod = getPackagingMethod(productName);
 
           return (
-            <div key={productName} className="border rounded-md text-black">
+            <div key={productName} className="border rounded-md text-black ">
               <button
                 className="w-full p-4 text-left font-bold border-[#f28a92]"
                 onClick={() => toggleProduct(productName)}
@@ -91,7 +102,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                       Sposób pakowania: {packagingMethod}
                     </p>
                   )}
-                  <p className="text-md font-semibold text-gray-600 mb-4">
+                  <p className="text-md font-semibold text-gray-600 mb-4 ">
                     Łącznie:{" "}
                     {productQuantities.reduce((current, quantity) => {
                       return current + Number(quantity.value); // Convert to number
@@ -108,6 +119,9 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                             className="inp-cbx"
                             checked={quantityObj.packed}
                             onChange={() => {
+                              if (quantityObj.packed) {
+                                return;
+                              }
                               const newQuantities = [...quantities];
                               newQuantities[productIndex].quantities[index] = {
                                 ...quantityObj,
@@ -142,6 +156,13 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                       </li>
                     ))}
                   </ul>
+                  <button
+                    className="p-4 bg-[#031C4D20] rounded-lg mt-4 w-full"
+                    onClick={() => checkAllForProduct(productIndex)}
+                  >
+                    {" "}
+                    Zaznacz wszystko{" "}
+                  </button>
                 </div>
               )}
             </div>
