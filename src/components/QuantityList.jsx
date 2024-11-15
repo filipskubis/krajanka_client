@@ -3,11 +3,17 @@ import { useEffect, useState, useRef } from "react";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Spinner from "./Spinner";
+import Confirm from "./Confirm";
 
 export default function QuantityList({ aggregatedProducts, routeID }) {
   const [expandedProduct, setExpandedProduct] = useState(null);
   const { data } = useSWR("/products/get", fetcher);
-
+  const [confirmWindow, setConfirmWindow] = useState({
+    index: null,
+    productIndex: null,
+    quantityObj: null,
+    active: false,
+  });
   const [quantities, setQuantities] = useState([]);
   const initialized = useRef(false);
   useEffect(() => {
@@ -80,9 +86,43 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     return product ? product.packagingMethod : "";
   };
 
+  function removePacked(e) {
+    e.preventDefault();
+    const newQuantities = [...quantities];
+    const quantityObj = confirmWindow.quantityObj;
+    const productIndex = confirmWindow.productIndex;
+    const index = confirmWindow.index;
+    newQuantities[productIndex].quantities[index] = {
+      ...quantityObj,
+      packed: !quantityObj.packed,
+    };
+    setQuantities(newQuantities);
+    setConfirmWindow({
+      index: null,
+      productIndex: null,
+      quantityObj: null,
+      active: false,
+    });
+  }
+
   if (!quantities) return <Spinner />;
   return (
     <div className="flex flex-col gap-4">
+      {confirmWindow.active ? (
+        <Confirm
+          action={"Odchacz porcje"}
+          description={"Czy na pewno chcesz zmienić status zapakowanej porcji?"}
+          cancel={() =>
+            setConfirmWindow({
+              index: null,
+              productIndex: null,
+              quantityObj: null,
+              active: false,
+            })
+          }
+          confirm={(e) => removePacked(e)}
+        />
+      ) : null}
       {quantities.map(
         ({ productName, quantities: productQuantities }, productIndex) => {
           const packagingMethod = getPackagingMethod(productName);
@@ -120,6 +160,12 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                             checked={quantityObj.packed}
                             onChange={() => {
                               if (quantityObj.packed) {
+                                setConfirmWindow({
+                                  index,
+                                  productIndex,
+                                  quantityObj,
+                                  active: true,
+                                });
                                 return;
                               }
                               const newQuantities = [...quantities];
