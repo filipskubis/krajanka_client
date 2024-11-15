@@ -35,6 +35,7 @@ export default function RouteDetails() {
   async function updateRoute() {
     try {
       fetcher(`/routes/update/${id}`, "POST");
+      window.location.reload()
     } catch (err) {
       console.log(err);
     }
