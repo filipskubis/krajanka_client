@@ -219,39 +219,43 @@ export default function EditForm({ order, close }) {
             </div>
           ) : null}
 
-          {products.map(({ id, name, price, quantity, packagingMethod }) => (
-            <div
-              key={id}
-              className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[1.5fr_1fr_1.5fr_1fr] items-start  text-start"
-            >
-              <p className="col-span-1">{name}</p>
-              <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
-              <div className="flex flex-col gap-2 items-center">
-                {quantity} ({packagingMethod})
-                <div className="flex gap-2">
-                  <button
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleAdd(id);
-                    }}
-                  >
-                    <CirclePlus />
-                  </button>
-                  <HoldButton
-                    click={() => {
-                      handleSubtract(id);
-                    }}
-                    hold={() => {
-                      removeProduct(id);
-                    }}
-                  >
-                    <CircleMinus />
-                  </HoldButton>
+          {products.map(
+            ({ id, name, price, quantity, packagingMethod }, index) => (
+              <div
+                key={id}
+                className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[2fr_1fr_1.5fr_1fr] items-start  text-start"
+              >
+                <p className="break-words col-span-1">{`${
+                  index + 1
+                }. ${name}`}</p>
+                <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
+                <div className="flex flex-col gap-2 items-center">
+                  {quantity} ({packagingMethod})
+                  <div className="flex gap-2">
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        handleAdd(id);
+                      }}
+                    >
+                      <CirclePlus />
+                    </button>
+                    <HoldButton
+                      click={() => {
+                        handleSubtract(id);
+                      }}
+                      hold={() => {
+                        removeProduct(id);
+                      }}
+                    >
+                      <CircleMinus />
+                    </HoldButton>
+                  </div>
                 </div>
+                <p>{`${String(Big(quantity).times(price))} zł`}</p>
               </div>
-              <p>{`${String(Big(quantity).times(price))} zł`}</p>
-            </div>
-          ))}
+            )
+          )}
           {products.length > 0 ? (
             <div className="gap-4 p-1 flex w-full justify-end">
               <p className="border-[2px] border-slate p-1 rounded-md flex gap-2 ">

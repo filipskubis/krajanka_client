@@ -22,6 +22,8 @@ const prioritizedProducts = [
   "Zakwas buraczany 0.5l",
   "Por duży",
   "Seler duży",
+  "Cebula",
+  "Pietruszka korzeń",
 ];
 
 export default function ProductModal({
