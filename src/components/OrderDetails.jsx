@@ -6,7 +6,6 @@ import {
   MapPin,
   Phone,
   CalendarDays,
-  Clock,
   CreditCard,
   NotebookPen,
 } from "lucide-react";
@@ -156,15 +155,6 @@ export default function OrderDetails() {
                     className="tablet:w-[2rem] print:w-[1.5rem]"
                   />
                   <p>{data.date || "- ~ -"}</p>
-                </div>
-                <div className="flex gap-2 items-center">
-                  <Clock
-                    color="#f28a72"
-                    width={"30px"}
-                    height={"auto"}
-                    className="tablet:w-[2rem] print:w-[1.5rem]"
-                  />
-                  <p>{data.time || "- ~ -"}</p>
                 </div>
                 {data.products.length > 0 && (
                   <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] text-left w-full print:grid-cols-4 print:gap-1 print:p-1">

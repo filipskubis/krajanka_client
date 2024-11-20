@@ -11,7 +11,6 @@ import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
 import DatePicker from "./DatePicker.jsx";
 import HoldButton from "./HoldButton.jsx";
-import TimePicker from "./TimePicker.jsx";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -27,7 +26,6 @@ export default function OrderForm() {
   const [phone, setPhone] = useState("");
 
   const [date, setDate] = useState(null);
-  const [time, setTime] = useState(null);
 
   const { addAlert } = useContext(AlertContext);
 
@@ -51,19 +49,12 @@ export default function OrderForm() {
     setDate(newDate);
   };
 
-  const handleTimeChange = (newTime) => {
-    console.log(newTime);
-    setTime(newTime);
-  };
-
   async function handleFormSubmit(e) {
     e.preventDefault();
     const productsNoTotal = products.map(({ total, ...rest }) => rest);
     let formattedDate = null;
-    let formattedTime = null;
-    if (date && time) {
+    if (date) {
       formattedDate = date.format("DD-MM-YYYY");
-      formattedTime = time.format("HH:mm");
     }
 
     const body = {
@@ -74,7 +65,7 @@ export default function OrderForm() {
       orderNumber,
       note: note || null,
       date: formattedDate,
-      time: formattedTime,
+      time: null,
     };
 
     try {
@@ -92,7 +83,6 @@ export default function OrderForm() {
     setAddress("");
     setPhone("");
     setDate(null);
-    setTime(null);
   }
 
   function handleAdd(id) {
@@ -346,7 +336,6 @@ export default function OrderForm() {
         </div>
 
         <DatePicker date={date} handleDateChange={handleDateChange} />
-        <TimePicker time={time} handleTimeChange={handleTimeChange} />
 
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem] tablet:text-2xl"

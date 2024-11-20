@@ -7,7 +7,6 @@ import {
   Trash2,
   CalendarDays,
   CirclePlus,
-  Clock,
   CreditCard,
   Banknote,
 } from "lucide-react";
@@ -98,7 +97,6 @@ export default function Orders() {
           phone,
           orderNumber,
           date,
-          time,
           paymentMethod,
           products,
         }) => (
@@ -132,10 +130,6 @@ export default function Orders() {
                 <p> {date || "- ~ -"} </p>
               </div>
 
-              <div className="flex gap-2 items-center">
-                <Clock color="#f28a72" />
-                <p> {time || "- ~ -"} </p>
-              </div>
               <div className="flex gap-2 items-center">
                 <Banknote color="#f28a72" />
                 <p>
