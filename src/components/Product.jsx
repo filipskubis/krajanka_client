@@ -70,7 +70,9 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
       ) : null}
       <div
         className="border-[2px] border-black rounded-lg p-1 absolute bottom-[0.5rem] right-[0.5rem] hover:bg-[#00000010]"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
+          e.preventDefault();
           if (isEditMode) {
             handleEditSubmit();
           }
