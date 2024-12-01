@@ -1,13 +1,12 @@
 import { useParams } from "react-router-dom";
 import { useState, useRef, useEffect } from "react";
-import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
-import Spinner from "./Spinner";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+
 export default function ProductNotes() {
   const { id } = useParams();
-  const { data: product, isLoading } = useSWR(`/products/get/${id}`, fetcher);
+  const [product, setProduct] = useState(null);
   const textarea = useRef(null);
   const [note, setNote] = useState("");
   const noteRef = useRef();
@@ -26,6 +25,14 @@ export default function ProductNotes() {
   }, [product]);
 
   useEffect(() => {
+    async function fetchProduct() {
+      const fetchedProduct = await fetcher(`/products/get/${id}`);
+      if (!fetchedProduct) return;
+      setProduct(fetchedProduct);
+    }
+
+    fetchProduct();
+
     return () => {
       fetcher(`/products/updateNotes/${id}`, "POST", { note: noteRef.current });
     };
@@ -40,7 +47,6 @@ export default function ProductNotes() {
     }
   }, [textarea]);
 
-  if (isLoading) return <Spinner />;
   return (
     <div className="w-full h-fit p-4">
       <div className="bg-white w-full h-full rounded-lg flex flex-col items-center p-4 gap-4">
