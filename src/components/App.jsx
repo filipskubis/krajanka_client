@@ -16,6 +16,7 @@ import UndefinedPage from "./UndefinedPage";
 import Routes from "./Routes";
 import RouteForm from "./RouteForm";
 import RouteDetails from "./RouteDetails";
+import ProductNotes from "./ProductNotes";
 
 const router = createBrowserRouter([
   {
@@ -61,6 +62,10 @@ const router = createBrowserRouter([
       {
         path: "/trasa/:id",
         element: <RouteDetails />,
+      },
+      {
+        path: "/product/:id",
+        element: <ProductNotes />,
       },
       {
         path: "/formularzTrasy",

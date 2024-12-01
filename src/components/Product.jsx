@@ -4,7 +4,7 @@ import { useState, useRef, useEffect, useContext } from "react";
 import fetcher from "../helpers/fetcher";
 import { AlertContext } from "../misc/AlertContext.jsx";
 import Confirm from "./Confirm.jsx";
-
+import { Link } from "react-router-dom";
 export default function Product({ uniqueId, name, src, initPrice, packaging }) {
   const { addAlert } = useContext(AlertContext);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -41,8 +41,9 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
     setIsEditMode(false);
   }
   return (
-    <div
+    <Link
       key={uniqueId}
+      to={`/product/${uniqueId}`}
       className="relative flex flex-col gap-2 items-center justify-end min-h-[250px] border-2 border-[#6b7a8f] p-2 bg-white rounded-md tablet:w-full"
     >
       {isBeingDeleted ? (
@@ -136,6 +137,6 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
           )}
         </div>
       )}
-    </div>
+    </Link>
   );
 }
