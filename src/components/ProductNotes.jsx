@@ -47,6 +47,8 @@ export default function ProductNotes() {
     }
   }, [textarea]);
 
+  if (!product) return;
+
   return (
     <div className="w-full h-fit p-4">
       <div className="bg-white w-full h-full rounded-lg flex flex-col items-center p-4 gap-4">
