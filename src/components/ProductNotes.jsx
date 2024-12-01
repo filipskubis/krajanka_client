@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import fetcher from "../helpers/fetcher";
 import { ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
+import Spinner from "./Spinner";
 
 export default function ProductNotes() {
   const { id } = useParams();
@@ -47,7 +48,7 @@ export default function ProductNotes() {
     }
   }, [textarea]);
 
-  if (!product) return;
+  if (!product) return <Spinner />;
 
   return (
     <div className="w-full h-fit p-4">
