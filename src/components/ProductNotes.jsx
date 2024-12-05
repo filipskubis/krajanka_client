@@ -8,20 +8,28 @@ import Spinner from "./Spinner";
 export default function ProductNotes() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
-  const textarea = useRef(null);
-  const [note, setNote] = useState("");
+
+  const [note, setNote] = useState({ stock: "", ordered: "", toOrder: "" });
   const noteRef = useRef();
 
   useEffect(() => {
     noteRef.current = note;
+    console.log(note);
   }, [note]);
 
-  const handleTextareaChange = (e) => {
-    setNote(e.target.value);
-  };
   useEffect(() => {
-    if (product) {
-      setNote(product.note || "");
+    if (product?.note) {
+      setNote({
+        stock: product.note.stock || "",
+        ordered: product.note.ordered || "",
+        toOrder: product.note.toOrder || "",
+      });
+    } else {
+      setNote({
+        stock: "",
+        ordered: "",
+        toOrder: "",
+      });
     }
   }, [product]);
 
@@ -39,28 +47,66 @@ export default function ProductNotes() {
     };
   }, []);
 
-  useEffect(() => {
-    if (textarea.current) {
-      textarea.current.addEventListener("input", function () {
-        this.style.height = "auto";
-        this.style.height = this.scrollHeight + "px";
-      });
-    }
-  }, [textarea]);
-
   if (!product) return <Spinner />;
 
   return (
     <div className="w-full h-fit p-4">
-      <div className="bg-white w-full h-full rounded-lg flex flex-col items-center p-4 gap-4">
+      <div className="bg-white w-full h-full rounded-lg flex flex-col items-center p-4 gap-6">
         <h1 className="text-2xl"> {product.name} </h1>
-        <textarea
-          rows="10"
-          value={note}
-          onChange={handleTextareaChange}
-          ref={textarea}
-          className="text-black text-lg focus:outline-none bg-transparent w-full p-2 rounded-lg text-wrap h-fit resize-none no-scrollbar border-[1px] border-[#00000050]"
-        />
+        <label htmlFor="stock"> Na stanie: </label>
+        <div className="relative flex">
+          <input
+            type="text"
+            id="stock"
+            className="border-[1px] border-black rounded-lg text-lg p-1"
+            value={note.stock}
+            onChange={(e) => {
+              setNote({ ...note, stock: e.target.value });
+            }}
+          />
+          <div className="absolute right-2 h-full flex items-center">
+            {" "}
+            {["główki", "kg", "sztuki", "wiązki"].includes(
+              product.packagingMethod
+            ) && product.packagingMethod}
+          </div>
+        </div>
+        <label htmlFor="ordered"> Zamówione: </label>
+        <div className="relative flex">
+          <input
+            type="text"
+            id="ordered"
+            className="border-[1px] border-black rounded-lg text-lg p-1"
+            value={note.ordered}
+            onChange={(e) => {
+              setNote({ ...note, ordered: e.target.value });
+            }}
+          />
+          <div className="absolute right-2 h-full flex items-center">
+            {["główki", "kg", "sztuki", "wiązki"].includes(
+              product.packagingMethod
+            ) && product.packagingMethod}
+          </div>
+        </div>
+        <label htmlFor="toOrder"> Zamówić: </label>
+        <div className="relative flex">
+          {" "}
+          <input
+            id="toOrder"
+            type="text"
+            className="border-[1px] border-black rounded-lg text-lg p-1"
+            value={note.toOrder}
+            onChange={(e) => {
+              setNote({ ...note, toOrder: e.target.value });
+            }}
+          />{" "}
+          <div className="absolute right-2 h-full flex items-center">
+            {["główki", "kg", "sztuki", "wiązki"].includes(
+              product.packagingMethod
+            ) && product.packagingMethod}
+          </div>
+        </div>
+
         <Link
           to="/produkty"
           className="w-fit p-2 flex justify-start items-center h-fit border-[1px] border-[#00000050] rounded-lg self-start"

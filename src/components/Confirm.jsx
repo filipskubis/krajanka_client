@@ -25,10 +25,26 @@ export default function Confirm({ action, description, cancel, confirm }) {
             <p className="message">{description}</p>
           </div>
           <div className="actions">
-            <button className="desactivate" type="button" onClick={confirm}>
+            <button
+              className="desactivate"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                confirm();
+              }}
+            >
               Potwierdź
             </button>
-            <button className="cancel" type="button" onClick={cancel}>
+            <button
+              className="cancel"
+              type="button"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                cancel();
+              }}
+            >
               Anuluj
             </button>
           </div>

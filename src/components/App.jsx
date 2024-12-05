@@ -17,6 +17,7 @@ import Routes from "./Routes";
 import RouteForm from "./RouteForm";
 import RouteDetails from "./RouteDetails";
 import ProductNotes from "./ProductNotes";
+import Stock from "./Stock";
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/produkty",
         element: <Products />,
+      },
+      {
+        path: "/stan",
+        element: <Stock />,
       },
       {
         path: "/klienci",

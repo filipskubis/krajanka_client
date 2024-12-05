@@ -7,6 +7,7 @@ import {
   BookOpen,
   ArrowLeft,
   Route,
+  PackageOpen,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -66,6 +67,19 @@ export default function Navbar() {
           <p> Produkty </p>
         </Link>
 
+        <Link
+          to="/stan"
+          onClick={() => {
+            setOpen(false);
+          }}
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
+        >
+          <PackageOpen
+            color="#303c6c"
+            className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+          />
+          <p> Stan </p>
+        </Link>
         <Link
           to="/klienci"
           onClick={() => {
