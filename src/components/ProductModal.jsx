@@ -13,8 +13,6 @@ const prioritizedProducts = [
   "Buraki",
   "Ogórki kiszone",
   "Kapusta kiszona",
-  "Natka pietruszki",
-  "Jarmuż",
   "Czerwona kapusta kiszona",
   "Kapusta kiszona z ogórkiem",
   "Czosnek",
