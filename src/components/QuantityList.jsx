@@ -110,7 +110,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     <div className="flex flex-col gap-4">
       {confirmWindow.active ? (
         <Confirm
-          action={"Odchacz porcje"}
+          action={"Odhacz porcje"}
           description={"Czy na pewno chcesz zmienić status zapakowanej porcji?"}
           cancel={() =>
             setConfirmWindow({
