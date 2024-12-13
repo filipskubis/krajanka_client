@@ -22,9 +22,8 @@ export default function Orders() {
   const { data, isLoading } = useSWR("/orders/get", fetcher);
   const [orders, setOrders] = useState([]);
   const [removingOrder, setRemovingOrder] = useState(null);
-  const [searchText, setSearchText] = useState(""); // State for combined search text
+  const [searchText, setSearchText] = useState("");
 
-  // Filter orders by checking if searchText matches either address or date
   const filteredOrders = orders.filter(
     (order) =>
       order.address.toLowerCase().includes(searchText.toLowerCase()) ||
@@ -33,10 +32,15 @@ export default function Orders() {
 
   useEffect(() => {
     if (data) {
-      const sortedOrders = data.sort((a, b) => b.orderNumber - a.orderNumber);
+      const sortedOrders = data.sort((a, b) => {
+        const dateA = new Date(a.date.split('-').reverse().join('-'));
+        const dateB = new Date(b.date.split('-').reverse().join('-'));
+        return dateB - dateA;
+      });
       setOrders(sortedOrders);
     }
   }, [data]);
+  
 
   async function removeOrder(id) {
     try {
@@ -74,8 +78,6 @@ export default function Orders() {
         <CirclePlus color="#303c6c" width={"2rem"} height={"auto"} />
         <p className="text-xl tablet:text-2xl">Dodaj zamówienie</p>
       </Link>
-
-      {/* Single Input for Both Address and Date Search */}
       <div className="formverse mt-4 shadow-lg">
         <input
           className="inputverse"

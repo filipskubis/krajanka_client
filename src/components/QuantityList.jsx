@@ -4,10 +4,13 @@ import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Spinner from "./Spinner";
 import Confirm from "./Confirm";
+import HoldButton from "./HoldButton"
+import { useNavigate } from "react-router-dom";
 
 export default function QuantityList({ aggregatedProducts, routeID }) {
   const [expandedProduct, setExpandedProduct] = useState(null);
   const { data } = useSWR("/products/get", fetcher);
+  const navigate = useNavigate()
   const [confirmWindow, setConfirmWindow] = useState({
     index: null,
     productIndex: null,
@@ -15,6 +18,8 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     active: false,
   });
   const [quantities, setQuantities] = useState([]);
+  console.log(quantities)
+
   const initialized = useRef(false);
   useEffect(() => {
     const fetchOrInitializeQuantityList = async () => {
@@ -25,22 +30,21 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
           `/routes/getQuantityList/${routeID}`,
           "GET"
         );
-        if (quantityList.length > 0) {
-          setQuantities(quantityList);
-        } else {
+        // if (quantityList.length > 0) {
+        //   setQuantities(quantityList);
+        // } else {
           const newQuantities = aggregatedProducts.map(
-            ({ name, quantities }) => ({
+            ({ name, quantities}) => ({
               productName: name,
-              quantities: quantities.map((quantity) =>
-                typeof quantity === "object"
-                  ? quantity
-                  : { value: quantity, packed: false }
+              quantities: quantities.map((quantity) => {
+                return { orderID: quantity.id, value: quantity.quantity, packed: quantity === 'object' ? quantity.packed : false };
+              }
+
               ),
             })
           );
-
           setQuantities(newQuantities);
-        }
+        // }
         initialized.current = true;
       } catch (error) {
         console.error("Error fetching or initializing quantity list:", error);
@@ -145,7 +149,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                   <p className="text-md font-semibold text-gray-600 mb-4 ">
                     Łącznie:{" "}
                     {productQuantities.reduce((current, quantity) => {
-                      return current + Number(quantity.value); // Convert to number
+                      return current + Number(quantity.value);
                     }, 0)}{" "}
                     {packagingMethod === "kg" ? packagingMethod : null}
                   </p>
@@ -176,6 +180,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                               setQuantities(newQuantities);
                             }}
                           />
+                          
                           <label
                             htmlFor={`cbx-${productName}-${index}`}
                             className="cbx"
@@ -188,17 +193,20 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                               >
                                 <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                               </svg>
+                              
                             </span>
-                          </label>
+                          </label>                          
                         </div>
-                        <span>
+                        <HoldButton click={() => { return }} hold={() => {
+                              navigate(`/zamówienie/${quantityObj.orderID}`)
+                          }}>
                           {quantityObj.value}
                           {packagingMethod === "kg" && (
                             <span className="text-md text-gray-500 ml-1">
                               kg
                             </span>
                           )}
-                        </span>
+                        </HoldButton>
                       </li>
                     ))}
                   </ul>

@@ -22,9 +22,9 @@ export default function RouteDetails() {
       order.products.forEach((product) => {
         const { name, quantity } = product;
         if (productMap.has(name)) {
-          productMap.get(name).quantities.push(quantity);
+          productMap.get(name).quantities.push({id: order.id, quantity});
         } else {
-          productMap.set(name, { name, quantities: [quantity] });
+          productMap.set(name, { name, quantities: [{id: order.id, quantity}] });
         }
       });
     });
@@ -114,12 +114,6 @@ export default function RouteDetails() {
             onClick={updateRoute}
           >
             <p className="text-md">Zaktualizuj</p>
-          </button>
-          <button className="bg-[#031C4D20] rounded-2xl w-full flex-grow p-3 flex justify-center items-center">
-            <div className="text-white text-md flex items-center gap-2">
-              <MapPin color="#1873FF" className="w-[1.5rem] h-[1.5rem]" />
-              <p>Połącz z Circuit</p>
-            </div>
           </button>
           <div className="flex flex-col w-full gap-8 items-center">
             <p className="text-xl text-bold">Produkty: </p>
