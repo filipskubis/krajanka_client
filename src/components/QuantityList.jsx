@@ -4,13 +4,13 @@ import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Spinner from "./Spinner";
 import Confirm from "./Confirm";
-import HoldButton from "./HoldButton"
+import HoldButton from "./HoldButton";
 import { useNavigate } from "react-router-dom";
 
 export default function QuantityList({ aggregatedProducts, routeID }) {
   const [expandedProduct, setExpandedProduct] = useState(null);
   const { data } = useSWR("/products/get", fetcher);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [confirmWindow, setConfirmWindow] = useState({
     index: null,
     productIndex: null,
@@ -18,7 +18,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     active: false,
   });
   const [quantities, setQuantities] = useState([]);
-  console.log(quantities)
+  console.log(quantities);
 
   const initialized = useRef(false);
   useEffect(() => {
@@ -30,21 +30,23 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
           `/routes/getQuantityList/${routeID}`,
           "GET"
         );
-        // if (quantityList.length > 0) {
-        //   setQuantities(quantityList);
-        // } else {
+        if (quantityList.length > 0) {
+          setQuantities(quantityList);
+        } else {
           const newQuantities = aggregatedProducts.map(
-            ({ name, quantities}) => ({
+            ({ name, quantities }) => ({
               productName: name,
               quantities: quantities.map((quantity) => {
-                return { orderID: quantity.id, value: quantity.quantity, packed: quantity === 'object' ? quantity.packed : false };
-              }
-
-              ),
+                return {
+                  orderID: quantity.id,
+                  value: quantity.quantity,
+                  packed: quantity === "object" ? quantity.packed : false,
+                };
+              }),
             })
           );
           setQuantities(newQuantities);
-        // }
+        }
         initialized.current = true;
       } catch (error) {
         console.error("Error fetching or initializing quantity list:", error);
@@ -90,8 +92,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     return product ? product.packagingMethod : "";
   };
 
-  function removePacked(e) {
-    e.preventDefault();
+  function removePacked() {
     const newQuantities = [...quantities];
     const quantityObj = confirmWindow.quantityObj;
     const productIndex = confirmWindow.productIndex;
@@ -124,7 +125,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
               active: false,
             })
           }
-          confirm={(e) => removePacked(e)}
+          confirm={removePacked}
         />
       ) : null}
       {quantities.map(
@@ -177,10 +178,11 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                                 ...quantityObj,
                                 packed: !quantityObj.packed,
                               };
+                              console.log(newQuantities);
                               setQuantities(newQuantities);
                             }}
                           />
-                          
+
                           <label
                             htmlFor={`cbx-${productName}-${index}`}
                             className="cbx"
@@ -193,13 +195,17 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
                               >
                                 <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
                               </svg>
-                              
                             </span>
-                          </label>                          
+                          </label>
                         </div>
-                        <HoldButton click={() => { return }} hold={() => {
-                              navigate(`/zamówienie/${quantityObj.orderID}`)
-                          }}>
+                        <HoldButton
+                          click={() => {
+                            return;
+                          }}
+                          hold={() => {
+                            navigate(`/zamówienie/${quantityObj.orderID}`);
+                          }}
+                        >
                           {quantityObj.value}
                           {packagingMethod === "kg" && (
                             <span className="text-md text-gray-500 ml-1">

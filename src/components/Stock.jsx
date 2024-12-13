@@ -28,7 +28,7 @@ export default function Stock() {
             Zamówić
           </div>
         </div>
-        {products.map(({ _id, note = null, name }) => {
+        {products.map(({ _id, note = null, name, packagingMethod }) => {
           if (
             note !== null &&
             note !== "" &&
@@ -42,15 +42,15 @@ export default function Stock() {
                 </div>
                 <div className="col-start-1 col-end-2 w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {note?.stock}
+                  {note?.stock} {note?.stock && packagingMethod}
                 </div>
                 <div className="col-start-2 col-end-3 w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {note?.ordered}
+                  {note?.ordered} {note?.ordered && packagingMethod}
                 </div>
                 <div className="col-start-3 col-end-4  w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {note?.toOrder}
+                  {note?.toOrder} {note?.toOrder && packagingMethod}
                 </div>
               </div>
             );
