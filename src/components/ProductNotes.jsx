@@ -9,7 +9,7 @@ export default function ProductNotes() {
   const { id } = useParams();
   const [product, setProduct] = useState(null);
 
-  const [note, setNote] = useState({ stock: "", ordered: "", toOrder: "" });
+  const [note, setNote] = useState({ stock: "", toOrder: "" });
   const noteRef = useRef();
 
   useEffect(() => {
@@ -21,13 +21,11 @@ export default function ProductNotes() {
     if (product?.note) {
       setNote({
         stock: product.note.stock || "",
-        ordered: product.note.ordered || "",
         toOrder: product.note.toOrder || "",
       });
     } else {
       setNote({
         stock: "",
-        ordered: "",
         toOrder: "",
       });
     }
@@ -66,23 +64,6 @@ export default function ProductNotes() {
           />
           <div className="absolute right-2 h-full flex items-center">
             {" "}
-            {["główki", "kg", "sztuki", "wiązki"].includes(
-              product.packagingMethod
-            ) && product.packagingMethod}
-          </div>
-        </div>
-        <label htmlFor="ordered"> Zamówione: </label>
-        <div className="relative flex">
-          <input
-            type="text"
-            id="ordered"
-            className="border-[1px] border-black rounded-lg text-lg p-1"
-            value={note.ordered}
-            onChange={(e) => {
-              setNote({ ...note, ordered: e.target.value });
-            }}
-          />
-          <div className="absolute right-2 h-full flex items-center">
             {["główki", "kg", "sztuki", "wiązki"].includes(
               product.packagingMethod
             ) && product.packagingMethod}

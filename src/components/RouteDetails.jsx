@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Car, LibraryBig, MapPin } from "lucide-react";
+import { Car, LibraryBig } from "lucide-react";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Confirm from "./Confirm";
@@ -22,9 +22,12 @@ export default function RouteDetails() {
       order.products.forEach((product) => {
         const { name, quantity } = product;
         if (productMap.has(name)) {
-          productMap.get(name).quantities.push({id: order.id, quantity});
+          productMap.get(name).quantities.push({ id: order.id, quantity });
         } else {
-          productMap.set(name, { name, quantities: [{id: order.id, quantity}] });
+          productMap.set(name, {
+            name,
+            quantities: [{ id: order.id, quantity }],
+          });
         }
       });
     });
@@ -35,7 +38,7 @@ export default function RouteDetails() {
   async function updateRoute() {
     try {
       fetcher(`/routes/update/${id}`, "POST");
-      window.location.reload()
+      window.location.reload();
     } catch (err) {
       console.log(err);
     }

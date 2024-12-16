@@ -58,7 +58,7 @@ export default function Navbar() {
           onClick={() => {
             setOpen(false);
           }}
-          className='relative w-[16rem] tablet:w-[20rem] tablet:mt-[0.25rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
+          className='relative w-[16rem] tablet:w-[20rem] tablet:mt-[0.25rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.15rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
           <Carrot
             color="#303c6c"
@@ -72,7 +72,7 @@ export default function Navbar() {
           onClick={() => {
             setOpen(false);
           }}
-          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.15rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
           <PackageOpen
             color="#303c6c"
@@ -85,7 +85,7 @@ export default function Navbar() {
           onClick={() => {
             setOpen(false);
           }}
-          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.15rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
           <UsersRound
             color="#303c6c"
