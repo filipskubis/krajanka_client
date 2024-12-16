@@ -3,11 +3,23 @@ import { Link } from "react-router-dom";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import { MapPin, CalendarDays, Trash2, Car } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect} from "react";
 import Confirm from "./Confirm";
 export default function Routes() {
-  const { data: routes } = useSWR("/routes/get", fetcher);
+  const { data } = useSWR("/routes/get", fetcher);
   const [removingRoute, setRemovingRoute] = useState("");
+  const [routes, setRoutes] = useState(null)
+
+  useEffect(() => {
+    if (data) {
+      const sortedRoutes = data.sort((a, b) => {
+        const dateA = new Date(a.date.split('-').reverse().join('-'));
+        const dateB = new Date(b.date.split('-').reverse().join('-'));
+        return dateB - dateA;
+      });
+      setRoutes(sortedRoutes);
+    }
+  }, [data]);
   async function removeRoute(id) {
     try {
       fetcher(`/routes/delete/${id}`, "POST");
