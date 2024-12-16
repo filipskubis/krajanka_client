@@ -4,7 +4,10 @@ import Spinner from "./Spinner";
 import { useEffect, useState } from "react";
 export default function Stock() {
   const [products, setProducts] = useState(null);
-  const { data: productTotals } = useSWR("/products/getProductTotals", fetcher);
+  const { data: productTotals, isLoading } = useSWR(
+    "/products/getProductTotals",
+    fetcher
+  );
 
   useEffect(() => {
     async function getProducts() {
@@ -13,7 +16,7 @@ export default function Stock() {
     }
     getProducts();
   }, []);
-  if (!products) return <Spinner />;
+  if (!products || isLoading) return <Spinner />;
 
   return (
     <div className="w-full h-full bg-white p-4 relative">

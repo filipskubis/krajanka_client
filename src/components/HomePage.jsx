@@ -17,16 +17,6 @@ export default function HomePage() {
         <p> Produkty </p>
       </Link>
       <Link
-        to="/klienci"
-        className="relative w-[20rem] shadow-lg tablet:w-[28rem] bg-white tablet:text-4xl p-5 flex gap-[1.5rem] hover:bg-[#303c6c10] tablet:gap-[2.5rem] rounded-xl items-center text-2xl "
-      >
-        <UsersRound
-          color="#303c6c"
-          className="w-[2.5rem] h-[2.5rem] tablet:w-[3.5rem] tablet:h-[3.5rem]"
-        />
-        <p> Klienci </p>
-      </Link>
-      <Link
         to="/stan"
         className="relative w-[20rem] shadow-lg tablet:w-[28rem] bg-white tablet:text-4xl p-5 flex gap-[1.5rem] hover:bg-[#303c6c10] tablet:gap-[2.5rem] rounded-xl items-center text-2xl "
       >
@@ -36,6 +26,17 @@ export default function HomePage() {
         />
         <p> Stan </p>
       </Link>
+      <Link
+        to="/klienci"
+        className="relative w-[20rem] shadow-lg tablet:w-[28rem] bg-white tablet:text-4xl p-5 flex gap-[1.5rem] hover:bg-[#303c6c10] tablet:gap-[2.5rem] rounded-xl items-center text-2xl "
+      >
+        <UsersRound
+          color="#303c6c"
+          className="w-[2.5rem] h-[2.5rem] tablet:w-[3.5rem] tablet:h-[3.5rem]"
+        />
+        <p> Klienci </p>
+      </Link>
+
       <Link
         to="/zamówienia"
         className="relative w-[20rem] shadow-lg tablet:w-[28rem] bg-white tablet:text-4xl p-5 flex gap-[1.5rem] hover:bg-[#303c6c10] tablet:gap-[2.5rem] rounded-xl items-center text-2xl "
