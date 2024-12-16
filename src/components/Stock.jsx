@@ -1,22 +1,20 @@
-import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Spinner from "./Spinner";
 import { useEffect, useState } from "react";
 export default function Stock() {
   const [products, setProducts] = useState(null);
-  const { data: productTotals, isLoading } = useSWR(
-    "/products/getProductTotals",
-    fetcher
-  );
+  const [productTotals, setProductTotals] = useState(null);
 
   useEffect(() => {
-    async function getProducts() {
+    async function getData() {
       const products = await fetcher("/products/get");
       setProducts(products);
+      const productTotals = await fetcher("/products/getProductTotals");
+      setProductTotals(productTotals);
     }
-    getProducts();
+    getData();
   }, []);
-  if (!products || isLoading) return <Spinner />;
+  if (!products || !productTotals) return <Spinner />;
 
   return (
     <div className="w-full h-full bg-white p-4 relative">
