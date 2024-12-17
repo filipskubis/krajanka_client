@@ -45,7 +45,8 @@ export default function Stock() {
                 </div>
                 <div className="col-start-1 col-end-2 w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {note?.stock} {note?.stock && packagingMethod}
+                  {note?.stock}{" "}
+                  {note?.stock && packagingMethod === "kg" && packagingMethod}
                 </div>
                 <div className="col-start-2 col-end-3 w-full flex justify-center border-b-[1px]">
                   {" "}
@@ -56,7 +57,8 @@ export default function Stock() {
                 </div>
                 <div className="col-start-3 col-end-4  w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {note?.toOrder} {note?.toOrder && packagingMethod}
+                  {note?.toOrder}{" "}
+                  {note?.toOrder && packagingMethod === "kg" && packagingMethod}
                 </div>
               </div>
             );
