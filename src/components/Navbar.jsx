@@ -40,7 +40,7 @@ export default function Navbar() {
       <div
         className={`flex h-full flex-col items-start pl-4 pt-16 gap-[2.5rem] ${
           open ? "translate-x-[0]" : "translate-x-[-100%]"
-        } absolute left-0 top-0 w-[20rem] tablet:w-[24rem] pr-4 bg-[#f9f9f9] transition-transform duration-200 z-[9999]`}
+        } absolute left-0 top-0 w-[20rem] tablet:w-[24rem] pr-4 bg-[#f9f9f9] transition-transform duration-200 z-[99999999999999]`}
       >
         <button
           className="absolute top-[1rem] left-[1rem] "
