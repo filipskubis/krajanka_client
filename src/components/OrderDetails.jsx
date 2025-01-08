@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 import Big from "big.js";
 import EditForm from "./EditForm";
 import Spinner from "./Spinner.jsx";
-
+import generateOrderIdentifier from "../helpers/generateOrderIdentifier.js";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -108,7 +108,7 @@ export default function OrderDetails() {
           ) : data ? (
             <>
               <p className="text-2xl text-slate self-center tablet:text-3xl print:text-base print:text-left print:mb-2">
-                Zamówienie numer: {data.orderNumber}
+                {generateOrderIdentifier(data.orderNumber, data.date)}
               </p>
               <div className="flex flex-col gap-3 w-full text-lg tablet:text-xl print:!text-xs">
                 <div className="flex gap-2 items-center">
@@ -267,7 +267,7 @@ export default function OrderDetails() {
           <>
             <p className="text-2xl text-slate self-center tablet:text-3xl print:text-lg print:text-left print:mb-2">
               {" "}
-              Zamówienie numer: {data.orderNumber}
+              {generateOrderIdentifier(data.orderNumber, data.date)}
             </p>
             <div className="flex flex-col gap-3 w-full text-lg tablet:text-xl print:!text-sm">
               <div className="flex gap-2 items-center">

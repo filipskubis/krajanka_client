@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import Confirm from "./Confirm";
 import Spinner from "./Spinner.jsx";
 import Big from "big.js";
-
+import generateOrderIdentifier from "../helpers/generateOrderIdentifier.js";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -36,7 +36,6 @@ export default function Orders() {
       setOrders(sortedOrders);
     }
   }, [data]);
-  
 
   async function removeOrder(id) {
     try {
@@ -105,7 +104,7 @@ export default function Orders() {
           >
             <p className="self-center text-xl">
               {" "}
-              Zamówienie numer {orderNumber}{" "}
+              Zamówienie {generateOrderIdentifier(orderNumber, date)}{" "}
             </p>
             <div className="flex flex-col gap-3">
               <div className="flex gap-2 items-center">

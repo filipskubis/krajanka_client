@@ -23,6 +23,13 @@ export default function Clients() {
     );
     setClients(newClients);
   }
+
+  const [searchText, setSearchText] = useState("");
+
+  const filteredClients = clients.filter((client) =>
+    client.address.toLowerCase().includes(searchText.toLowerCase())
+  );
+
   useEffect(() => {
     if (data != undefined) {
       setClients(data);
@@ -112,8 +119,21 @@ export default function Clients() {
           </button>
         )}
       </form>
+      <div className="formverse mt-4 shadow-lg">
+        <input
+          className="inputverse"
+          placeholder="Wyszukaj klienta"
+          value={searchText}
+          onChange={(e) => {
+            setSearchText(e.target.value);
+          }}
+          required=""
+          type="text"
+        />
+        <span className="input-border"></span>
+      </div>
       <div className="flex flex-col gap-4 tablet:grid tablet:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] tablet:justify-items-center">
-        {clients.map((client) => (
+        {filteredClients.map((client) => (
           <div
             key={client._id}
             className="relative rounded-lg bg-white justify-start p-4 flex items-center gap-4 tablet:w-full tablet:max-w-[350px]"
