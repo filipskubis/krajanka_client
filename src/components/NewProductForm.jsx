@@ -1,18 +1,18 @@
 /* eslint-disable react/prop-types */
-import ImageInput from './ImageInput';
-import DropdownMenu from './DropdownMenu';
-import { X } from 'lucide-react';
-import { useState } from 'react';
+import ImageInput from "./ImageInput";
+import DropdownMenu from "./DropdownMenu";
+import { X } from "lucide-react";
+import { useState } from "react";
 export default function NewProductForm({ handleAddProduct, setFormActive }) {
-  const [selectedOption, setSelectedOption] = useState('kg');
+  const [selectedOption, setSelectedOption] = useState("kg");
   const [file, setFile] = useState(null);
   function handleFormSubmit(e) {
     e.preventDefault();
-    const name = document.querySelector('#productName').value;
-    const price = document.querySelector('#price').value;
+    const name = document.querySelector("#productName").value;
+    const price = document.querySelector("#price").value;
     const image = file ? file : null;
     const packaging = selectedOption;
-    const seasonal = document.querySelector('#cbx-46').checked;
+    const seasonal = document.querySelector("#cbx-46").checked;
     handleAddProduct(name, price, image, packaging, seasonal);
   }
   return (
@@ -42,6 +42,7 @@ export default function NewProductForm({ handleAddProduct, setFormActive }) {
           <label htmlFor="price"> Cena: </label>
           <input
             type="number"
+            step="any"
             required
             id="price"
             className="p-1 rounded-lg focus:outline-none border-[2px] border-slate"
@@ -49,7 +50,7 @@ export default function NewProductForm({ handleAddProduct, setFormActive }) {
         </div>
         <div className="flex flex-col gap-1">
           <ImageInput
-            label={'Zdjęcie (opcjonalnie): '}
+            label={"Zdjęcie (opcjonalnie): "}
             file={file}
             setFile={setFile}
           />
@@ -71,24 +72,24 @@ export default function NewProductForm({ handleAddProduct, setFormActive }) {
           <label htmlFor="dropdownMenu"> Sposób pakowania: </label>
           <DropdownMenu
             options={[
-              'sztuki',
-              'kg',
-              'wiązki',
-              'główka',
-              'słoik 0.9l',
-              'butelka 0.5l',
-              'butelka 1l',
-              'paczka',
-              'porcja',
-              'pęczek',
+              "sztuki",
+              "kg",
+              "wiązki",
+              "główka",
+              "słoik 0.9l",
+              "butelka 0.5l",
+              "butelka 1l",
+              "paczka",
+              "porcja",
+              "pęczek",
             ]}
             selectedOption={selectedOption}
             setSelectedOption={setSelectedOption}
           />
         </div>
         <button className="border-[1px] rounded-full bg-[#00000020] p-2 active:scale-[101%]">
-          {' '}
-          Dodaj{' '}
+          {" "}
+          Dodaj{" "}
         </button>
       </div>
     </form>
