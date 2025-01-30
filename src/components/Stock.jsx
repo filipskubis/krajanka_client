@@ -57,8 +57,12 @@ export default function Stock() {
                 </div>
                 <div className="col-start-3 col-end-4  w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {note?.toOrder}{" "}
-                  {note?.toOrder && packagingMethod === "kg" && packagingMethod}
+                  {note?.stock - productTotals[name] < 0
+                    ? Math.abs(note?.stock - productTotals[name])
+                    : null}{" "}
+                  {note?.stock - productTotals[name] < 0 &&
+                    packagingMethod === "kg" &&
+                    packagingMethod}
                 </div>
               </div>
             );
