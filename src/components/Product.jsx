@@ -5,16 +5,24 @@ import fetcher from "../helpers/fetcher";
 import { AlertContext } from "../misc/AlertContext.jsx";
 import Confirm from "./Confirm.jsx";
 import { Link } from "react-router-dom";
-export default function Product({ uniqueId, name, src, initPrice, packaging }) {
+export default function Product({
+  uniqueId,
+  initName,
+  src,
+  initPrice,
+  packaging,
+}) {
   const { addAlert } = useContext(AlertContext);
   const [isEditMode, setIsEditMode] = useState(false);
   const inputRef = useRef();
+  const input2Ref = useRef();
   const [price, setPrice] = useState(initPrice);
+  const [name, setName] = useState(initName);
   const formRef = useRef(null);
   const [isBeingDeleted, setIsBeingDeleted] = useState(false);
   useEffect(() => {
     if (isEditMode) {
-      inputRef.current.focus();
+      input2Ref.current.focus();
     }
   }, [isEditMode]);
 
@@ -30,8 +38,9 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
 
   async function handleEditSubmit(e = null) {
     if (e) e.preventDefault();
-    if (price === initPrice) return;
-    const body = { price: price };
+    if (price === initPrice && name === initName) return;
+    if (e) return;
+    const body = { price: price, name: name };
     try {
       const response = await fetcher(`/products/edit/${uniqueId}`, "PUT", body);
       addAlert("success", response);
@@ -44,7 +53,7 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
     <Link
       key={uniqueId}
       to={`/product/${uniqueId}`}
-      className="relative flex flex-col gap-2 items-center justify-end min-h-[250px] border-2 border-[#6b7a8f] p-2 bg-white rounded-md tablet:w-full"
+      className={`relative flex flex-col gap-2 items-center justify-end min-h-[120px] border-2 border-[#6b7a8f] p-2 bg-white rounded-md tablet:w-full`}
     >
       {isBeingDeleted ? (
         <Confirm
@@ -82,61 +91,79 @@ export default function Product({ uniqueId, name, src, initPrice, packaging }) {
       >
         <Pencil width={"20px"} height={"auto"} />
       </div>
-      {src != null && (
+      {src ? (
         <img
           src={src}
           className="h-[150px] w-auto object-cover"
           referrerPolicy="no-referrer"
         />
-      )}
-      <p className="text-xl font-bold text-center">{name}</p>
+      ) : null}
+
       {isEditMode ? (
         <form
-          className="text-lg flex gap-1"
+          className="flex flex-col items-center gap-2"
           ref={formRef}
-          onSubmit={handleEditSubmit}
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }}
         >
-          <div className="relative flex">
-            <input
-              ref={inputRef}
-              type="number"
-              className="w-[5rem]"
-              value={price}
-              step="0.1"
-              onChange={(e) => {
-                let value = e.target.value;
+          <input
+            ref={input2Ref}
+            type="text"
+            className="min-w-[5rem] text-xl font-bold text-center"
+            value={name}
+            onChange={(e) => {
+              let value = e.target.value;
+              setName(value);
+            }}
+          />
+          <div className="text-lg flex gap-1" onSubmit={handleEditSubmit}>
+            <div className="relative flex">
+              <input
+                ref={inputRef}
+                type="number"
+                className="w-[5rem]"
+                value={price}
+                step="0.1"
+                onChange={(e) => {
+                  let value = e.target.value;
 
-                if (value.includes(".")) {
-                  const [integerPart, decimalPart] = value.split(".");
-                  if (decimalPart.length > 2) {
-                    value = `${integerPart}.${decimalPart.slice(0, 2)}`;
+                  if (value.includes(".")) {
+                    const [integerPart, decimalPart] = value.split(".");
+                    if (decimalPart.length > 2) {
+                      value = `${integerPart}.${decimalPart.slice(0, 2)}`;
+                    }
+                  } else {
+                    if (value.length > 3) {
+                      value = value.slice(0, 3);
+                    }
                   }
-                } else {
-                  if (value.length > 3) {
-                    value = value.slice(0, 3);
-                  }
-                }
 
-                setPrice(value);
-              }}
-            />
-            <p className="absolute right-[0.25rem]">PLN</p>
+                  setPrice(value);
+                }}
+              />
+              <p className="absolute right-[0.25rem]">PLN</p>
+            </div>
+
+            <p> /</p>
+            <p> {packaging} </p>
           </div>
-
-          <p> /</p>
-          <p> {packaging} </p>
         </form>
       ) : (
-        <div className="text-lg">
-          {price < 1 ? (
-            <p>
-              {price * 100} groszy / {packaging}
-            </p>
-          ) : (
-            <p>
-              {price} PLN / {packaging}
-            </p>
-          )}
+        <div className="flex flex-col items-center gap-2">
+          <p className="text-xl font-bold text-center">{name}</p>
+          <div className="text-lg">
+            {price < 1 ? (
+              <p>
+                {price * 100} groszy / {packaging}
+              </p>
+            ) : (
+              <p>
+                {price} PLN / {packaging}
+              </p>
+            )}
+          </div>
         </div>
       )}
     </Link>

@@ -53,7 +53,7 @@ export default function Products() {
           <Product
             key={_id}
             uniqueId={_id}
-            name={name}
+            initName={name}
             initPrice={price}
             packaging={packagingMethod}
             src={image}
