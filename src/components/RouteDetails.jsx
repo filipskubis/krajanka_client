@@ -39,7 +39,9 @@ export default function RouteDetails() {
     try {
       const addresses = data.orders.map((order) => {
         return {
-          addressName: `${data.destination} ${order.address}`,
+          addressName: order.address.includes(data.destination)
+            ? order.address
+            : `${data.destination} ${order.address}`,
           phone: order.phone,
           notes: order.note,
           paymentMethod: order.paymentMethod,
