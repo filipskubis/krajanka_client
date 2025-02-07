@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useContext } from "react";
 import { useParams } from "react-router-dom";
 import { Car, LibraryBig, MapPin } from "lucide-react";
 import useSWR from "swr";
@@ -6,13 +6,13 @@ import fetcher from "../helpers/fetcher";
 import Confirm from "./Confirm";
 import Spinner from "./Spinner";
 import QuantityList from "./QuantityList";
-
+import { AlertContext } from "../misc/AlertContext";
 export default function RouteDetails() {
   const { id } = useParams();
   const { data } = useSWR(`/routes/get/${id}`, fetcher);
   const [removingRoute, setRemovingRoute] = useState("");
   const [confirmWindow, setConfirmWindow] = useState(false);
-
+  const { addAlert } = useContext(AlertContext);
   const aggregatedProducts = useMemo(() => {
     if (!data || !data.orders) return [];
 
@@ -46,11 +46,12 @@ export default function RouteDetails() {
         };
       });
 
-      fetcher(
+      const response = await fetcher(
         `/circuit/routes/${data.destination} ${data.date}/addStops`,
         "POST",
         { addresses: addresses }
       );
+      addAlert("success", response);
     } catch (err) {
       console.log(err);
     }

@@ -21,6 +21,9 @@ body {
   overflow-x: hidden;
 }
 
+button:active {
+  scale: 0.95;
+}
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
