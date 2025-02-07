@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Car, LibraryBig } from "lucide-react";
+import { Car, LibraryBig, MapPin } from "lucide-react";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Confirm from "./Confirm";
@@ -34,6 +34,27 @@ export default function RouteDetails() {
 
     return Array.from(productMap.values());
   }, [data]);
+
+  async function syncWithCircuit() {
+    try {
+      const addresses = data.orders.map((order) => {
+        return {
+          addressName: `${data.destination} ${order.address}`,
+          phone: order.phone,
+          notes: order.note,
+          paymentMethod: order.paymentMethod,
+        };
+      });
+
+      fetcher(
+        `/circuit/routes/${data.destination} ${data.date}/addStops`,
+        "POST",
+        { addresses: addresses }
+      );
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   async function updateRoute() {
     try {
@@ -111,6 +132,13 @@ export default function RouteDetails() {
             }}
           >
             <p className="text-white text-md">Usuń</p>
+          </button>
+          <button
+            className="bg-[#031C4D20] rounded-2xl flex-grow p-3 w-full flex justify-center items-center gap-2"
+            onClick={syncWithCircuit}
+          >
+            <MapPin color="#3A7AF6" strokeWidth={2.5} />
+            <p className="text-md">Połącz z Circuit</p>
           </button>
           <button
             className="bg-[#031C4D20] rounded-2xl flex-grow p-3 w-full flex  justify-center items-center"

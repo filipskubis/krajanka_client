@@ -18,7 +18,6 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
     active: false,
   });
   const [quantities, setQuantities] = useState([]);
-  console.log(quantities);
 
   const initialized = useRef(false);
   useEffect(() => {

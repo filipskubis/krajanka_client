@@ -69,25 +69,6 @@ export default function ProductNotes() {
             ) && product.packagingMethod}
           </div>
         </div>
-        <label htmlFor="toOrder"> Zamówić: </label>
-        <div className="relative flex">
-          {" "}
-          <input
-            id="toOrder"
-            type="text"
-            className="border-[1px] border-black rounded-lg text-lg p-1"
-            value={note.toOrder}
-            onChange={(e) => {
-              setNote({ ...note, toOrder: e.target.value });
-            }}
-          />{" "}
-          <div className="absolute right-2 h-full flex items-center">
-            {["główki", "kg", "sztuki", "wiązki"].includes(
-              product.packagingMethod
-            ) && product.packagingMethod}
-          </div>
-        </div>
-
         <Link
           to="/produkty"
           className="w-fit p-2 flex justify-start items-center h-fit border-[1px] border-[#00000050] rounded-lg self-start"

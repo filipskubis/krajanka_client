@@ -13,6 +13,7 @@ export default async function fetcher(ENDPOINT, method = "GET", body = null) {
     }
   );
   const data = await response.json();
+
   if (data.message === "Unauthorized") {
     window.location.href = "/";
   }
