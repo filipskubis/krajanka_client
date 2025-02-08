@@ -38,12 +38,24 @@ export default function RouteDetails() {
   async function syncWithCircuit() {
     try {
       const addresses = data.orders.map((order) => {
+        let productsString = "";
+        order.products.forEach(({ name, quantity, packagingMethod }) => {
+          productsString += `${name} - ${quantity} (${packagingMethod})\n`;
+        });
+        const total = order.products.reduce(
+          (value, product) =>
+            value + Number(product.quantity) * Number(product.price),
+          0
+        );
+        console.log(order);
         return {
           addressName: order.address.includes(data.destination)
             ? order.address
             : `${data.destination} ${order.address}`,
           phone: order.phone,
           notes: order.note,
+          products: productsString,
+          total,
           paymentMethod: order.paymentMethod,
         };
       });
