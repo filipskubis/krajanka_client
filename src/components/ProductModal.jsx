@@ -5,22 +5,17 @@ import { CirclePlus, CircleMinus } from "lucide-react";
 // import Spinner from './Spinner';
 
 const prioritizedProducts = [
-  "Jaja z wolnego wybiegu (M/L)",
-  "Jaja z wolnego wybiegu (S/M)",
-  "Jaja z wolnego wybiegu (L/XL)",
+  "Jaja (M/L)",
+  "Jaja (S/M)",
+  "Jaja (L/XL)",
   "Marchew",
   "Ziemniaki",
   "Buraki",
   "Ogórki kiszone",
   "Kapusta kiszona",
   "Czerwona kapusta kiszona",
-  "Kapusta kiszona z ogórkiem",
-  "Czosnek",
-  "Zakwas buraczany 1l",
-  "Zakwas buraczany 0.5l",
-  "Por duży",
-  "Seler duży",
-  "Cebula",
+  "Por",
+  "Seler",
   "Pietruszka korzeń",
 ];
 
