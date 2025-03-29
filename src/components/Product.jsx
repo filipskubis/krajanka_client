@@ -5,6 +5,7 @@ import fetcher from "../helpers/fetcher";
 import { AlertContext } from "../misc/AlertContext.jsx";
 import Confirm from "./Confirm.jsx";
 import { Link } from "react-router-dom";
+import Star from "./Star.jsx";
 export default function Product({
   uniqueId,
   initName,
@@ -20,6 +21,12 @@ export default function Product({
   const [name, setName] = useState(initName);
   const formRef = useRef(null);
   const [isBeingDeleted, setIsBeingDeleted] = useState(false);
+  const [favorite, setFavorite] = useState(false);
+
+  function toggleFavorite() {
+    setFavorite((prev) => !prev);
+  }
+
   useEffect(() => {
     if (isEditMode) {
       input2Ref.current.focus();
@@ -55,6 +62,11 @@ export default function Product({
       to={`/product/${uniqueId}`}
       className={`relative flex flex-col gap-2 items-center justify-end min-h-[120px] border-2 border-[#6b7a8f] p-2 bg-white rounded-md tablet:w-full`}
     >
+      <Star
+        checked={favorite}
+        toggleChecked={toggleFavorite}
+        className="absolute left-[0.5rem] top-[0.5rem]"
+      ></Star>
       {isBeingDeleted ? (
         <Confirm
           action="Usuń produkt"

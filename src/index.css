@@ -1240,3 +1240,36 @@ input[type="number"] {
     max-height: 500px; /* Set a large enough value to fit the content */
   }
 }
+
+/* From Uiverse.io by andrew-demchenk0 */
+.starContainer input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.starContainer {
+  display: block;
+  cursor: pointer;
+  user-select: none;
+}
+
+.starContainer svg {
+  position: relative;
+  top: 0;
+  left: 0;
+  height: 40px;
+  width: 40px;
+  transition: all 0.3s;
+  fill: #666;
+}
+
+.starContainer svg:hover {
+  transform: scale(1.1);
+}
+
+.starContainer input:checked ~ svg {
+  fill: #ffe100;
+}
