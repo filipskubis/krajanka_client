@@ -14,6 +14,7 @@ export default function Stock() {
     }
     getData();
   }, []);
+
   if (!products || !productTotals) return <Spinner />;
 
   return (
@@ -50,8 +51,8 @@ export default function Stock() {
                 </div>
                 <div className="col-start-2 col-end-3 w-full flex justify-center border-b-[1px]">
                   {" "}
-                  {productTotals[name] !== 0 && productTotals[name]}{" "}
-                  {productTotals[name] !== 0 &&
+                  {productTotals[name] > 0 && productTotals[name]}{" "}
+                  {productTotals[name] > 0 &&
                     packagingMethod === "kg" &&
                     packagingMethod}
                 </div>
