@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-export default function Star({ checked, toggleChecked, className }) {
+export default function Star({ checked, toggleChecked, className, disabled }) {
   return (
     <label
       className={`starContainer ${className}`}
@@ -9,7 +9,12 @@ export default function Star({ checked, toggleChecked, className }) {
         toggleChecked();
       }}
     >
-      <input type="checkbox" checked={checked} />
+      <input
+        type="checkbox"
+        checked={checked}
+        disabled={disabled}
+        onChange={() => {}}
+      />
       <svg
         height="24px"
         id="Layer_1"

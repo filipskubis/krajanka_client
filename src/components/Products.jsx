@@ -11,10 +11,9 @@ export default function Products() {
 
   const [products, setProducts] = useState([]);
   const [formActive, setFormActive] = useState(false);
-
-  function handleAddProduct(name, price, image, packaging, seasonal) {
+  function handleAddProduct(name, price, image, packaging, seasonal, favorite) {
     setFormActive(false);
-    const body = { name, price, image, packaging, seasonal };
+    const body = { name, price, image, packaging, seasonal, favorite };
 
     try {
       fetcher("/products/add", "POST", body);
@@ -49,16 +48,19 @@ export default function Products() {
         </button>
       )}
       <div className="flex flex-col gap-4 tablet:grid tablet:grid-cols-[repeat(auto-fit,minmax(300px,1fr))] tablet:justify-items-center">
-        {products.map(({ _id, name, price, packagingMethod, image }) => (
-          <Product
-            key={_id}
-            uniqueId={_id}
-            initName={name}
-            initPrice={price}
-            packaging={packagingMethod}
-            src={image}
-          />
-        ))}
+        {products.map(
+          ({ _id, name, price, packagingMethod, image, favorite }) => (
+            <Product
+              key={_id}
+              uniqueId={_id}
+              initName={name}
+              initPrice={price}
+              initFavorite={favorite}
+              packaging={packagingMethod}
+              src={image}
+            />
+          )
+        )}
       </div>
     </div>
   );

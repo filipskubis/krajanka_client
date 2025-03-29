@@ -12,6 +12,7 @@ export default function Product({
   src,
   initPrice,
   packaging,
+  initFavorite,
 }) {
   const { addAlert } = useContext(AlertContext);
   const [isEditMode, setIsEditMode] = useState(false);
@@ -21,10 +22,23 @@ export default function Product({
   const [name, setName] = useState(initName);
   const formRef = useRef(null);
   const [isBeingDeleted, setIsBeingDeleted] = useState(false);
-  const [favorite, setFavorite] = useState(false);
-
-  function toggleFavorite() {
-    setFavorite((prev) => !prev);
+  const [favorite, setFavorite] = useState(initFavorite);
+  const [disabled, setDisabled] = useState(false);
+  async function toggleFavorite() {
+    if (disabled) return;
+    const newValue = !favorite;
+    setFavorite((prev) => newValue);
+    setDisabled(true);
+    setTimeout(() => {
+      setDisabled(false);
+    }, 500);
+    try {
+      fetcher(`/products/updateFavorite/${uniqueId}`, "POST", {
+        favorite: newValue,
+      });
+    } catch (err) {
+      setFavorite((prev) => !prev);
+    }
   }
 
   useEffect(() => {
@@ -60,10 +74,11 @@ export default function Product({
     <Link
       key={uniqueId}
       to={`/product/${uniqueId}`}
-      className={`relative flex flex-col gap-2 items-center justify-end min-h-[120px] border-2 border-[#6b7a8f] p-2 bg-white rounded-md tablet:w-full`}
+      className={`relative flex flex-col gap-2 items-center justify-end min-h-[120px] border-2 border-[#6b7a8f] p-2 pt-[3rem] bg-white rounded-md tablet:w-full`}
     >
       <Star
         checked={favorite}
+        disabled={disabled}
         toggleChecked={toggleFavorite}
         className="absolute left-[0.5rem] top-[0.5rem]"
       ></Star>

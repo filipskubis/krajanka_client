@@ -1271,5 +1271,5 @@ input[type="number"] {
 }
 
 .starContainer input:checked ~ svg {
-  fill: #ffe100;
+  fill: #f28a72;
 }

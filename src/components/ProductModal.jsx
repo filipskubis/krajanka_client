@@ -2,22 +2,8 @@
 import { X } from "lucide-react";
 import { useEffect, useState, useRef } from "react";
 import { CirclePlus, CircleMinus } from "lucide-react";
+import fetcher from "../helpers/fetcher";
 // import Spinner from './Spinner';
-
-const prioritizedProducts = [
-  "Jaja (M/L)",
-  "Jaja (S/M)",
-  "Jaja (L/XL)",
-  "Marchew",
-  "Ziemniaki",
-  "Buraki",
-  "Ogórki kiszone",
-  "Kapusta kiszona",
-  "Czerwona kapusta kiszona",
-  "Por",
-  "Seler",
-  "Pietruszka korzeń",
-];
 
 export default function ProductModal({
   data,
@@ -27,6 +13,19 @@ export default function ProductModal({
   const [quantity, setQuantity] = useState(1);
   const modalRef = useRef(null);
   const [currentProduct, setCurrentProduct] = useState("");
+  const [prioritizedProducts, setPrioritizedProducts] = useState([]);
+
+  useEffect(() => {
+    async function getData() {
+      const prioritizedProductsData = await fetcher("/products/getFavorite");
+      const prioritizedProducts = prioritizedProductsData.map(
+        (value) => value.name
+      );
+      setPrioritizedProducts(prioritizedProducts);
+    }
+
+    getData();
+  }, []);
 
   function handleChange(e) {
     const name = e.target.value;
