@@ -111,7 +111,7 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
 
   if (!quantities) return <Spinner />;
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-4 w-full">
       {confirmWindow.active ? (
         <Confirm
           action={"Odhacz porcje"}
@@ -132,7 +132,10 @@ export default function QuantityList({ aggregatedProducts, routeID }) {
           const packagingMethod = getPackagingMethod(productName);
 
           return (
-            <div key={productName} className="border rounded-md text-black ">
+            <div
+              key={productName}
+              className="border rounded-md text-black w-full"
+            >
               <button
                 className="w-full p-4 text-left font-bold border-[#f28a92]"
                 onClick={() => toggleProduct(productName)}

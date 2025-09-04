@@ -1,18 +1,16 @@
-import { useState, useMemo, useContext } from "react";
+import { useState, useMemo } from "react";
 import { useParams } from "react-router-dom";
-import { Car, LibraryBig, MapPin } from "lucide-react";
+import { Car, LibraryBig } from "lucide-react";
 import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import Confirm from "./Confirm";
 import Spinner from "./Spinner";
 import QuantityList from "./QuantityList";
-import { AlertContext } from "../misc/AlertContext";
 export default function RouteDetails() {
   const { id } = useParams();
   const { data } = useSWR(`/routes/get/${id}`, fetcher);
   const [removingRoute, setRemovingRoute] = useState("");
   const [confirmWindow, setConfirmWindow] = useState(false);
-  const { addAlert } = useContext(AlertContext);
   const aggregatedProducts = useMemo(() => {
     if (!data || !data.orders) return [];
 
@@ -34,42 +32,6 @@ export default function RouteDetails() {
 
     return Array.from(productMap.values());
   }, [data]);
-
-  async function syncWithCircuit() {
-    try {
-      const addresses = data.orders.map((order) => {
-        let productsString = "";
-        order.products.forEach(({ name, quantity, packagingMethod }) => {
-          productsString += `${name} - ${quantity} (${packagingMethod})\n`;
-        });
-        const total = order.products.reduce(
-          (value, product) =>
-            value + Number(product.quantity) * Number(product.price),
-          0
-        );
-        console.log(order);
-        return {
-          addressName: order.address.includes(data.destination)
-            ? order.address
-            : `${data.destination} ${order.address}`,
-          phone: order.phone,
-          notes: order.note,
-          products: productsString,
-          total,
-          paymentMethod: order.paymentMethod,
-        };
-      });
-
-      const response = await fetcher(
-        `/circuit/routes/${data.destination} ${data.date}/addStops`,
-        "POST",
-        { addresses: addresses }
-      );
-      addAlert("success", response);
-    } catch (err) {
-      console.log(err);
-    }
-  }
 
   async function updateRoute() {
     try {
@@ -147,13 +109,6 @@ export default function RouteDetails() {
             }}
           >
             <p className="text-white text-md">Usuń</p>
-          </button>
-          <button
-            className="bg-[#031C4D20] rounded-2xl flex-grow p-3 w-full flex justify-center items-center gap-2"
-            onClick={syncWithCircuit}
-          >
-            <MapPin color="#3A7AF6" strokeWidth={2.5} />
-            <p className="text-md">Połącz z Circuit</p>
           </button>
           <button
             className="bg-[#031C4D20] rounded-2xl flex-grow p-3 w-full flex  justify-center items-center"

@@ -55,6 +55,9 @@ export default function OrderForm() {
     let formattedDate = null;
     if (date) {
       formattedDate = date.format("DD-MM-YYYY");
+    } else {
+      let newDate = new Date();
+      formattedDate = newDate.format("DD-MM-YYYY");
     }
 
     const body = {

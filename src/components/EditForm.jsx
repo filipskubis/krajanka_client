@@ -13,24 +13,14 @@ import dayjs from "dayjs";
 import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
 import HoldButton from "./HoldButton";
-import TimePicker from "./TimePicker";
 import DatePicker from "./DatePicker";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
-function convertToDateAndTimeObjects(dateStr, timeStr) {
-  // Parse the date part
+function convertToDateObject(dateStr) {
   const dateObject = dayjs(dateStr, "DD-MM-YYYY");
 
-  // Parse the time part
-  const [hours, minutes] = timeStr.split(":");
-  const timeObject = dayjs()
-    .hour(parseInt(hours, 10))
-    .minute(parseInt(minutes, 10))
-    .second(0)
-    .millisecond(0);
-
-  return { dateObject, timeObject };
+  return { dateObject };
 }
 
 export default function EditForm({ order, close }) {
@@ -47,16 +37,11 @@ export default function EditForm({ order, close }) {
   const [orderNumber, setOrderNumber] = useState(order.orderNumber);
 
   const [date, setDate] = useState(null);
-  const [time, setTime] = useState(null);
 
   useEffect(() => {
-    if (order && order.date && order.time) {
-      const { dateObject, timeObject } = convertToDateAndTimeObjects(
-        order.date,
-        order.time
-      );
+    if (order && order.date) {
+      const { dateObject } = convertToDateObject(order.date);
       setDate(dateObject);
-      setTime(timeObject);
     }
   }, [order]);
 
@@ -66,18 +51,13 @@ export default function EditForm({ order, close }) {
     setDate(newDate);
   };
 
-  const handleTimeChange = (newTime) => {
-    setTime(newTime);
-  };
-
   async function handleFormSubmit(e) {
     e.preventDefault();
     const productsNoTotal = products.map(({ total, ...rest }) => rest);
     let formattedDate = null;
     let formattedTime = null;
-    if (date && time) {
+    if (date) {
       formattedDate = date.format("DD-MM-YYYY");
-      formattedTime = time.format("HH:mm");
     }
 
     const body = {
@@ -138,7 +118,6 @@ export default function EditForm({ order, close }) {
     setPhone("");
     setOrderNumber("");
     setDate(null);
-    setTime(null);
   }
 
   function handleClientChoice(address, phone) {
@@ -339,7 +318,6 @@ export default function EditForm({ order, close }) {
           />
         </div>
         <DatePicker date={date} handleDateChange={handleDateChange} />
-        <TimePicker time={time} handleTimeChange={handleTimeChange} />
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem]"
           onSubmit={handleFormSubmit}
