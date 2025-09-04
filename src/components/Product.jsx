@@ -27,7 +27,7 @@ export default function Product({
   async function toggleFavorite() {
     if (disabled) return;
     const newValue = !favorite;
-    setFavorite((prev) => newValue);
+    setFavorite(() => newValue);
     setDisabled(true);
     setTimeout(() => {
       setDisabled(false);

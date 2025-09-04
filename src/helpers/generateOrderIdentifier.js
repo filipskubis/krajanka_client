@@ -2,7 +2,7 @@ export default function generateOrderIdentifier(orderNumber, dateString) {
   // Validate the input date format (DD-MM-YYYY)
   const dateRegex = /^\d{2}-\d{2}-\d{4}$/;
   if (!dateRegex.test(dateString)) {
-    throw new Error("Invalid date format. Please use DD-MM-YYYY.");
+    return obfuscateOrderNumber(orderNumber);
   }
 
   // Obfuscate the order number
