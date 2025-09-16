@@ -5,23 +5,25 @@ import { CirclePlus, CircleMinus } from "lucide-react";
 import fetcher from "../helpers/fetcher";
 // import Spinner from './Spinner';
 
-export default function ProductModal({
-  data,
-  setProductModal,
-  handleAddProduct,
-}) {
+export default function ProductModal({ setProductModal, setProducts }) {
   const [quantity, setQuantity] = useState(1);
   const modalRef = useRef(null);
   const [currentProduct, setCurrentProduct] = useState("");
+
   const [prioritizedProducts, setPrioritizedProducts] = useState([]);
+  const [data, setData] = useState();
 
   useEffect(() => {
     async function getData() {
-      const prioritizedProductsData = await fetcher("/products/getFavorite");
+      const [data, prioritizedProductsData] = await Promise.all([
+        fetcher("/products/get"),
+        fetcher("/products/getFavorite"),
+      ]);
       const prioritizedProducts = prioritizedProductsData.map(
         (value) => value.name
       );
       setPrioritizedProducts(prioritizedProducts);
+      setData(data);
     }
 
     getData();
@@ -45,6 +47,26 @@ export default function ProductModal({
       window.removeEventListener("click", closeFunction);
     };
   }, [setProductModal]);
+
+  function handleAddProduct(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    const name = e.target.querySelector("#productSelect").value;
+    const quantity = e.target.querySelector("#quantity").value;
+    const product = data.find((product) => product.name === name);
+    const uniqueId = crypto.randomUUID();
+    const productObject = {
+      name,
+      id: uniqueId,
+      quantity: quantity,
+      price: product.price,
+      packagingMethod: product.packagingMethod,
+    };
+    setProducts((products) => [...products, productObject]);
+    setProductModal(false);
+  }
+
   if (data) {
     return (
       <div className="absolute flex inset-0 justify-center pt-[30%] w-screen h-screen">

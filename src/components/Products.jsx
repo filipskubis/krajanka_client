@@ -7,7 +7,7 @@ import fetcher from "../helpers/fetcher";
 import NewProductForm from "./NewProductForm";
 import Spinner from "./Spinner.jsx";
 export default function Products() {
-  const { data, error, isLoading } = useSWR("/products/get", fetcher);
+  const { data, error, isLoading } = useSWR("/products/get");
 
   const [products, setProducts] = useState([]);
   const [formActive, setFormActive] = useState(false);

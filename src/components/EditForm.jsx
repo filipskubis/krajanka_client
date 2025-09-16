@@ -24,7 +24,7 @@ function convertToDateObject(dateStr) {
 }
 
 export default function EditForm({ order, close }) {
-  const { data } = useSWR("/products/get", fetcher);
+  const { data } = useSWR("/products/get");
   const [products, setProducts] = useState(order.products);
   const [productModal, setProductModal] = useState(false);
   const [clientModal, setClientModal] = useState(false);
@@ -55,7 +55,6 @@ export default function EditForm({ order, close }) {
     e.preventDefault();
     const productsNoTotal = products.map(({ total, ...rest }) => rest);
     let formattedDate = null;
-    let formattedTime = null;
     if (date) {
       formattedDate = date.format("DD-MM-YYYY");
     }
@@ -68,7 +67,6 @@ export default function EditForm({ order, close }) {
       note: note || null,
       orderNumber,
       date: formattedDate,
-      time: formattedTime,
       originalOrderNumber: order.orderNumber,
     };
     try {

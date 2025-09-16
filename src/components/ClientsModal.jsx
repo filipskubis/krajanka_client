@@ -1,11 +1,11 @@
 /* eslint-disable react/prop-types */
-import fetcher from "../helpers/fetcher";
+
 import useSWR from "swr";
 import { X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 
 export default function ClientsModal({ setClientModal, handleClientChoice }) {
-  const { data } = useSWR(`/clients/get`, fetcher);
+  const { data } = useSWR(`/clients/get`);
   const [value, setValue] = useState(null);
   const [searchQuery, setSearchQuery] = useState(""); // State for search input
   const modalRef = useRef(null);

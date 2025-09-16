@@ -21,8 +21,8 @@ Big.RM = Big.roundHalfUp;
 
 export default function OrderDetails() {
   const { id } = useParams();
-  const { data, isLoading } = useSWR(`/orders/get/${id}`, fetcher);
-  const { data: orderIDsRaw } = useSWR("/orders/getAllIDs", fetcher);
+  const { data, isLoading } = useSWR(`/orders/get/${id}`);
+  const { data: orderIDsRaw } = useSWR("/orders/getAllIDs");
   const [editing, setEditing] = useState(false);
   const [confirmWindow, setConfirmWindow] = useState(false);
   const orderRef = useRef(null);

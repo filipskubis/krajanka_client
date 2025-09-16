@@ -15,8 +15,11 @@ Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
 export default function OrderForm() {
-  const { data } = useSWR("/products/get", fetcher);
-  const { data: orderNumber } = useSWR("/orders/getOrderNumber", fetcher);
+  // const [data, setData] = useState();
+
+  //delegate product data fetching into product modal and jam it into a promise all there
+
+  const { data: orderNumber } = useSWR("/orders/getOrderNumber");
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [productModal, setProductModal] = useState(false);
@@ -31,6 +34,16 @@ export default function OrderForm() {
 
   const textarea = useRef(null);
   const [note, setNote] = useState("");
+
+  // useEffect(() => {
+  //   async function getData() {
+  //     const [data, orderNumber] = await Promise.all([
+  //       "/products/get",
+  //       "/orders/getOrderNumber",
+  //     ]);
+  //     console.log(data, orderNumber);
+  //   }
+  // }, []);
 
   useEffect(() => {
     if (textarea.current) {
@@ -123,24 +136,7 @@ export default function OrderForm() {
     setAddress(address);
     setPhone(phone);
   }
-  function handleAddProduct(e) {
-    e.preventDefault();
-    e.stopPropagation();
 
-    const name = e.target.querySelector("#productSelect").value;
-    const quantity = e.target.querySelector("#quantity").value;
-    const product = data.find((product) => product.name === name);
-    const uniqueId = crypto.randomUUID();
-    const productObject = {
-      name,
-      id: uniqueId,
-      quantity: quantity,
-      price: product.price,
-      packagingMethod: product.packagingMethod,
-    };
-    setProducts([...products, productObject]);
-    setProductModal(false);
-  }
   return (
     <>
       {clientModal ? (
@@ -151,9 +147,8 @@ export default function OrderForm() {
       ) : null}
       {productModal ? (
         <ProductModal
-          data={data}
           setProductModal={setProductModal}
-          handleAddProduct={handleAddProduct}
+          setProducts={setProducts}
         />
       ) : null}
       <form
@@ -243,7 +238,7 @@ export default function OrderForm() {
                           acc.plus(Big(product.quantity).times(product.price)),
                         Big(0)
                       )
-                      .toFixed(2) // Round the final result to 2 decimal places
+                      .toFixed(2)
                   )}{" "}
                   zł
                 </p>

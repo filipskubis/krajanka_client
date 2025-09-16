@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 export default function QuantityList({ aggregatedProducts, routeID }) {
   const [expandedProduct, setExpandedProduct] = useState(null);
-  const { data } = useSWR("/products/get", fetcher);
+  const { data } = useSWR("/products/get");
   const navigate = useNavigate();
   const [confirmWindow, setConfirmWindow] = useState({
     index: null,

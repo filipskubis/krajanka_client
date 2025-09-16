@@ -7,9 +7,11 @@ export default function Stock() {
 
   useEffect(() => {
     async function getData() {
-      const products = await fetcher("/products/get");
+      const [products, productTotals] = await Promise.all([
+        fetcher("/products/get"),
+        fetcher("/products/getProductTotals"),
+      ]);
       setProducts(products);
-      const productTotals = await fetcher("/products/getProductTotals");
       setProductTotals(productTotals);
     }
     getData();

@@ -8,9 +8,10 @@ import Spinner from "./Spinner";
 import QuantityList from "./QuantityList";
 export default function RouteDetails() {
   const { id } = useParams();
-  const { data } = useSWR(`/routes/get/${id}`, fetcher);
+  const { data } = useSWR(`/routes/get/${id}`);
   const [removingRoute, setRemovingRoute] = useState("");
   const [confirmWindow, setConfirmWindow] = useState(false);
+
   const aggregatedProducts = useMemo(() => {
     if (!data || !data.orders) return [];
 
@@ -51,6 +52,7 @@ export default function RouteDetails() {
     }
   }
   if (!data) return <Spinner />;
+
   if (data) {
     return (
       <div className={`relative w-full h-fit p-4 bg-[#fbe8a6]`}>

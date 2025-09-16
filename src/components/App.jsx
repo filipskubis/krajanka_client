@@ -18,7 +18,8 @@ import RouteForm from "./RouteForm";
 import RouteDetails from "./RouteDetails";
 import ProductNotes from "./ProductNotes";
 import Stock from "./Stock";
-
+import fetcher from "../helpers/fetcher";
+import { SWRConfig } from "swr";
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -85,7 +86,13 @@ export default function App() {
   return (
     <AuthProvider>
       <Alerts />
-      <RouterProvider router={router} />
+      <SWRConfig
+        value={{
+          fetcher,
+        }}
+      >
+        <RouterProvider router={router} />
+      </SWRConfig>
     </AuthProvider>
   );
 }
