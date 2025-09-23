@@ -56,6 +56,7 @@ export default function ProductModal({ setProductModal, setProducts }) {
     const quantity = e.target.querySelector("#quantity").value;
     const product = data.find((product) => product.name === name);
     const uniqueId = crypto.randomUUID();
+
     const productObject = {
       name,
       id: uniqueId,
@@ -64,6 +65,7 @@ export default function ProductModal({ setProductModal, setProducts }) {
       packagingMethod: product.packagingMethod,
     };
     setProducts((products) => [...products, productObject]);
+
     setProductModal(false);
   }
 

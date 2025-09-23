@@ -14,7 +14,6 @@ export default function ProductNotes() {
 
   useEffect(() => {
     noteRef.current = note;
-    console.log(note);
   }, [note]);
 
   useEffect(() => {

@@ -18,20 +18,16 @@ function HoldButton({ click, hold, children }) {
 
   return (
     <button
-      onTouchStart={(e) => {
-        console.log("Touch start:", e);
+      onTouchStart={() => {
         handleTouchStart();
       }}
-      onTouchEnd={(e) => {
-        console.log("Touch end:", e);
+      onTouchEnd={() => {
         handleTouchEnd();
       }}
-      onMouseDown={(e) => {
-        console.log("Mouse down:", e);
+      onMouseDown={() => {
         handleTouchStart();
       }}
-      onMouseUp={(e) => {
-        console.log("Mouse up:", e);
+      onMouseUp={() => {
         handleTouchEnd();
       }}
       onClick={(e) => {

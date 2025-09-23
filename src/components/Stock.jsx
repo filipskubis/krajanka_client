@@ -1,18 +1,23 @@
 import fetcher from "../helpers/fetcher";
 import Spinner from "./Spinner";
 import { useEffect, useState } from "react";
+import StockByDate from "./StockByDate";
 export default function Stock() {
   const [products, setProducts] = useState(null);
   const [productTotals, setProductTotals] = useState(null);
+  const [availableRoutes, setAvailableRoutes] = useState(null);
+  const [filter, setFilter] = useState("ALL");
 
   useEffect(() => {
     async function getData() {
-      const [products, productTotals] = await Promise.all([
+      const [products, productTotals, availableRoutes] = await Promise.all([
         fetcher("/products/get"),
         fetcher("/products/getProductTotals"),
+        fetcher("/routes/getAvailable"),
       ]);
       setProducts(products);
       setProductTotals(productTotals);
+      setAvailableRoutes(availableRoutes);
     }
     getData();
   }, []);
@@ -23,55 +28,78 @@ export default function Stock() {
     <div className="w-full h-full bg-white p-4 relative">
       {" "}
       <div className="flex flex-col gap-4 items-center pb-4">
-        <div className="grid grid-cols-3 w-full border-b-2 p-2 mb-4 sticky top-0 left-0 bg-white z-[999999]">
-          <div className="col-start-1 col-end-2 w-full flex justify-center">
-            Na stanie
+        <div className="flex flex-col w-full">
+          <div className="grid grid-cols-3 w-full border-b-2 p-2 mb-4 sticky top-0 left-0 bg-white z-[999999]">
+            <div className="col-start-1 col-end-2 w-full flex justify-center">
+              Na stanie
+            </div>
+            <div className="col-start-2 col-end-3 w-full flex justify-center">
+              Zamówione
+            </div>
+            <div className="col-start-3 col-end-4 w-full flex justify-center">
+              Zamówić
+            </div>
           </div>
-          <div className="col-start-2 col-end-3 w-full flex justify-center">
-            Zamówione
-          </div>
-          <div className="col-start-3 col-end-4 w-full flex justify-center">
-            Zamówić
-          </div>
+          <select
+            name="filterByDate"
+            id="filterByDate"
+            className="w-full p-2 border-[1px] border-[#CCCCCC] text-center"
+            onChange={(e) => {
+              setFilter(e.target.value);
+            }}
+          >
+            <option value="ALL"> Łącznie</option>
+            {availableRoutes.map((route) => {
+              return (
+                <option key={route.id} value={route.date}>
+                  {route.date}
+                </option>
+              );
+            })}
+          </select>
         </div>
-        {products.map(({ _id, note = null, name, packagingMethod }) => {
-          if (
-            note.stock !== "" ||
-            (productTotals[name] && productTotals[name] !== 0) ||
-            note.toOrder !== ""
-          ) {
-            return (
-              <div key={_id} className="grid grid-cols-3 gap-2 w-full">
-                <div className="col-start-1 col-end-4 text-center text-coral text-lg">
-                  {" "}
-                  {name}{" "}
+        {filter === "ALL" ? (
+          products.map(({ _id, note = null, name, packagingMethod }) => {
+            if (
+              note.stock !== "" ||
+              (productTotals[name] && productTotals[name] !== 0) ||
+              note.toOrder !== ""
+            ) {
+              return (
+                <div key={_id} className="grid grid-cols-3 gap-2 w-full">
+                  <div className="col-start-1 col-end-4 text-center text-coral text-lg">
+                    {" "}
+                    {name}{" "}
+                  </div>
+                  <div className="col-start-1 col-end-2 w-full flex justify-center border-b-[1px]">
+                    {" "}
+                    {note?.stock}{" "}
+                    {note?.stock && packagingMethod === "kg" && packagingMethod}
+                  </div>
+                  <div className="col-start-2 col-end-3 w-full flex justify-center border-b-[1px]">
+                    {" "}
+                    {productTotals[name] > 0 && productTotals[name]}{" "}
+                    {productTotals[name] > 0 &&
+                      packagingMethod === "kg" &&
+                      packagingMethod}
+                  </div>
+                  <div className="col-start-3 col-end-4  w-full flex justify-center border-b-[1px]">
+                    {" "}
+                    {note?.stock - productTotals[name] < 0
+                      ? Math.abs(note?.stock - productTotals[name])
+                      : null}{" "}
+                    {note?.stock - productTotals[name] < 0 &&
+                      packagingMethod === "kg" &&
+                      packagingMethod}
+                  </div>
                 </div>
-                <div className="col-start-1 col-end-2 w-full flex justify-center border-b-[1px]">
-                  {" "}
-                  {note?.stock}{" "}
-                  {note?.stock && packagingMethod === "kg" && packagingMethod}
-                </div>
-                <div className="col-start-2 col-end-3 w-full flex justify-center border-b-[1px]">
-                  {" "}
-                  {productTotals[name] > 0 && productTotals[name]}{" "}
-                  {productTotals[name] > 0 &&
-                    packagingMethod === "kg" &&
-                    packagingMethod}
-                </div>
-                <div className="col-start-3 col-end-4  w-full flex justify-center border-b-[1px]">
-                  {" "}
-                  {note?.stock - productTotals[name] < 0
-                    ? Math.abs(note?.stock - productTotals[name])
-                    : null}{" "}
-                  {note?.stock - productTotals[name] < 0 &&
-                    packagingMethod === "kg" &&
-                    packagingMethod}
-                </div>
-              </div>
-            );
-          }
-          return null;
-        })}
+              );
+            }
+            return null;
+          })
+        ) : (
+          <StockByDate date={filter} products={products} />
+        )}
       </div>
     </div>
   );

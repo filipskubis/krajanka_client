@@ -15,10 +15,6 @@ Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
 export default function OrderForm() {
-  // const [data, setData] = useState();
-
-  //delegate product data fetching into product modal and jam it into a promise all there
-
   const { data: orderNumber } = useSWR("/orders/getOrderNumber");
   const navigate = useNavigate();
   const [products, setProducts] = useState([]);
@@ -34,16 +30,6 @@ export default function OrderForm() {
 
   const textarea = useRef(null);
   const [note, setNote] = useState("");
-
-  // useEffect(() => {
-  //   async function getData() {
-  //     const [data, orderNumber] = await Promise.all([
-  //       "/products/get",
-  //       "/orders/getOrderNumber",
-  //     ]);
-  //     console.log(data, orderNumber);
-  //   }
-  // }, []);
 
   useEffect(() => {
     if (textarea.current) {

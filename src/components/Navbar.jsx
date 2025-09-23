@@ -8,6 +8,7 @@ import {
   ArrowLeft,
   Route,
   PackageOpen,
+  Star,
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
@@ -136,6 +137,33 @@ export default function Navbar() {
           </div>
           <Link
             to="/formularzTrasy"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(false);
+            }}
+          >
+            <CirclePlus
+              color="#303c6c"
+              className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+            />
+          </Link>
+        </Link>
+        <Link
+          to="/formularze"
+          onClick={() => {
+            setOpen(false);
+          }}
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex  justify-between hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
+        >
+          <div className="flex gap-[1.5rem] items-center">
+            <Star
+              color="#303c6c"
+              className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+            />
+            <p> Formularze </p>
+          </div>
+          <Link
+            to="/kreatorFormularzy"
             onClick={(e) => {
               e.stopPropagation();
               setOpen(false);

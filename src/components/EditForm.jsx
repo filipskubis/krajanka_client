@@ -73,6 +73,7 @@ export default function EditForm({ order, close }) {
       const response = await fetcher(`/orders/edit/${order._id}`, "PUT", body);
       resetForm();
       close();
+      window.location.reload();
       addAlert("success", response);
     } catch (err) {
       addAlert("error", err);

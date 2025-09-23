@@ -24,9 +24,3 @@ function obfuscateOrderNumber(orderNumber) {
   const obfuscated = (parseInt(orderNumber, 10) * salt).toString(36); // Multiply and convert to base-36
   return obfuscated.toUpperCase(); // Return in uppercase for consistency
 }
-
-// Example usage
-const orderNumber = 123;
-const orderDate = "08-01-2025";
-const identifier = generateOrderIdentifier(orderNumber, orderDate);
-console.log(identifier); // Output: 7D9J9-20250108

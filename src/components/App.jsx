@@ -1,5 +1,10 @@
 /* eslint-disable no-unused-vars */
 import React from "react";
+import { createBrowserRouter, Form, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "../misc/AuthContext";
+import fetcher from "../helpers/fetcher";
+import { SWRConfig } from "swr";
+
 import Layout from "./Layout";
 import Products from "./Products";
 import Clients from "./Clients";
@@ -9,8 +14,6 @@ import OrderDetails from "./OrderDetails";
 import HomePage from "./HomePage";
 import LoginPage from "./LoginPage";
 import ProtectedRoute from "./ProtectedRoute";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AuthProvider } from "../misc/AuthContext";
 import Alerts from "./Alerts";
 import UndefinedPage from "./UndefinedPage";
 import Routes from "./Routes";
@@ -18,8 +21,10 @@ import RouteForm from "./RouteForm";
 import RouteDetails from "./RouteDetails";
 import ProductNotes from "./ProductNotes";
 import Stock from "./Stock";
-import fetcher from "../helpers/fetcher";
-import { SWRConfig } from "swr";
+import FormCreator from "./FormCreator.jsx";
+import Forms from "./Forms.jsx";
+import FormDetails from "./FormDetails.jsx";
+
 const router = createBrowserRouter([
   {
     path: "/login",
@@ -76,6 +81,12 @@ const router = createBrowserRouter([
       {
         path: "/formularzTrasy",
         element: <RouteForm />,
+      },
+      { path: "/kreatorFormularzy", element: <FormCreator /> },
+      { path: "/formularze", element: <Forms /> },
+      {
+        path: "/formularz/:id",
+        element: <FormDetails />,
       },
     ],
   },
