@@ -9,6 +9,7 @@ import {
   CirclePlus,
   CreditCard,
   Banknote,
+  CircleUserRound,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Confirm from "./Confirm";
@@ -97,12 +98,22 @@ export default function Orders() {
             date,
             paymentMethod,
             products,
+            createdByClient,
           }) => (
             <Link
               to={`/zamówienie/${_id}`}
               key={_id}
               className="relative w-full h-fit bg-white rounded-lg shadow-xl flex flex-col gap-4 items-start p-4 tablet:max-w-[400px] tablet:h-full"
             >
+              {createdByClient ? (
+                <div className="absolute top-[-10px] left-[-10px] ">
+                  <CircleUserRound
+                    color="#303c6c"
+                    size={"32px"}
+                    strokeWidth={2.5}
+                  />
+                </div>
+              ) : null}
               <p className="self-center text-xl">
                 {" "}
                 Zamówienie {generateOrderIdentifier(orderNumber, date)}{" "}

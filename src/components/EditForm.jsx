@@ -81,6 +81,7 @@ export default function EditForm({ order, close }) {
   }
 
   function handleAdd(id) {
+    console.log("yo");
     const newProducts = products.map((product) => {
       if (product?.id === id) {
         product.quantity++;
@@ -123,24 +124,6 @@ export default function EditForm({ order, close }) {
     setAddress(address);
     setPhone(phone);
   }
-  function handleAddProduct(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    const name = e.target.querySelector("#productSelect").value;
-    const quantity = e.target.querySelector("#quantity").value;
-    const product = data.find((product) => product.name === name);
-    const uniqueId = crypto.randomUUID();
-    const productObject = {
-      id: uniqueId,
-      name,
-      quantity: quantity,
-      price: product.price,
-      packagingMethod: product.packagingMethod,
-    };
-    setProducts([...products, productObject]);
-    setProductModal(false);
-  }
 
   return (
     <>
@@ -152,9 +135,8 @@ export default function EditForm({ order, close }) {
       ) : null}
       {productModal ? (
         <ProductModal
-          data={data}
           setProductModal={setProductModal}
-          handleAddProduct={handleAddProduct}
+          setProducts={setProducts}
         />
       ) : null}
       <form
