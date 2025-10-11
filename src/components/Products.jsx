@@ -6,8 +6,11 @@ import useSWR from "swr";
 import fetcher from "../helpers/fetcher";
 import NewProductForm from "./NewProductForm";
 import Spinner from "./Spinner.jsx";
+import { useLocation } from "react-router-dom";
 export default function Products() {
   const { data, error, isLoading } = useSWR("/products/get");
+  const location = useLocation();
+  const { productId } = location.state || {};
 
   const [products, setProducts] = useState([]);
   const [formActive, setFormActive] = useState(false);
@@ -21,11 +24,32 @@ export default function Products() {
       console.log(err);
     }
   }
+
   useEffect(() => {
-    if (data != undefined) {
+    if (data !== undefined) {
       setProducts(data);
     }
   }, [data]);
+
+  // Handle scroll to product after component renders
+  useEffect(() => {
+    if (productId && products.length > 0) {
+      // Use setTimeout to ensure the DOM is fully updated
+      const timer = setTimeout(() => {
+        const element = document.getElementById(productId);
+        if (element) {
+          console.log("Scrolling to product:", productId);
+          element.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
+        }
+      }, 50);
+
+      return () => clearTimeout(timer);
+    }
+  }, [productId, products]);
+
   if (isLoading) return <Spinner />;
   return (
     <div className="w-full box-border flex flex-col gap-4 p-4 no-scrollbar overflow-y-auto">

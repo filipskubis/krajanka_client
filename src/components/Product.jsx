@@ -73,6 +73,7 @@ export default function Product({
   return (
     <Link
       key={uniqueId}
+      id={uniqueId}
       to={`/product/${uniqueId}`}
       className={`relative flex flex-col gap-2 items-center justify-end min-h-[120px] border-2 border-[#6b7a8f] p-2 pt-[3rem] bg-white rounded-md tablet:w-full`}
     >

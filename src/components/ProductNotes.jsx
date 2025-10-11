@@ -70,6 +70,7 @@ export default function ProductNotes() {
         </div>
         <Link
           to="/produkty"
+          state={{ productId: id }}
           className="w-fit p-2 flex justify-start items-center h-fit border-[1px] border-[#00000050] rounded-lg self-start"
         >
           <ArrowLeft className="w-[2.5rem] h-auto" />
