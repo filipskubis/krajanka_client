@@ -8,6 +8,7 @@ import {
   CalendarDays,
   CreditCard,
   NotebookPen,
+  Clock,
 } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import Confirm from "./Confirm";
@@ -156,6 +157,17 @@ export default function OrderDetails() {
                   />
                   <p>{data.date || "- ~ -"}</p>
                 </div>
+                {data.createdAt ? (
+                  <div className="flex gap-2 items-center">
+                    <Clock color="#f28a72" />
+                    <p>
+                      {new Date(data.createdAt).toLocaleTimeString("pl-PL", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                ) : null}
                 {data.products.length > 0 && (
                   <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] text-left w-full print:grid-cols-4 print:gap-1 print:p-1">
                     <p>Nazwa:</p>
@@ -315,6 +327,22 @@ export default function OrderDetails() {
                 />
                 <p> {data.date || "- ~ -"} </p>
               </div>
+              {data.createdAt ? (
+                <div className="flex gap-2 items-center">
+                  <Clock
+                    color="#f28a72"
+                    width={"30px"}
+                    height={"auto"}
+                    className="tablet:w-[2rem]  print:w-[1.5rem]"
+                  />
+                  <p>
+                    {new Date(data.createdAt).toLocaleTimeString("pl-PL", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </p>
+                </div>
+              ) : null}
               {data.products.length > 0 && (
                 <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] text-left w-full print:grid-cols-[1fr_1fr_1fr_1fr] print:gap-1 print:p-0">
                   <p>Nazwa:</p>

@@ -10,6 +10,7 @@ import {
   CreditCard,
   Banknote,
   CircleUserRound,
+  Clock,
 } from "lucide-react";
 import { Link } from "react-router-dom";
 import Confirm from "./Confirm";
@@ -98,6 +99,7 @@ export default function Orders() {
             date,
             paymentMethod,
             products,
+            createdAt,
             createdByClient,
           }) => (
             <Link
@@ -138,6 +140,18 @@ export default function Orders() {
                   <CalendarDays color="#f28a72" />
                   <p> {date || "- ~ -"} </p>
                 </div>
+
+                {createdAt ? (
+                  <div className="flex gap-2 items-center">
+                    <Clock color="#f28a72" />
+                    <p>
+                      {new Date(createdAt).toLocaleTimeString("pl-PL", {
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })}
+                    </p>
+                  </div>
+                ) : null}
 
                 <div className="flex gap-2 items-center">
                   <Banknote color="#f28a72" />
