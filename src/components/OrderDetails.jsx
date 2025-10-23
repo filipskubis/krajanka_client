@@ -344,7 +344,7 @@ export default function OrderDetails() {
                 </div>
               ) : null}
               {data.products.length > 0 && (
-                <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr_2fr_1fr] text-left w-full print:grid-cols-[1fr_1fr_1fr_1fr] print:gap-1 print:p-0">
+                <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr_1.5fr_1fr] text-left w-full print:grid-cols-[1fr_1fr_1fr_1fr] print:gap-1 print:p-0">
                   <p>Nazwa:</p>
                   <p>Cena:</p>
                   <p>Ilość:</p>
@@ -356,7 +356,7 @@ export default function OrderDetails() {
                 ({ id, name, price, quantity, packagingMethod }, index) => (
                   <div
                     key={id}
-                    className="relative border rounded-md p-1 gap-2 grid grid-cols-[minmax(90px,_2fr)_1fr_1.5fr_1fr] items-center text-left w-full print:grid-cols-[1fr_1fr_1fr_1fr] print:!text-sm print:gap-1 print:p-1"
+                    className="relative border rounded-md p-1 gap-2 grid grid-cols-[minmax(90px,_1.5fr)_1fr_1.5fr_1fr] items-center text-left w-full print:grid-cols-[1fr_1fr_1fr_1fr] print:!text-sm print:gap-1 print:p-1"
                   >
                     <p className="break-words">{`${index + 1}. ${name}`}</p>
                     <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>

@@ -19,10 +19,7 @@ export default function ProductModal({ setProductModal, setProducts }) {
         fetcher("/products/get"),
         fetcher("/products/getFavorite"),
       ]);
-      const prioritizedProducts = prioritizedProductsData.map(
-        (value) => value.name
-      );
-      setPrioritizedProducts(prioritizedProducts);
+      setPrioritizedProducts(prioritizedProductsData);
       setData(data);
     }
 
@@ -99,9 +96,9 @@ export default function ProductModal({ setProductModal, setProducts }) {
             >
               <option value=""> - Wybierz z listy -</option>
               <optgroup label="Priorytetowe produkty" className="text-coral">
-                {prioritizedProducts.map((name, index) => (
+                {prioritizedProducts.map(({ name, price }, index) => (
                   <option value={name} key={`priority-${index}`}>
-                    {name}
+                    {name} {` | ${price} zł`}
                   </option>
                 ))}
               </optgroup>
@@ -112,9 +109,9 @@ export default function ProductModal({ setProductModal, setProducts }) {
                       !product.seasonal &&
                       !prioritizedProducts.includes(product.name)
                   )
-                  .map(({ name }, index) => (
+                  .map(({ name, price }, index) => (
                     <option value={name} key={`regular-${index}`}>
-                      {name}
+                      {name} {` | ${price} zł`}
                     </option>
                   ))}
               </optgroup>
@@ -125,9 +122,9 @@ export default function ProductModal({ setProductModal, setProducts }) {
                       product.seasonal &&
                       !prioritizedProducts.includes(product.name)
                   )
-                  .map(({ name }, index) => (
+                  .map(({ name, price }, index) => (
                     <option value={name} key={`seasonal-${index}`}>
-                      {name}
+                      {name} {` | ${price} zł`}
                     </option>
                   ))}
               </optgroup>
