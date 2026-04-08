@@ -28,7 +28,7 @@ export default function FormDetails() {
   async function handleCopyLink() {
     try {
       await navigator.clipboard.writeText(
-        `https://zamowienia-krajanka.up.railway.app/${id}`
+        `https://zamowienia-krj.up.railway.app/${id}`,
       );
 
       addAlert("success", "Pomyślnie skopiowano link");

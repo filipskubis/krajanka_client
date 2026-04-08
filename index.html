@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
@@ -9,5 +9,17 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
+    <script>
+      const beamsClient = new PusherPushNotifications.Client({
+        instanceId: "322358f8-b14c-446e-9b82-a442ae07a498",
+      });
+
+      beamsClient
+        .start()
+        .then(() => beamsClient.addDeviceInterest("orders"))
+        .then(() => console.log("Successfully registered and subscribed!"))
+        .catch(console.error);
+    </script>
   </body>
 </html>
