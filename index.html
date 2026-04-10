@@ -9,25 +9,19 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
-    <!-- <script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
+    <script src="https://js.pusher.com/beams/2.1.0/push-notifications-cdn.js"></script>
     <script>
       if ("serviceWorker" in navigator) {
-        navigator.serviceWorker
-          .register("/service-worker.js")
-          .then(() => {
-            const beamsClient = new PusherPushNotifications.Client({
-              instanceId: "322358f8-b14c-446e-9b82-a442ae07a498",
-            });
+        const beamsClient = new PusherPushNotifications.Client({
+          instanceId: "322358f8-b14c-446e-9b82-a442ae07a498",
+        });
 
-            return beamsClient
-              .start()
-              .then(() => beamsClient.addDeviceInterest("orders"))
-              .then(() =>
-                console.log("Successfully registered and subscribed!"),
-              );
-          })
+        beamsClient
+          .start()
+          .then(() => beamsClient.addDeviceInterest("orders"))
+          .then(() => console.log("Successfully registered and subscribed!"))
           .catch(console.error);
       }
-    </script> -->
+    </script>
   </body>
 </html>
