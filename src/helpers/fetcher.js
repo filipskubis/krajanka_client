@@ -1,8 +1,8 @@
-// https://krajankaservertesting-production.up.railway.app${ENDPOINT}
+// https://krajanka.up.railway.app${ENDPOINT}
 // http://localhost:3000${ENDPOINT}
 export default async function fetcher(ENDPOINT, method = "GET", body = null) {
   const response = await fetch(
-    `https://krajankaservertesting-production.up.railway.app${ENDPOINT}`,
+    `https://krajanka.up.railway.app${ENDPOINT}`,
     {
       method,
       headers: {
