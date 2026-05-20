@@ -15,6 +15,9 @@ export default function FormCreator() {
   const [productModal, setProductModal] = useState(false);
 
   const [city, setCity] = useState("");
+  const [minimumOrderValue, setMinimumOrderValue] = useState(80);
+  const [eggRequirement, setEggRequirement] = useState(false);
+  const [minimumEggQuantity, setMinimumEggQuantity] = useState(60);
 
   const [date, setDate] = useState(null);
   const [note, setNote] = useState("");
@@ -52,6 +55,8 @@ export default function FormCreator() {
       products,
       note: note || null,
       date: formattedDate,
+      minimumOrderValue,
+      minimumEggQuantity: eggRequirement ? minimumEggQuantity : 0,
     };
     console.log(body);
 
@@ -188,6 +193,46 @@ export default function FormCreator() {
         </div>
 
         <DatePicker date={date} handleDateChange={handleDateChange} />
+
+        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <label htmlFor="minimumOrderValue"> Minimalna wartość zamówienia (PLN): </label>
+          <input
+            type="number"
+            id="minimumOrderValue"
+            min="0"
+            value={minimumOrderValue}
+            onChange={(e) => setMinimumOrderValue(Number(e.target.value))}
+            required
+            className="p-1 rounded-lg focus:outline-none border-[1px] border-[#CCCCCC] w-32"
+          />
+        </div>
+
+        <div className="relative flex flex-col gap-2 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="eggRequirement"
+              checked={eggRequirement}
+              onChange={(e) => setEggRequirement(e.target.checked)}
+              className="w-5 h-5 cursor-pointer"
+            />
+            <label htmlFor="eggRequirement" className="cursor-pointer"> Wymagaj minimum jajek: </label>
+          </div>
+          {eggRequirement ? (
+            <div className="flex flex-col gap-1">
+              <label htmlFor="minimumEggQuantity"> Minimalna ilość jajek: </label>
+              <input
+                type="number"
+                id="minimumEggQuantity"
+                min="1"
+                value={minimumEggQuantity}
+                onChange={(e) => setMinimumEggQuantity(Number(e.target.value))}
+                required
+                className="p-1 rounded-lg focus:outline-none border-[1px] border-[#CCCCCC] w-32"
+              />
+            </div>
+          ) : null}
+        </div>
 
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem] tablet:text-2xl"
