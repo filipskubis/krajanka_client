@@ -105,22 +105,22 @@ export default function FormDetails() {
                 />
                 <p> {data.date || "- ~ -"} </p>
               </div>
-              {Object.keys(data.stock).length > 0 && (
+              {data.products.length > 0 && (
                 <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr] text-left w-full">
                   <p>Nazwa:</p>
                   <p>Ilość:</p>
                 </div>
               )}
-
-              {Object.keys(data.stock).map((name, index) => (
-                <div
-                  key={name}
-                  className="relative border rounded-md p-1 gap-2 grid grid-cols-[minmax(90px,_1.5fr)_1fr] items-center text-left w-full"
-                >
-                  <p className="break-words">{`${index + 1}. ${name}`}</p>
-                  <p className="break-words">{data.stock[name]}</p>
-                </div>
-              ))}
+              {data.products.length > 0 &&
+                Object.keys(data.stock).map((name, index) => (
+                  <div
+                    key={name}
+                    className="relative border rounded-md p-1 gap-2 grid grid-cols-[minmax(90px,_1.5fr)_1fr] items-center text-left w-full"
+                  >
+                    <p className="break-words">{`${index + 1}. ${name}`}</p>
+                    <p className="break-words">{data.stock[name]}</p>
+                  </div>
+                ))}
 
               <div className="mt-4 flex gap-4 dontPrint text-lg tablet:text-xl">
                 <button

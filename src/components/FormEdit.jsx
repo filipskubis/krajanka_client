@@ -16,6 +16,10 @@ export default function FormEdit({ formData, close }) {
   const [productModal, setProductModal] = useState(false);
 
   const [city, setCity] = useState("");
+  const [minimumOrderValue, setMinimumOrderValue] = useState(80);
+  const [eggRequirement, setEggRequirement] = useState(false);
+  const [minimumEggQuantity, setMinimumEggQuantity] = useState(60);
+
   const [date, setDate] = useState(null);
   const [note, setNote] = useState("");
 
@@ -27,6 +31,9 @@ export default function FormEdit({ formData, close }) {
       setDate(dayjs(formData.date, "DD-MM-YYYY"));
       setNote(formData.note);
       setProducts(formData.products);
+      setEggRequirement(formData.minimumEggQuantity > 0 ? true : false);
+      setMinimumEggQuantity(formData.minimumEggQuantity);
+      setMinimumOrderValue(formData.minimumOrderValue);
     }
   }, [formData]);
 
@@ -60,6 +67,8 @@ export default function FormEdit({ formData, close }) {
       note: note || null,
       products,
       date: formattedDate,
+      minimumOrderValue,
+      minimumEggQuantity: eggRequirement ? minimumEggQuantity : 0,
     };
     try {
       const response = await fetcher(`/forms/edit/${formData.id}`, "PUT", body);
@@ -194,6 +203,64 @@ export default function FormEdit({ formData, close }) {
         </div>
 
         <DatePicker date={date} handleDateChange={handleDateChange} />
+
+        <div className="relative flex flex-col gap-1 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <label htmlFor="minimumOrderValue">
+            {" "}
+            Minimalna wartość zamówienia (PLN):{" "}
+          </label>
+          <input
+            type="number"
+            id="minimumOrderValue"
+            min="0"
+            value={minimumOrderValue}
+            onChange={(e) => setMinimumOrderValue(e.target.value)}
+            required
+            className="p-1 rounded-lg focus:outline-none border-[1px] border-[#CCCCCC] w-32"
+          />
+        </div>
+
+        <div className="relative flex flex-col gap-2 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <div
+            className="flex flex-col gap-1"
+            style={{ marginBottom: "12 px" }}
+          >
+            <div className="checkbox-wrapper-46 flex flex-col gap-2 eggRequirement">
+              <span>Wymagaj minimum jajek: </span>
+              <input
+                type="checkbox"
+                id="cbx-46"
+                className="inp-cbx"
+                onChange={(e) => setEggRequirement(e.target.checked)}
+                checked={eggRequirement}
+              />
+              <label htmlFor="cbx-46" className="cbx">
+                <span>
+                  <svg viewBox="0 0 12 10" height="13px" width="15px">
+                    <polyline points="1.5 6 4.5 9 10.5 1"></polyline>
+                  </svg>
+                </span>
+              </label>
+            </div>
+          </div>
+          {eggRequirement ? (
+            <div className="flex flex-col gap-1">
+              <label htmlFor="minimumEggQuantity">
+                {" "}
+                Minimalna ilość jajek:{" "}
+              </label>
+              <input
+                type="number"
+                id="minimumEggQuantity"
+                min="1"
+                value={minimumEggQuantity}
+                onChange={(e) => setMinimumEggQuantity(e.target.value)}
+                required
+                className="p-1 rounded-lg focus:outline-none border-[1px] border-[#CCCCCC] w-32"
+              />
+            </div>
+          ) : null}
+        </div>
 
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem] tablet:text-2xl"

@@ -68,6 +68,8 @@ export default function EditForm({ order, close }) {
       orderNumber,
       date: formattedDate,
       originalOrderNumber: order.orderNumber,
+      minimumOrderValue,
+      minimumEggQuantity: eggRequirement ? minimumEggQuantity : 0,
     };
     try {
       const response = await fetcher(`/orders/edit/${order._id}`, "PUT", body);
@@ -214,7 +216,7 @@ export default function EditForm({ order, close }) {
                 </div>
                 <p>{`${String(Big(quantity).times(price))} zł`}</p>
               </div>
-            )
+            ),
           )}
           {products.length > 0 ? (
             <div className="gap-4 p-1 flex w-full justify-end">
@@ -226,9 +228,9 @@ export default function EditForm({ order, close }) {
                       .reduce(
                         (acc, product) =>
                           acc.plus(Big(product.quantity).times(product.price)),
-                        Big(0)
+                        Big(0),
                       )
-                      .toFixed(2) // Round the final result to 2 decimal places
+                      .toFixed(2), // Round the final result to 2 decimal places
                   )}{" "}
                   zł
                 </p>
@@ -282,7 +284,7 @@ export default function EditForm({ order, close }) {
                   />
                   <p className="text">{method}</p>
                 </label>
-              )
+              ),
             )}
           </div>
         </div>
@@ -299,6 +301,38 @@ export default function EditForm({ order, close }) {
           />
         </div>
         <DatePicker date={date} handleDateChange={handleDateChange} />
+        <div className="relative flex flex-col gap-2 before:absolute before:content-[''] before:w-full before:h-[2px] before:bg-[#CCCCCC] before:-bottom-4">
+          <div className="flex items-center gap-3">
+            <input
+              type="checkbox"
+              id="eggRequirement"
+              checked={eggRequirement}
+              onChange={(e) => setEggRequirement(e.target.checked)}
+              className="w-5 h-5 cursor-pointer"
+            />
+            <label htmlFor="eggRequirement" className="cursor-pointer">
+              {" "}
+              Wymagaj minimum jajek:{" "}
+            </label>
+          </div>
+          {eggRequirement ? (
+            <div className="flex flex-col gap-1">
+              <label htmlFor="minimumEggQuantity">
+                {" "}
+                Minimalna ilość jajek:{" "}
+              </label>
+              <input
+                type="number"
+                id="minimumEggQuantity"
+                min="1"
+                value={minimumEggQuantity}
+                onChange={(e) => setMinimumEggQuantity(e.target.value)}
+                required
+                className="p-1 rounded-lg focus:outline-none border-[1px] border-[#CCCCCC] w-32"
+              />
+            </div>
+          ) : null}
+        </div>
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem]"
           onSubmit={handleFormSubmit}
