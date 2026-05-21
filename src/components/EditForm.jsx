@@ -214,7 +214,7 @@ export default function EditForm({ order, close }) {
                 </div>
                 <p>{`${String(Big(quantity).times(price))} zł`}</p>
               </div>
-            )
+            ),
           )}
           {products.length > 0 ? (
             <div className="gap-4 p-1 flex w-full justify-end">
@@ -226,9 +226,9 @@ export default function EditForm({ order, close }) {
                       .reduce(
                         (acc, product) =>
                           acc.plus(Big(product.quantity).times(product.price)),
-                        Big(0)
+                        Big(0),
                       )
-                      .toFixed(2) // Round the final result to 2 decimal places
+                      .toFixed(2), // Round the final result to 2 decimal places
                   )}{" "}
                   zł
                 </p>
@@ -282,7 +282,7 @@ export default function EditForm({ order, close }) {
                   />
                   <p className="text">{method}</p>
                 </label>
-              )
+              ),
             )}
           </div>
         </div>
@@ -299,6 +299,7 @@ export default function EditForm({ order, close }) {
           />
         </div>
         <DatePicker date={date} handleDateChange={handleDateChange} />
+        
         <button
           className="text-xl bg-coral p-4 shadow-md rounded-lg w-fit self-center mt-[2rem]"
           onSubmit={handleFormSubmit}
