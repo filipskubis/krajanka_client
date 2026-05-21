@@ -68,8 +68,6 @@ export default function EditForm({ order, close }) {
       orderNumber,
       date: formattedDate,
       originalOrderNumber: order.orderNumber,
-      minimumOrderValue,
-      minimumEggQuantity: eggRequirement ? minimumEggQuantity : 0,
     };
     try {
       const response = await fetcher(`/orders/edit/${order._id}`, "PUT", body);
