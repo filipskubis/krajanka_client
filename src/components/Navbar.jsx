@@ -10,22 +10,8 @@ import {
   PackageOpen,
   Star,
 } from "lucide-react";
-import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-export default function Navbar() {
-  const [open, setOpen] = useState(false);
-
-  useEffect(() => {
-    if (open) {
-      document.body.style.overflowY = "hidden";
-    } else {
-      document.body.style.overflowY = "";
-    }
-
-    return () => {
-      document.body.style.overflowY = "";
-    };
-  }, [open]);
+export default function Navbar({ open, onOpenChange }) {
 
   return (
     <div
@@ -33,20 +19,28 @@ export default function Navbar() {
     >
       <button
         onClick={() => {
-          setOpen(true);
+          onOpenChange(true);
         }}
       >
         <AlignJustify color="#303c6c" width="2rem" height="2rem" />
       </button>
-      <div
-        className={`flex h-full flex-col items-start pl-4 pt-16 gap-[2.5rem] ${
+      {open && (
+        <button
+          aria-label="Zamknij menu"
+          className="fixed inset-0 z-[99999999999998] cursor-default bg-black/10"
+          onClick={() => onOpenChange(false)}
+        />
+      )}
+      <nav
+        aria-hidden={!open}
+        className={`fixed inset-y-0 left-0 flex h-[100dvh] max-h-[100dvh] flex-col items-start gap-[2.5rem] overflow-y-auto bg-[#f9f9f9] pl-4 pr-4 pt-[max(4rem,calc(env(safe-area-inset-top)+3rem))] pb-[max(1rem,env(safe-area-inset-bottom))] transition-transform duration-200 z-[99999999999999] ${
           open ? "translate-x-[0]" : "translate-x-[-100%]"
-        } absolute left-0 top-0 w-[20rem] tablet:w-[24rem] pr-4 bg-[#f9f9f9] transition-transform duration-200 z-[99999999999999]`}
+        } w-[20rem] tablet:w-[24rem]`}
       >
         <button
           className="absolute top-[1rem] left-[1rem] "
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
         >
           <ArrowLeft
@@ -57,7 +51,7 @@ export default function Navbar() {
         <Link
           to="/produkty"
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
           className='relative w-[16rem] tablet:w-[20rem] tablet:mt-[0.25rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.15rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
@@ -71,7 +65,7 @@ export default function Navbar() {
         <Link
           to="/stan"
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
           className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.15rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
@@ -84,7 +78,7 @@ export default function Navbar() {
         <Link
           to="/klienci"
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
           className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.15rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
@@ -112,7 +106,7 @@ export default function Navbar() {
             to="/formularzZamówienia"
             onClick={(e) => {
               e.stopPropagation();
-              setOpen(false);
+              onOpenChange(false);
             }}
           >
             <CirclePlus
@@ -124,7 +118,7 @@ export default function Navbar() {
         <Link
           to="/trasy"
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
           className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex  justify-between hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
@@ -139,7 +133,7 @@ export default function Navbar() {
             to="/formularzTrasy"
             onClick={(e) => {
               e.stopPropagation();
-              setOpen(false);
+              onOpenChange(false);
             }}
           >
             <CirclePlus
@@ -151,7 +145,7 @@ export default function Navbar() {
         <Link
           to="/formularze"
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
           className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex  justify-between hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
@@ -166,7 +160,7 @@ export default function Navbar() {
             to="/kreatorFormularzy"
             onClick={(e) => {
               e.stopPropagation();
-              setOpen(false);
+              onOpenChange(false);
             }}
           >
             <CirclePlus
@@ -175,7 +169,7 @@ export default function Navbar() {
             />
           </Link>
         </Link>
-      </div>
+      </nav>
     </div>
   );
 }

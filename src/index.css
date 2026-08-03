@@ -14,11 +14,35 @@
 
 html,
 body {
-  min-height: 100%;
-  min-height: 100vh;
+  height: 100%;
   overflow-x: hidden;
   background-color: white;
+}
+
+#root {
+  min-height: 100%;
+}
+
+/* Keep exactly one scroll surface. This avoids iOS Safari fighting between the
+   document and an inner overflow container as its browser chrome expands. */
+.app-shell {
+  height: 100vh;
+  min-height: 100vh;
+  overflow: hidden;
+}
+
+.app-content {
   overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior-y: contain;
+}
+
+@supports (height: 100dvh) {
+  .app-shell {
+    height: 100dvh;
+    min-height: 100dvh;
+  }
 }
 
 button:active {
