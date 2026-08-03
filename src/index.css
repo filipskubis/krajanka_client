@@ -38,10 +38,20 @@ body {
   overscroll-behavior-y: contain;
 }
 
+.app-drawer {
+  height: 100vh;
+  max-height: 100vh;
+}
+
 @supports (height: 100dvh) {
   .app-shell {
     height: 100dvh;
     min-height: 100dvh;
+  }
+
+  .app-drawer {
+    height: 100dvh;
+    max-height: 100dvh;
   }
 }
 

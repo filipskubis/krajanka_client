@@ -14,9 +14,7 @@ import { Link } from "react-router-dom";
 export default function Navbar({ open, onOpenChange }) {
 
   return (
-    <div
-      className={`dontPrint w-full h-[3.5rem] flex justify-start items-center p-4 border-b-[1px] border-[#303c6c50]`}
-    >
+    <header className="dontPrint relative flex h-[3.5rem] w-full shrink-0 items-center justify-start border-b-[1px] border-[#303c6c50] p-4">
       <button
         onClick={() => {
           onOpenChange(true);
@@ -27,15 +25,15 @@ export default function Navbar({ open, onOpenChange }) {
       {open && (
         <button
           aria-label="Zamknij menu"
-          className="fixed inset-0 z-[99999999999998] cursor-default bg-black/10"
+          className="app-drawer absolute left-0 top-0 z-[99999999999998] w-screen cursor-default bg-black/10"
           onClick={() => onOpenChange(false)}
         />
       )}
       <nav
         aria-hidden={!open}
-        className={`fixed inset-y-0 left-0 flex h-[100dvh] max-h-[100dvh] flex-col items-start gap-[2.5rem] overflow-y-auto bg-[#f9f9f9] pl-4 pr-4 pt-[max(4rem,calc(env(safe-area-inset-top)+3rem))] pb-[max(1rem,env(safe-area-inset-bottom))] transition-transform duration-200 z-[99999999999999] ${
+        className={`app-drawer absolute left-0 top-0 z-[99999999999999] flex w-[20rem] flex-col items-start gap-[2.5rem] overflow-y-auto bg-[#f9f9f9] pl-4 pr-4 pt-[max(4rem,calc(env(safe-area-inset-top)+3rem))] pb-[max(1rem,env(safe-area-inset-bottom))] transition-transform duration-200 tablet:w-[24rem] ${
           open ? "translate-x-[0]" : "translate-x-[-100%]"
-        } w-[20rem] tablet:w-[24rem]`}
+        }`}
       >
         <button
           className="absolute top-[1rem] left-[1rem] "
@@ -91,7 +89,7 @@ export default function Navbar({ open, onOpenChange }) {
         <Link
           to="/zamówienia"
           onClick={() => {
-            setOpen(false);
+            onOpenChange(false);
           }}
           className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex  justify-between hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
         >
@@ -170,6 +168,6 @@ export default function Navbar({ open, onOpenChange }) {
           </Link>
         </Link>
       </nav>
-    </div>
+    </header>
   );
 }

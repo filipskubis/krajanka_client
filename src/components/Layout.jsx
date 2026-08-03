@@ -6,7 +6,7 @@ export default function Layout() {
   const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <div className="app-shell flex w-full flex-col bg-[#fbe8a6]">
+    <div className="app-shell relative flex w-full flex-col bg-[#fbe8a6]">
       <Navbar open={menuOpen} onOpenChange={setMenuOpen} />
       <main className={`app-content flex-1 min-h-0 ${menuOpen ? "overflow-hidden" : ""}`}>
         <Outlet />
