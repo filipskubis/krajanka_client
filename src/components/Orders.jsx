@@ -96,6 +96,7 @@ export default function Orders() {
             address,
             phone,
             orderNumber,
+            orderId,
             date,
             paymentMethod,
             products,
@@ -118,7 +119,7 @@ export default function Orders() {
               ) : null}
               <p className="self-center text-xl">
                 {" "}
-                Zamówienie {generateOrderIdentifier(orderNumber, date)}{" "}
+                Zamówienie {orderId || generateOrderIdentifier(orderNumber, date)}{" "}
               </p>
               <div className="flex flex-col gap-3">
                 <div className="flex gap-2 items-center">

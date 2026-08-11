@@ -5,6 +5,7 @@ import {
   Carrot,
   UsersRound,
   BookOpen,
+  Archive,
   ArrowLeft,
   Route,
   PackageOpen,
@@ -166,6 +167,19 @@ export default function Navbar({ open, onOpenChange }) {
               className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
             />
           </Link>
+        </Link>
+        <Link
+          to="/archiwum"
+          onClick={() => {
+            onOpenChange(false);
+          }}
+          className='relative w-[16rem] tablet:w-[20rem] tablet:text-2xl p-4 flex gap-[1.5rem] hover:bg-[#303c6c10] rounded-t-xl items-center text-xl before:absolute before:content-[""] before:h-[0.125rem] before:left-0 before:w-full before:bottom-0 before:bg-slate'
+        >
+          <Archive
+            color="#303c6c"
+            className="w-[2rem] h-[2rem] tablet:w-[3rem] tablet:h-[2.5rem]"
+          />
+          <p>Archiwum</p>
         </Link>
       </nav>
     </header>

@@ -24,6 +24,8 @@ import Stock from "./Stock";
 import FormCreator from "./FormCreator.jsx";
 import Forms from "./Forms.jsx";
 import FormDetails from "./FormDetails.jsx";
+import Archive from "./Archive.jsx";
+import ArchiveOrderDetails from "./ArchiveOrderDetails.jsx";
 
 const router = createBrowserRouter([
   {
@@ -69,6 +71,14 @@ const router = createBrowserRouter([
       {
         path: "/trasy",
         element: <Routes />,
+      },
+      {
+        path: "/archiwum",
+        element: <Archive />,
+      },
+      {
+        path: "/archiwum/:id",
+        element: <ArchiveOrderDetails />,
       },
       {
         path: "/trasa/:id",
