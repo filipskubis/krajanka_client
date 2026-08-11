@@ -1,153 +1,21 @@
 import useSWR from "swr";
 import { useContext, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import { CalendarDays, MapPin, NotebookPen } from "lucide-react";
 import Confirm from "./Confirm";
 import Spinner from "./Spinner";
-import { CalendarDays, MapPin, NotebookPen } from "lucide-react";
 import fetcher from "../helpers/fetcher";
 import { AlertContext } from "../misc/AlertContext";
 import FormEdit from "./FormEdit";
 
+const weight = new Intl.NumberFormat("pl-PL", { maximumFractionDigits: 2 });
+
 export default function FormDetails() {
-  const { id } = useParams();
-  const { data, isLoading } = useSWR(`/forms/get/${id}`);
-  const [editing, setEditing] = useState(false);
-  const [confirmWindow, setConfirmWindow] = useState(false);
-  const { addAlert } = useContext(AlertContext);
-  const navigate = useNavigate();
-
-  async function removeForm() {
-    try {
-      await fetcher(`/forms/remove/${id}`, "POST");
-      navigate("/zamówienia");
-    } catch (err) {
-      console.log(err);
-    }
-  }
-
-  async function handleCopyLink() {
-    try {
-      await navigator.clipboard.writeText(
-        `https://zamowienia.up.railway.app/${id}`,
-      );
-
-      addAlert("success", "Pomyślnie skopiowano link");
-    } catch (err) {
-      return;
-    }
-  }
-
-  return (
-    <div className={`relative w-full h-fit ${!editing && "p-4"} bg-[#fbe8a6]`}>
-      {confirmWindow && (
-        <Confirm
-          action={"Usuń formularz"}
-          description={
-            "Czy na pewno chcesz usunąć formularz? Ta czynność nie może być cofnięta."
-          }
-          cancel={() => {
-            setConfirmWindow(false);
-          }}
-          confirm={() => {
-            removeForm();
-          }}
-        />
-      )}
-
-      <div className="bg-white h-full w-full rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8">
-        {isLoading ? (
-          <Spinner />
-        ) : editing && data ? (
-          <FormEdit
-            formData={data}
-            close={() => {
-              setEditing(false);
-            }}
-          />
-        ) : data ? (
-          <>
-            <p className="text-2xl text-slate self-center tablet:text-3xl print:text-lg print:text-left print:mb-2">
-              {" "}
-              {data.city} {data.date}
-            </p>
-            <button
-              className="bg-slate rounded-2xl w-full flex-grow p-3 flex justify-center items-center dontPrint self-center"
-              onClick={handleCopyLink}
-            >
-              <p className="text-white text-lg tablet:text-xl">Kopiuj link</p>
-            </button>
-            <div className="flex flex-col gap-3 w-full text-lg tablet:text-xl print:!text-sm">
-              <div className="flex gap-2 items-center">
-                <MapPin
-                  color="#f28a72"
-                  width={"30px"}
-                  height={"auto"}
-                  className="tablet:w-[2rem] print:w-[1.5rem]"
-                />
-                <p>{data.city} </p>
-              </div>
-
-              <div className="flex gap-2 items-center">
-                <NotebookPen
-                  color="#f28a72"
-                  width={"30px"}
-                  height={"auto"}
-                  className="tablet:w-[2rem] print:w-[1.5rem]"
-                />
-                <p> {data.note || "- ~ -"} </p>
-              </div>
-              <div className="flex gap-2 items-center">
-                <CalendarDays
-                  color="#f28a72"
-                  width={"30px"}
-                  height={"auto"}
-                  className="tablet:w-[2rem]  print:w-[1.5rem]"
-                />
-                <p> {data.date || "- ~ -"} </p>
-              </div>
-              {data.products.length > 0 && (
-                <div className="gap-2 p-1 grid grid-cols-[minmax(90px,_1.5fr)_1fr] text-left w-full">
-                  <p>Nazwa:</p>
-                  <p>Ilość:</p>
-                </div>
-              )}
-              {data.products.length > 0 &&
-                Object.keys(data.stock).map((name, index) => (
-                  <div
-                    key={name}
-                    className="relative border rounded-md p-1 gap-2 grid grid-cols-[minmax(90px,_1.5fr)_1fr] items-center text-left w-full"
-                  >
-                    <p className="break-words">{`${index + 1}. ${name}`}</p>
-                    <p className="break-words">{data.stock[name]}</p>
-                  </div>
-                ))}
-
-              <div className="mt-4 flex gap-4 dontPrint text-lg tablet:text-xl">
-                <button
-                  className="bg-slate rounded-2xl flex-grow p-3 flex justify-center items-center"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    e.preventDefault();
-                    setEditing(true);
-                  }}
-                >
-                  <p className="text-white">Edytuj</p>
-                </button>
-                <button
-                  className="bg-[#E74D4D] rounded-2xl flex-grow p-3 flex justify-center items-center"
-                  onClick={() => {
-                    setConfirmWindow(true);
-                  }}
-                >
-                  <p className="text-white">Usuń</p>
-                </button>
-              </div>
-            </div>
-          </>
-        ) : (
-          <p>Brak danych do wyświetlenia.</p>
-        )}
-      </div>
-    </div>
-  );
+  const { id } = useParams(); const { data, isLoading } = useSWR(`/forms/get/${id}`); const [editing, setEditing] = useState(false); const [confirmWindow, setConfirmWindow] = useState(false); const { addAlert } = useContext(AlertContext); const navigate = useNavigate();
+  async function removeForm() { try { await fetcher(`/forms/remove/${id}`, "POST"); navigate("/zamówienia"); } catch (error) { addAlert("error", error.message || error); } }
+  async function copyLink() { try { await navigator.clipboard.writeText(`https://zamowienia.up.railway.app/${id}`); addAlert("success", "Pomyślnie skopiowano link"); } catch { addAlert("error", "Nie udało się skopiować linku"); } }
+  if (isLoading) return <Spinner />;
+  if (editing && data) return <FormEdit formData={data} close={() => setEditing(false)} />;
+  if (!data) return <p>Brak danych do wyświetlenia.</p>;
+  return <div className="relative w-full h-fit p-4 bg-[#fbe8a6]">{confirmWindow && <Confirm action="Usuń formularz" description="Czy na pewno chcesz usunąć formularz?" cancel={() => setConfirmWindow(false)} confirm={removeForm} />}<div className="bg-white rounded-xl shadow-2xl flex flex-col items-start p-4 gap-6 pb-8"><p className="text-2xl text-slate self-center">{data.city} {data.date}</p><button className="bg-slate rounded-2xl w-full p-3 text-white" onClick={copyLink}>Kopiuj link</button><div className="flex flex-col gap-3 w-full text-lg"><p className="flex gap-2 items-center"><MapPin color="#f28a72" />{data.city}</p><p className="flex gap-2 items-center"><NotebookPen color="#f28a72" />{data.note || "- ~ -"}</p><p className="flex gap-2 items-center"><CalendarDays color="#f28a72" />{data.date}</p><section className="flex flex-col gap-2 w-full">{(data.products || []).map((product) => product.selectionMode === "weighted-items" ? <div key={product.id} className="rounded border p-2"><p className="font-semibold">{product.name} · pojedyncze sztuki</p><ul>{(product.weightedItems || []).map((item) => <li key={item.id}>{weight.format(item.weight)} kg</li>)}</ul></div> : <div key={product.id || product.name} className="rounded border p-2">{product.name} · {product.quantity ?? data.stock?.[product.name]}</div>)}</section><div className="mt-4 flex gap-4 w-full"><button className="bg-slate rounded-2xl flex-grow p-3 text-white" onClick={() => setEditing(true)}>Edytuj</button><button className="bg-[#E74D4D] rounded-2xl flex-grow p-3 text-white" onClick={() => setConfirmWindow(true)}>Usuń</button></div></div></div></div>;
 }
