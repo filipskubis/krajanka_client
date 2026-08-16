@@ -84,7 +84,7 @@ export default function EditForm({ order, close }) {
     console.log("yo");
     const newProducts = products.map((product) => {
       if (product?.id === id) {
-        product.quantity++;
+        product.quantity += 0.5;
       }
       return product;
     });
@@ -99,12 +99,12 @@ export default function EditForm({ order, close }) {
 
     if (!productToSubtract) return;
 
-    if (productToSubtract.quantity - 1 <= 0) {
+    if (productToSubtract.quantity - 0.5 < 0.5) {
       removeProduct(id);
     } else {
       const newProducts = products.map((product) => {
         if (product.id === id) {
-          return { ...product, quantity: product.quantity - 1 };
+          return { ...product, quantity: product.quantity - 0.5 };
         }
         return product;
       });
