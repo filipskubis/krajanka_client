@@ -14,6 +14,7 @@ import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
 import HoldButton from "./HoldButton";
 import DatePicker from "./DatePicker";
+import roundQuantity from "../helpers/roundQuantity";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -84,7 +85,7 @@ export default function EditForm({ order, close }) {
     console.log("yo");
     const newProducts = products.map((product) => {
       if (product?.id === id) {
-        product.quantity = Number((product.quantity + 0.1).toFixed(1));
+        product.quantity = roundQuantity(Number(product.quantity) + 0.1);
       }
       return product;
     });
@@ -99,12 +100,12 @@ export default function EditForm({ order, close }) {
 
     if (!productToSubtract) return;
 
-    if (productToSubtract.quantity - 0.1 < 0.1) {
+    if (roundQuantity(Number(productToSubtract.quantity) - 0.1) < 0.1) {
       removeProduct(id);
     } else {
       const newProducts = products.map((product) => {
         if (product.id === id) {
-          return { ...product, quantity: Number((product.quantity - 0.1).toFixed(1)) };
+          return { ...product, quantity: roundQuantity(Number(product.quantity) - 0.1) };
         }
         return product;
       });
