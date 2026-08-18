@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { useContext, useEffect, useState } from "react";
-import { CirclePlus, ClipboardList, CircleMinus } from "lucide-react";
+import { ChevronDown, CirclePlus, ClipboardList, CircleMinus, Trash2 } from "lucide-react";
 import PhoneNumberInput from "./PhoneNumberInput";
 import fetcher from "../helpers/fetcher";
 import useSWR from "swr";
@@ -14,7 +14,8 @@ import Big from "big.js";
 import { AlertContext } from "../misc/AlertContext";
 import HoldButton from "./HoldButton";
 import DatePicker from "./DatePicker";
-import roundQuantity, { updateOrderProductQuantity } from "../helpers/roundQuantity";
+import { getQuantityStep, normalizeQuantity, updateOrderProductQuantity } from "../helpers/roundQuantity";
+import WeightedItemPicker from "./WeightedItemPicker";
 Big.DP = 2;
 Big.RM = Big.roundHalfUp;
 
@@ -25,10 +26,14 @@ function convertToDateObject(dateStr) {
 }
 
 export default function EditForm({ order, close }) {
-  const { data } = useSWR("/products/get");
+  const { data: publicForm, error: publicFormError } = useSWR(
+    order.formId ? `/forms/public/${order.formId}` : null,
+    fetcher,
+  );
   const [products, setProducts] = useState(order.products);
   const [productModal, setProductModal] = useState(false);
   const [clientModal, setClientModal] = useState(false);
+  const [weightedProductId, setWeightedProductId] = useState(null);
 
   const [payment, setPayment] = useState(order.paymentMethod || "Przelew/BLIK");
   const [note, setNote] = useState(order.note || "");
@@ -84,7 +89,7 @@ export default function EditForm({ order, close }) {
   function handleAdd(id) {
     const newProducts = products.map((product) => {
       if (product?.id === id) {
-        return updateOrderProductQuantity(product, Number(product.quantity) + 0.1);
+        return updateOrderProductQuantity(product, Number(product.quantity) + getQuantityStep(product.packagingMethod));
       }
       return product;
     });
@@ -99,17 +104,43 @@ export default function EditForm({ order, close }) {
 
     if (!productToSubtract) return;
 
-    if (roundQuantity(Number(productToSubtract.quantity) - 0.1) < 0.1) {
+    const step = getQuantityStep(productToSubtract.packagingMethod);
+    if (normalizeQuantity(Number(productToSubtract.quantity) - step, productToSubtract.packagingMethod) < step) {
       removeProduct(id);
     } else {
       const newProducts = products.map((product) => {
         if (product.id === id) {
-          return updateOrderProductQuantity(product, Number(product.quantity) - 0.1);
+          return updateOrderProductQuantity(product, Number(product.quantity) - step);
         }
         return product;
       });
       setProducts(newProducts);
     }
+  }
+
+  const weightedProduct = products.find((product) => product.id === weightedProductId);
+  const weightedFormProduct = publicForm?.products?.find(
+    (product) => product.id === weightedProduct?.formProductId,
+  );
+
+  function replaceWeightedItem(item) {
+    if (!weightedProduct || !weightedFormProduct) return;
+
+    setProducts((current) =>
+      current.map((product) => {
+        if (product.id !== weightedProduct.id) return product;
+        return {
+          ...product,
+          weightedItemId: item.id,
+          quantity: Number(item.weight),
+          weight: Number(item.weight),
+          lineTotal: Number(item.totalPrice),
+          selectionMode: "weighted-items",
+          packagingMethod: weightedFormProduct.packagingMethod,
+        };
+      }),
+    );
+    setWeightedProductId(null);
   }
 
   function resetForm() {
@@ -137,6 +168,14 @@ export default function EditForm({ order, close }) {
         <ProductModal
           setProductModal={setProductModal}
           setProducts={setProducts}
+        />
+      ) : null}
+      {weightedProduct && weightedFormProduct ? (
+        <WeightedItemPicker
+          formProduct={weightedFormProduct}
+          selectedWeightedItemId={weightedProduct.weightedItemId}
+          onChoose={replaceWeightedItem}
+          onClose={() => setWeightedProductId(null)}
         />
       ) : null}
       <form
@@ -171,7 +210,7 @@ export default function EditForm({ order, close }) {
             <p className="text-coral"> Dodaj Produkt</p>
           </button>
           {products.length > 0 ? (
-            <div className="gap-4 p-1 grid grid-cols-[1.5fr_1fr_1fr_1fr] text-left">
+            <div className="hidden">
               <p className="col-span-1">Nazwa:</p>
               <p>Cena:</p>
               <p>Ilość:</p>
@@ -180,39 +219,86 @@ export default function EditForm({ order, close }) {
           ) : null}
 
           {products.map(
-            ({ id, name, price, quantity, packagingMethod }, index) => (
+            ({ id, name, price, quantity, packagingMethod, selectionMode }, index) => (
               <div
                 key={id}
-                className="relative border-[1px] rounded-md p-1 gap-4 grid grid-cols-[2fr_1fr_1.5fr_1fr] items-start  text-start"
+                className="flex flex-col gap-3 rounded-md border-[1px] p-3 text-start"
               >
-                <p className="break-words col-span-1">{`${
-                  index + 1
-                }. ${name}`}</p>
-                <p>{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
-                <div className="flex flex-col gap-2 items-center">
-                  {quantity} ({packagingMethod})
-                  <div className="flex gap-2">
-                    <button
-                      onClick={(e) => {
-                        e.preventDefault();
-                        handleAdd(id);
-                      }}
-                    >
-                      <CirclePlus />
-                    </button>
-                    <HoldButton
-                      click={() => {
-                        handleSubtract(id);
-                      }}
-                      hold={() => {
-                        removeProduct(id);
-                      }}
-                    >
-                      <CircleMinus />
-                    </HoldButton>
+                <header className="flex items-start justify-between gap-3">
+                  <div className="min-w-0">
+                    <p className="break-words font-semibold">{`${index + 1}. ${name}`}</p>
+                    <p className="text-sm opacity-75">{price >= 1 ? `${price} zł` : `${price * 100} gr`}</p>
                   </div>
+                  <button
+                      type="button"
+                      aria-label={`Usuń ${name} z zamówienia`}
+                      className="grid h-9 w-9 place-items-center rounded text-slate hover:bg-[#A1221E]/10 focus-visible:ring-2 focus-visible:ring-coral"
+                      onClick={() => removeProduct(id)}
+                    >
+                      <Trash2 aria-hidden="true" />
+                  </button>
+                </header>
+                <div className="flex w-full items-end justify-between gap-4">
+                <div className="flex flex-col items-start gap-2">
+                  <p>Ilość: ({packagingMethod})</p>
+                  {selectionMode === "weighted-items" ? (
+                    <>
+                      <button
+                        type="button"
+                        aria-label={`Zmień ważoną sztukę: ${name}, ${quantity} ${packagingMethod}`}
+                        className="flex items-center gap-2 rounded-md px-1 py-1 text-darkBlue transition-colors hover:bg-[#fff7f5] focus-visible:ring-2 focus-visible:ring-coral disabled:cursor-not-allowed disabled:opacity-50"
+                        disabled={!publicForm}
+                        onClick={() => setWeightedProductId(id)}
+                      >
+                        {quantity} ({packagingMethod})
+                        <ChevronDown className="h-4 w-4 text-coral" aria-hidden="true" />
+                      </button>
+                      {publicFormError ? (
+                        <p className="text-center text-xs text-[#A1221E]">
+                          Nie można pobrać dostępnych sztuk.
+                        </p>
+                      ) : null}
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2">
+                        <input
+                          type="number"
+                          min={getQuantityStep(packagingMethod)}
+                          step={getQuantityStep(packagingMethod)}
+                          value={quantity}
+                          onChange={(event) => {
+                            const nextQuantity = Number(event.target.value);
+                            const step = getQuantityStep(packagingMethod);
+                            if (!Number.isFinite(nextQuantity) || nextQuantity < step) return;
+                            setProducts((current) => current.map((product) => product.id === id ? updateOrderProductQuantity(product, nextQuantity) : product));
+                          }}
+                          className="w-[80px] border-[1px] border-[#CCCCCC] p-1 text-lg"
+                        />
+                        <button
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleAdd(id);
+                          }}
+                        >
+                          <CirclePlus />
+                        </button>
+                        <HoldButton
+                          click={() => {
+                            handleSubtract(id);
+                          }}
+                          hold={() => {
+                            removeProduct(id);
+                          }}
+                        >
+                          <CircleMinus />
+                        </HoldButton>
+                      </div>
+                    </>
+                  )}
                 </div>
-                <p>{`${String(Big(quantity).times(price))} zł`}</p>
+                <p className="shrink-0">{`${String(Big(quantity).times(price))} zł`}</p>
+                </div>
               </div>
             ),
           )}

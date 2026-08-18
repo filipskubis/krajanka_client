@@ -166,6 +166,58 @@ button::-moz-focus-inner {
   padding: 0;
 }
 
+.weight-option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  width: 100%;
+  min-height: 3.25rem;
+  padding: 0.7rem 0.85rem;
+  border: 2px solid #e49a89;
+  border-radius: 0.75rem;
+  background: #fff1ed;
+  color: #303c6c;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.weight-option:hover:not(:disabled) {
+  border-color: #f28a72;
+  background: #ffe4dc;
+}
+
+.weight-option:focus-visible {
+  outline: 2px solid #f28a72;
+  outline-offset: 2px;
+}
+
+.weight-option:disabled {
+  border-color: #cccccc;
+  background: #f5f5f5;
+  color: #778197;
+  cursor: not-allowed;
+}
+
+.weight-option__label {
+  font-weight: 650;
+}
+
+.weight-option__action {
+  display: flex;
+  flex: none;
+  align-items: center;
+  gap: 0.25rem;
+  color: #d96850;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+.weight-option__action--muted {
+  color: #778197;
+}
+
 /* DROPDOWN COMPONENT  */
 
 /* From Uiverse.io by 3bdel3ziz-T */
